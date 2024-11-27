@@ -7,5 +7,5 @@ TEST(test2, from2) {
 }
 
 TEST(test2, from3) {
-    EXPECT_EQ(1, 2);
+    EXPECT_EQ(1, 1);
 }

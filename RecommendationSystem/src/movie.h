@@ -1,14 +1,16 @@
-//
-// Created by ido on 11/27/24.
-//
+
 
 #ifndef MOVIE_H
 #define MOVIE_H
+#include <string>
 
 
-
-class movie {
-
+class Movie {
+    private:
+        const int movieID;
+    public:
+        Movie(const int id) : movieID(id) {}
+        int getMovieID() const;
 };
 
 
