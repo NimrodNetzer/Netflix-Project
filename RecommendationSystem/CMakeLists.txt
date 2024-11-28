@@ -4,4 +4,7 @@ project(RecommendationSystem)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(RecommendationSystem src/main.cpp
-        src/movie.cpp)
+        src/movie.cpp
+        src/FilePersistence.cpp
+        src/FilePersistence.h
+        src/user.h)

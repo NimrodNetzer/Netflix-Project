@@ -1,5 +1,6 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.29)
 project(my_test)
+set(CMAKE_CXX_STANDARD 20)
 
 # 'lib' is the folder with Google Test sources
 add_subdirectory(lib)
@@ -17,5 +18,7 @@ add_executable(my_test test1.cpp
         ../src/user.cpp
         ../src/user.h
         test_user.cpp
-        test_user.h)
+        test_user.h
+        test_persistence.cpp
+        ../src/FilePersistence.cpp)
 target_link_libraries(my_test gtest gtest_main)
