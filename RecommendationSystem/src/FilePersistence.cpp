@@ -42,5 +42,7 @@ void FilePersistence::Save(std::vector<Movie> &movies, std::vector<User> &users)
 }
 
 void FilePersistence::Load(std::vector<Movie> &movies, std::vector<User> &users) {
-
+    fs::path dataDir = this->folderName;
+    fs::path moviesDir = dataDir / "movies";
+    fs::path usersDir = dataDir / "users";
 }

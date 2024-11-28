@@ -30,8 +30,8 @@ void clean_directory(const fs::path& dir_path) {
         std::cout << "Error: " << e.what() << std::endl;
     }
 }
-TEST(Save, MoviesUsers) {
-    fs::path data_dir = "test/test_data";
+TEST(Persistence, Save) {
+    fs::path data_dir = "test/test_data/save";
     fs::path movies_dir = data_dir / "movies";
     fs::path users_dir = data_dir / "users";
 
@@ -85,3 +85,39 @@ TEST(Save, MoviesUsers) {
     file1.close();
     delete persistence;
 }
+
+TEST(Persistence, Load) {
+    std::string data_dir = "test/test_data/load";
+    IPersistence* persistence = new FilePersistence(data_dir);
+    std::vector<Movie> movies;
+    std::vector<User> users;
+    persistence->Load(movies, users);
+    std::vector<int> expected_users = {10, 20, 30};
+    std::vector<int> expected_movies = {100, 200, 300};
+    // check if data was loaded
+    ASSERT_FALSE(users.empty());
+    ASSERT_FALSE(movies.empty());
+    // Extract user IDs
+    std::vector<int> actual_user_ids;
+    std::transform(users.begin(), users.end(), std::back_inserter(actual_user_ids),
+                   [](const User& user) { return user.getUserID(); });
+    sort(actual_user_ids.begin(), actual_user_ids.end());
+    // Extract movie IDs
+    std::vector<int> actual_movie_ids;
+    std::transform(movies.begin(), movies.end(), std::back_inserter(actual_movie_ids),
+                   [](const Movie& movie) { return movie.getMovieID(); });
+    sort(actual_movie_ids.begin(), actual_movie_ids.end());
+    // Compare the vectors
+
+    EXPECT_EQ(expected_users, actual_user_ids);
+    EXPECT_EQ(expected_movies, actual_movie_ids);
+    std::vector<int> user1_movies;
+    for (auto const& movie : users[0].getMoviesWatched()) {
+        user1_movies.push_back(movie.getMovieID());
+    }
+    sort(user1_movies.begin(), user1_movies.end());
+    std::vector<int> expected_watched_movies = {100, 200};
+    EXPECT_EQ(user1_movies, expected_watched_movies);
+    delete persistence;
+}
+
