@@ -10,13 +10,14 @@
 #include "../src/FilePersistence.h"
 namespace fs = std::filesystem;
 
-void clean_directory(const fs::path& dir_path) {
+// Delete all files and directories withing a directory
+void cleanDirectory(const fs::path& dir_path) {
     try {
         if (fs::exists(dir_path) && fs::is_directory(dir_path)) {
             for (const auto& entry : fs::directory_iterator(dir_path)) {
                 const auto& path = entry.path();
                 if (fs::is_directory(path)) {
-                    clean_directory(path);
+                    cleanDirectory(path);
                     fs::remove_all(path);
                 } else {
                     fs::remove(path);
@@ -30,12 +31,15 @@ void clean_directory(const fs::path& dir_path) {
         std::cout << "Error: " << e.what() << std::endl;
     }
 }
+
+// Test the save method
 TEST(Persistence, Save) {
     fs::path data_dir = "test/test_data/save";
     fs::path movies_dir = data_dir / "movies";
     fs::path users_dir = data_dir / "users";
 
-    clean_directory(data_dir);
+    // Generate test case
+    cleanDirectory(data_dir); // clean the test folder
     IPersistence* persistence = new FilePersistence(data_dir);
     std::vector<Movie> movies = { Movie(100), Movie(200), Movie(300) };
     std::vector<User> users = { User(10), User(20), User(30) };
@@ -86,11 +90,13 @@ TEST(Persistence, Save) {
     delete persistence;
 }
 
+// Test the load method
 TEST(Persistence, Load) {
     std::string data_dir = "test/test_data/load";
     IPersistence* persistence = new FilePersistence(data_dir);
     std::vector<Movie> movies;
     std::vector<User> users;
+    // load movies and users from the file
     persistence->Load(movies, users);
     std::vector<int> expected_users = {10, 20, 30};
     std::vector<int> expected_movies = {100, 200, 300};
@@ -107,13 +113,13 @@ TEST(Persistence, Load) {
     std::transform(movies.begin(), movies.end(), std::back_inserter(actual_movie_ids),
                    [](const Movie& movie) { return movie.getMovieID(); });
     sort(actual_movie_ids.begin(), actual_movie_ids.end());
-    // Compare the vectors
 
+    // Compare the vectors
     EXPECT_EQ(expected_users, actual_user_ids);
     EXPECT_EQ(expected_movies, actual_movie_ids);
     std::vector<int> user1_movies;
     auto userIt = std::find_if(users.begin(), users.end(), [](const User& user) {
-    return user.getUserID() == 10; // Assuming User has a getID() method
+    return user.getUserID() == 10;
     });
     for (auto const& movie : userIt->getMoviesWatched()) {
         user1_movies.push_back(movie.getMovieID());
@@ -124,3 +130,48 @@ TEST(Persistence, Load) {
     delete persistence;
 }
 
+// Test save and load method
+TEST(Persistence, SaveLoad) {
+    std::string save_dir = "test/test_data/save";
+    cleanDirectory(save_dir);
+    std::string data_dir = "test/test_data/load";
+    // load users and movies
+    IPersistence* persistence = new FilePersistence(data_dir);
+    std::vector<Movie> movies_from_original_save;
+    std::vector<User> users_from_original_save;
+    persistence->Load(movies_from_original_save, users_from_original_save);
+    delete persistence;
+    // save the loaded movies and users
+    IPersistence* persistence2 = new FilePersistence(save_dir);
+    persistence2->Save(movies_from_original_save, users_from_original_save);
+    std::vector<Movie> movies_from_generated_save;
+    std::vector<User> users_from_generated_save;
+    // load the new save
+    persistence2->Load(movies_from_generated_save, users_from_generated_save);
+    delete persistence2;
+    std::vector<int> movie_ids1, movie_ids2, user_ids1, user_ids2;
+    // insert user ids and movies ids to the vectors
+    for (const auto& movie : movies_from_original_save) {
+        movie_ids1.push_back(movie.getMovieID());
+    }
+    for (const auto& movie : movies_from_generated_save) {
+        movie_ids2.push_back(movie.getMovieID());
+    }
+
+    for (const auto& user : users_from_original_save) {
+        user_ids1.push_back(user.getUserID());
+    }
+    for (const auto& user : users_from_generated_save) {
+        user_ids2.push_back(user.getUserID());
+    }
+
+    // Sort the ID vectors
+    std::sort(movie_ids1.begin(), movie_ids1.end());
+    std::sort(movie_ids2.begin(), movie_ids2.end());
+    std::sort(user_ids1.begin(), user_ids1.end());
+    std::sort(user_ids2.begin(), user_ids2.end());
+    // Compare the vectors
+    EXPECT_EQ(user_ids1, user_ids2);
+    EXPECT_EQ(movie_ids1, movie_ids2);
+
+}
