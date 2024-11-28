@@ -6,6 +6,7 @@
 #include <map>
 namespace fs = std::filesystem;
 
+// Gets vectors of movies and users in the system and saves them to files.
 void FilePersistence::Save(std::vector<Movie> &movies, std::vector<User> &users) {
     // Initialize folders
     fs::path dataDir = this->folderName;
