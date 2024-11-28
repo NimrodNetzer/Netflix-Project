@@ -2,10 +2,10 @@
 #define IPERSISTENCE_H
 #include <vector>
 
-#include "movie.h"
-#include "user.h"
+#include "Movie.h"
+#include "User.h"
 
-// This interface defines methods for saving and loading users and movies data to/from persistent storage (e.g., file, database).
+ // This interface defines methods for saving and loading users and movies data to/from persistent storage (e.g., file, database).
 class IPersistence {
     public:
         // save to the storage

@@ -1,8 +1,8 @@
 #ifndef FILEPERSISTENCE_H
 #define FILEPERSISTENCE_H
 #include <vector>
-#include "movie.h"
-#include "user.h"
+#include "Movie.h"
+#include "User.h"
 #include "IPersistence.h"
 
 // Object for persisting users and movies to files

@@ -2,7 +2,7 @@
 #define USER_H
 #include <vector>
 
-#include "movie.h"
+#include "Movie.h"
 
 
 class User {
