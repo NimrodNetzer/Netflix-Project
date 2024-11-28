@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <map>
 namespace fs = std::filesystem;
 
 void FilePersistence::Save(std::vector<Movie> &movies, std::vector<User> &users) {
@@ -45,4 +46,33 @@ void FilePersistence::Load(std::vector<Movie> &movies, std::vector<User> &users)
     fs::path dataDir = this->folderName;
     fs::path moviesDir = dataDir / "movies";
     fs::path usersDir = dataDir / "users";
+    if (!fs::exists(moviesDir) || !fs::exists(usersDir)) {
+        return;
+    }
+    // Load movies
+    std::map<int, Movie> moviesMap; // store movies in map so we can attach them to users
+    for (const auto& filePath : fs::directory_iterator(moviesDir)) {
+        int id = atoi(filePath.path().filename().string().c_str());
+        Movie movie(id);
+        moviesMap.insert({id, movie});
+        movies.push_back(movie);
+    }
+    // Load Users
+    for (const auto& filePath : fs::directory_iterator(usersDir)) {
+        int id = atoi(filePath.path().filename().string().c_str());
+        User user(id);
+        std::ifstream userFile(usersDir /  std::to_string(id));
+        std::string line;
+        std::getline(userFile, line);
+        std::istringstream stream(line);
+        int movieID;
+
+        // Process each movie id
+        while (stream >> movieID) {
+            user.addMovieWatched(moviesMap[movieID]);
+        }
+        users.push_back(user);
+
+    }
+
 }

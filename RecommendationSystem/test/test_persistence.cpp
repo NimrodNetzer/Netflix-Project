@@ -112,7 +112,10 @@ TEST(Persistence, Load) {
     EXPECT_EQ(expected_users, actual_user_ids);
     EXPECT_EQ(expected_movies, actual_movie_ids);
     std::vector<int> user1_movies;
-    for (auto const& movie : users[0].getMoviesWatched()) {
+    auto userIt = std::find_if(users.begin(), users.end(), [](const User& user) {
+    return user.getUserID() == 10; // Assuming User has a getID() method
+    });
+    for (auto const& movie : userIt->getMoviesWatched()) {
         user1_movies.push_back(movie.getMovieID());
     }
     sort(user1_movies.begin(), user1_movies.end());
