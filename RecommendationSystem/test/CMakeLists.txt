@@ -20,5 +20,8 @@ add_executable(my_test test1.cpp
         test_user.cpp
         test_user.h
         test_persistence.cpp
-        ../src/FilePersistence.cpp)
+        ../src/IPersistence.h
+        ../src/FilePersistence.cpp
+        ../src/FilePersistence.h
+        )
 target_link_libraries(my_test gtest gtest_main)

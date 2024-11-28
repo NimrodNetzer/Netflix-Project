@@ -1,12 +1,12 @@
 #ifndef FILEPERSISTENCE_H
+#define FILEPERSISTENCE_H
 #include <vector>
-
 #include "movie.h"
 #include "user.h"
+#include "IPersistence.h"
 
 
-
-class FilePersistence {
+class FilePersistence : public IPersistence {
     private:
         std::string folderName;
     public:

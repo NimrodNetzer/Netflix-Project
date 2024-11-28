@@ -6,7 +6,7 @@
 #include <fstream>
 
 #include <gtest/gtest.h>
-
+#include "../src/IPersistence.h"
 #include "../src/FilePersistence.h"
 namespace fs = std::filesystem;
 
@@ -36,8 +36,7 @@ TEST(Save, MoviesUsers) {
     fs::path users_dir = data_dir / "users";
 
     clean_directory(data_dir);
-    FilePersistence persistence(data_dir);
-
+    IPersistence* persistence = new FilePersistence(data_dir);
     std::vector<Movie> movies = { Movie(100), Movie(200), Movie(300) };
     std::vector<User> users = { User(10), User(20), User(30) };
 
@@ -46,7 +45,7 @@ TEST(Save, MoviesUsers) {
     users[1].addMovieWatched(movies[2]);
     users[2].addMovieWatched(movies[2]);
     users[2].addMovieWatched(movies[1]);
-    persistence.Save(movies, users);
+    persistence->Save(movies, users);
 
     // Assertions for existence of directories
     ASSERT_TRUE(fs::exists(movies_dir));
@@ -84,4 +83,5 @@ TEST(Save, MoviesUsers) {
     std::getline(file1, line);
     EXPECT_EQ(line, "300");
     file1.close();
+    delete persistence;
 }
