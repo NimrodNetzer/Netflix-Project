@@ -1,12 +1,13 @@
-# Set the minimum required version of CMake
-cmake_minimum_required(VERSION 3.29)
-
-# Set the project name
+cmake_minimum_required(VERSION 3.28.1)
 project(Netflix-BIU)
 
-# Set the C++ standard
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
 
-# Add subdirectories for employee modules
-add_subdirectory(RecommendationSystem)
-add_subdirectory(RecommendationAlgorithm)
+add_executable(Netflix-BIU
+        RecommendationSystem/algorithm/commonMovies.cpp
+
+        RecommendationSystem/src/main.cpp
+        RecommendationSystem/src/main.cpp
+        RecommendationSystem/src/user.cpp
+        RecommendationSystem/src/movie.cpp
+)

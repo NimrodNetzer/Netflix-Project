@@ -3,5 +3,10 @@ project(RecommendationSystem)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(RecommendationSystem src/main.cpp
-        src/movie.cpp)
+add_executable(RecommendationSystem
+
+        src/main.cpp
+        src/movie.cpp
+
+        algorithm/commonMovies.cpp
+)
