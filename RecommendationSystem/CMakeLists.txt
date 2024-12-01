@@ -8,5 +8,4 @@ add_executable(RecommendationSystem
         src/main.cpp
         src/movie.cpp
 
-        algorithm/commonMovies.cpp
 )

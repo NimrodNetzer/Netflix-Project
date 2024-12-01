@@ -4,10 +4,10 @@ project(Netflix-BIU)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(Netflix-BIU
-        RecommendationSystem/algorithm/commonMovies.cpp
 
-        RecommendationSystem/src/main.cpp
         RecommendationSystem/src/main.cpp
         RecommendationSystem/src/user.cpp
         RecommendationSystem/src/movie.cpp
+        RecommendationSystem/src/recommendations.cpp
+        RecommendationSystem/src/recommendations.h
 )
