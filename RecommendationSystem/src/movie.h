@@ -8,9 +8,10 @@
 class Movie {
     private:
         const int movieID;
-    public:
+public:
         Movie(const int id) : movieID(id) {}
         int getMovieID() const;
+
 };
 
 
