@@ -1,22 +1,26 @@
-/*
-// Created by orlib on 02/12/2024.
-*/
+#ifndef APP_H
+#define APP_H
 
-#ifndef MY_TEST_APP_H
-#define MY_TEST_APP_H
-
+#include <map>
 #include <vector>
-#include <string>
+#include "ICommand.h"
+#include "movie.h"
+#include "user.h"
 
 class app {
-private:
-    // Vector to store user identifiers (e.g., usernames or IDs)
-    std::vector<std::string> users;
-    // Vector to store movie identifiers (e.g., titles or IDs)
-    std::vector<std::string> movies;
-
 public:
+    // Constructor that initializes the app with command map, movies, and users
+    app(const std::map<std::string, ICommand*>& commands,
+        std::vector<Movie>& movies,
+        std::vector<User>& users);
 
+    // Method to start the application
+    void run();
+
+private:
+    std::map<std::string, ICommand*> m_commands;  // Map of command IDs and their corresponding ICommand instances
+    std::vector<Movie> m_movies;                  // Vector of movies
+    std::vector<User> m_users;                    // Vector of users
 };
 
-#endif //MY_TEST_APP_H
+#endif // APP_H

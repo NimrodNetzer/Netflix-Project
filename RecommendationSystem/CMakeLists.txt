@@ -1,7 +1,16 @@
-cmake_minimum_required(VERSION 3.29)
+cmake_minimum_required(VERSION 3.11)
 project(RecommendationSystem)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(RecommendationSystem src/main.cpp
-        src/movie.cpp)
+# Gather all .cpp and .h files in the src directory
+file(GLOB SOURCES "src/*.cpp")
+file(GLOB HEADERS "src/*.h")
+
+# Add the executable and include all the source and header files
+add_executable(RecommendationSystem ${SOURCES} ${HEADERS}
+        src/help.cpp
+        src/help.h)
+
+# Optionally, include the src directory for header file lookups
+target_include_directories(RecommendationSystem PRIVATE ${CMAKE_SOURCE_DIR}/src)

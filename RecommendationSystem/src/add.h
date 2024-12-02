@@ -4,7 +4,7 @@
 #include <vector>
 #include "movie.h"
 #include "user.h"
-#include "icommand.h"  // Include the ICommand interface
+#include "ICommand.h"  // Include the ICommand interface
 
 class add : public ICommand {
 public:
@@ -12,7 +12,7 @@ public:
     add(std::vector<Movie>& movies, std::vector<User>& users);
 
     // Method to execute some functionality with the movies and users
-    void execute(std::string s);
+    void execute(std::string s) override;
 
 private:
     std::vector<Movie>& m_movies;  // Reference to the vector of movies

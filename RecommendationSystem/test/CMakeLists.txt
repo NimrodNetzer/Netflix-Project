@@ -17,5 +17,13 @@ add_executable(my_test test1.cpp
         ../src/user.cpp
         ../src/user.h
         test_user.cpp
-        test_user.h)
+        test_user.h
+        ../src/app.cpp
+        ../src/app.h
+        ../src/add.cpp
+        ../src/add.h
+        ../src/ICommand.cpp
+        ../src/ICommand.h
+        test_add.cpp
+        test_add.h)
 target_link_libraries(my_test gtest gtest_main)
