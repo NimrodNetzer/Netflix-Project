@@ -6,9 +6,11 @@
 #define MY_TEST_ICOMMAND_H
 
 
+#include <string>
+
 class ICommand {
 public:
-    virtual void execute() = 0;
+    virtual void execute(std::string s) = 0;
 };
 
 
