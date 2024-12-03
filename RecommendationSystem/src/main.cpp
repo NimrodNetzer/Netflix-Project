@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory> // For smart pointers
 #include "ICommand.h"
 #include "add.h"
 #include "app.h"
@@ -6,29 +7,46 @@
 #include <map>
 #include <vector>
 
-int main() {
-    // Create sample vectors of movies and users
-    std::vector<Movie> movies = {};
-    std::vector<User> users = {};
-
-    // Create a map to associate command IDs with ICommand instances
+// Helper function to initialize commands
+std::map<std::string, ICommand*> initializeCommands(std::vector<Movie>& movies, std::vector<User>& users) {
     std::map<std::string, ICommand*> commands;
 
-    // Create the 'add' command instance and add it to the commands map
-    ICommand* addCommand = new add(movies, users);
-    commands["add"] = addCommand;
+    // Add 'add' command
+    commands["add"] = new add(movies, users);
 
-    // Create the 'help' command instance and add it to the commands map
-    ICommand* helpCommand = new Help();
-    commands["help"] = helpCommand;
+    // Add 'help' command
+    commands["help"] = new Help();
 
-    // Create the application instance with the command map, movies, and users
-    app application(commands, movies, users);
-    application.run();
+    return commands;
+}
 
-    // Clean up dynamically allocated commands to prevent memory leaks
-    delete addCommand;
-    delete helpCommand;
+int main() {
+    try {
+        // Create sample vectors of movies and users
+        std::vector<Movie> movies;
+        std::vector<User> users;
 
-    return 0;
+        // Initialize commands
+        std::map<std::string, ICommand*> commands = initializeCommands(movies, users);
+
+        // Create the application instance
+        app application(commands, movies, users);
+
+        // Run the application
+        application.run();
+
+        // Clean up dynamically allocated commands
+        for (auto& command : commands) {
+            delete command.second;
+        }
+
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred: " << e.what() << std::endl;
+        return 1; // Return non-zero to indicate failure
+    } catch (...) {
+        std::cerr << "An unknown error occurred." << std::endl;
+        return 1; // Return non-zero to indicate failure
+    }
+
+    return 0; // Return zero to indicate success
 }
