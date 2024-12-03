@@ -1,5 +1,6 @@
 #include <iostream>
 #include <memory> // For smart pointers
+#include "ConsoleMenu.h"
 #include "ICommand.h"
 #include "add.h"
 #include "app.h"
@@ -10,13 +11,8 @@
 // Helper function to initialize commands
 std::map<std::string, ICommand*> initializeCommands(std::vector<Movie>& movies, std::vector<User>& users) {
     std::map<std::string, ICommand*> commands;
-
-    // Add 'add' command
     commands["add"] = new add(movies, users);
-
-    // Add 'help' command
     commands["help"] = new Help();
-
     return commands;
 }
 
@@ -29,8 +25,11 @@ int main() {
         // Initialize commands
         std::map<std::string, ICommand*> commands = initializeCommands(movies, users);
 
+        // Create a ConsoleMenu instance
+        ConsoleMenu menu;
+
         // Create the application instance
-        app application(commands, movies, users);
+        App application(menu, commands, movies, users);
 
         // Run the application
         application.run();

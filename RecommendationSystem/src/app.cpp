@@ -1,38 +1,46 @@
 #include "app.h"
-#include <iostream>
-#include <sstream>
+#include <sstream>    // For std::istringstream
+#include <exception>  // For std::exception
 
-app::app(const std::map<std::string, ICommand*>& commands,
-         std::vector<Movie>& movies,
-         std::vector<User>& users)
-        : m_commands(commands), m_movies(movies), m_users(users) {}
+// Constructor for the App class that initializes the menu, commands, movies, and users.
+App::App(IMenu& menu, const std::map<std::string, ICommand*>& commands,
+         std::vector<Movie>& movies, std::vector<User>& users)
+        : m_menu(menu), m_commands(commands), m_movies(movies), m_users(users) {}
 
-void app::run() {
-    std::string commandLine;
+// Main loop for the application, continuously accepting and executing commands.
+void App::run() {
     while (true) {
-        std::cout << "Enter command (or 'exit' to quit): ";
-        std::getline(std::cin, commandLine);
+        try {
+            // Display the menu and get the user's command input.
+            m_menu.nextCommand();
 
-        if (commandLine == "exit") {
-            break;
-        }
+            // Retrieve the last input from the menu.
+            const std::string& commandLine = m_menu.getLastInput();
 
-        std::istringstream iss(commandLine);
-        std::string commandID;
-        iss >> commandID;
+            // Exit the loop if the user enters the 'exit' command.
+            if (commandLine == "exit") {
+                break;
+            }
 
-        if (commandID.empty()) {
-            std::cout << "No command entered." << std::endl;
-            continue;
-        }
+            // Parse the command ID from the input.
+            std::istringstream iss(commandLine);
+            std::string commandID;
+            iss >> commandID;
 
-        auto it = m_commands.find(commandID);
-        if (it != m_commands.end()) {
-            std::string arguments;
-            std::getline(iss, arguments);
-            it->second->execute(arguments);
-        } else {
-            std::cout << "Invalid command ID." << std::endl;
+            // Search for the command in the command map.
+            auto it = m_commands.find(commandID);
+            if (it != m_commands.end()) {
+                // If the command exists, extract any remaining arguments and execute the command.
+                std::string arguments;
+                std::getline(iss, arguments);
+                it->second->execute(arguments);
+            } else {
+                // If the command is not found, display an error message.
+                m_menu.displayError("Invalid command ID.");
+            }
+        } catch (const std::exception& e) {
+            // Handle exceptions and display an error message using the menu.
+            m_menu.displayError(e.what());
         }
     }
 }
