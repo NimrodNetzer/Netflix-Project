@@ -111,6 +111,21 @@ int main() {
 
     // Create a vector and add users to it
     std::vector<User> users = {user1, user2, user3, user4, user5, user6, user7, user8, user9, user10};
+    std::vector<Movie> movies = {movie100, movie101, movie102, movie103, movie104, movie105, movie106,
+                                 movie107, movie108, movie109, movie110, movie111, movie112, movie113,
+                                 movie114, movie115, movie116};
+
+
+    std::vector<int> sortedMap =
+            combineAndCalculateMoviesRelevance(users, movies, user1, movie104);
+
+    // Print using a range-based for loop
+    for (size_t i = 0; i < sortedMap.size(); ++i) {
+        std::cout << sortedMap[i];
+        if (i < sortedMap.size() - 1) {
+            std::cout << ", "; // Add a comma except after the last element
+        }
+    }
 
     return 0;
 }

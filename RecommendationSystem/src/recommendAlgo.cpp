@@ -37,11 +37,12 @@ std::unordered_map<int, int> countCommonMoviesWithGivenUser(
     for (const User &currentUser: usersWatchedTargetMovieList) {
         for (Movie givenUserCurrentMovie: givenUser.getMoviesWatched()) {
             for (Movie currentUserMovie: currentUser.getMoviesWatched()) {
+                if (givenUser.getUserID() == currentUser.getUserID()) continue;
                 if (givenUserCurrentMovie.getMovieID() == currentUserMovie.getMovieID()) {
-                    if (commonMoviesWithGivenUserCounterList[currentUser.getUserID()] == 0) {
-                        commonMoviesWithGivenUserCounterList[currentUser.getUserID()] = currentUserMovie.getMovieID();
+                    if (commonMoviesWithGivenUserCounterList.count(currentUser.getUserID()) == 0) {
+                        commonMoviesWithGivenUserCounterList[currentUser.getUserID()] = 1;
                     } else {
-                        commonMoviesWithGivenUserCounterList[currentUser.getUserID()] += currentUserMovie.getMovieID();
+                        commonMoviesWithGivenUserCounterList[currentUser.getUserID()] += 1;
                     }
                 }
             }
@@ -53,34 +54,51 @@ std::unordered_map<int, int> countCommonMoviesWithGivenUser(
 
 
 std::unordered_map<int, int>
-sumMoviesRelevance(const std::unordered_map<int, int> &commonMoviesWithGivenUserCounterList,
+sumMoviesRelevance(std::unordered_map<int, int> &commonMoviesWithGivenUserCounterList,
                    const std::vector<User> &allUsers, const User &givenUser) {
 
     std::unordered_map<int, int> finalMovieCounterList;
 
-    // Iterating the user ID values in the map, the value is the number of common movies with target user
-    for (const auto &pair: commonMoviesWithGivenUserCounterList) {
-        int keyUserID = pair.first;
-        int numberOfCommonMoviesWithTargetUser = pair.second;
-
-        // Find the user in the original list by ID
-        for (const User &currentUser: allUsers) {
-            const User &originalKeyUser = currentUser;
-            // Keep the loop iteration if the current user is with different ID
-            if (currentUser.getUserID() != keyUserID) {
-                continue;
+    for (const User &user: allUsers) {
+        for (Movie movie: user.getMoviesWatched()) {
+            bool watched = false;
+            for (const Movie &givenUserWatchedMovie: givenUser.getMoviesWatched()) {
+                if (givenUserWatchedMovie.getMovieID() == movie.getMovieID()) {
+                    watched = true;
+                    break;
+                };
             }
-            // We can use the original user now
-            // We will iterate the given user movies list
-            for (Movie givenUserMovie: givenUser.getMoviesWatched()) {
-                // Iterating the key original user movies list in order to sum the value, movies weight
-                for (const Movie &valueUserMovie: originalKeyUser.getMoviesWatched()) {
-                    if (valueUserMovie.getMovieID() == givenUserMovie.getMovieID()) {
-                        if (finalMovieCounterList[valueUserMovie.getMovieID()] == 0) {
-                            finalMovieCounterList[valueUserMovie.getMovieID()] = numberOfCommonMoviesWithTargetUser;
-                        } else {
-                            finalMovieCounterList[valueUserMovie.getMovieID()] += numberOfCommonMoviesWithTargetUser;
-                        }
+            if (watched) continue;
+            if (finalMovieCounterList.count(movie.getMovieID()) == 0) {
+                finalMovieCounterList[movie.getMovieID()] = 0;
+            }
+        }
+    }
+
+    // Now the final movie counter list is all movies watched
+    for (const auto &pairs: finalMovieCounterList) {
+        int currentAllUsersMovieKey = pairs.first;
+        int valueZero = pairs.second;
+
+
+        // Iterating the user ID values in the map, the value is the number of common movies with target user
+        for (const auto &pair: commonMoviesWithGivenUserCounterList) {
+            int keyUserID = pair.first;
+            int numberOfCommonMoviesWithTargetUser = pair.second;
+
+            // Find the user in the original list by ID
+            for (const User &currentUser: allUsers) {
+                const User &originalKeyUser = currentUser;
+                // Keep the loop iteration if the current user is with different ID
+                if (currentUser.getUserID() != keyUserID) {
+                    continue;
+                }
+                // We can use the original user now
+                for (const Movie &currentOriginalKeyMovie: originalKeyUser.getMoviesWatched()) {
+                    if (currentOriginalKeyMovie.getMovieID() == currentAllUsersMovieKey) {
+                        finalMovieCounterList[currentAllUsersMovieKey] +=
+                                commonMoviesWithGivenUserCounterList[originalKeyUser.getUserID()];
+                        break;
                     }
                 }
             }
@@ -90,29 +108,32 @@ sumMoviesRelevance(const std::unordered_map<int, int> &commonMoviesWithGivenUser
 }
 
 
-// Sorting the map by its values, from high to small
-std::map<int, int> sortKeysByValue(const std::unordered_map<int, int> &inputMap) {
-    // Step 1: Create a vector of pairs (key, value) from the input unordered_map
-    std::vector<std::pair<int, int>> keyValuePairs(inputMap.begin(), inputMap.end());
+std::vector<int> sortKeysByValues(const std::unordered_map<int, int>& movieRelevance) {
+    // Create a vector of pairs from the map
+    std::vector<std::pair<int, int>> elements(movieRelevance.begin(), movieRelevance.end());
 
-    // Step 2: Sort the vector by value in descending order
-    std::sort(keyValuePairs.begin(), keyValuePairs.end(),
-              [](const std::pair<int, int> &a, const std::pair<int, int> &b) {
-                  return a.second > b.second;  // Sorting by value (descending)
-              });
+    // Sort the vector with a stable tie-breaking mechanism
+    std::sort(elements.begin(), elements.end(), [](const auto& a, const auto& b) {
+        if (a.second == b.second) {
+            return a.first < b.first; // Sort by key in ascending order if values are equal
+        }
+        return a.second > b.second; // Otherwise, sort by value in descending order
+    });
 
-    // Step 3: Create a map (which automatically sorts by key)
-    std::map<int, int> sortedMap;
-    for (const auto &pair: keyValuePairs) {
-        sortedMap[pair.first] = pair.second;
+    // Extract the keys into a vector
+    std::vector<int> sortedKeys;
+    for (const auto& pair : elements) {
+        sortedKeys.push_back(pair.first);
     }
 
-    return sortedMap;
+    size_t size = std::min(sortedKeys.size(), static_cast<size_t>(10));
+    return std::vector<int>(sortedKeys.begin(), sortedKeys.begin() + size);
+    return sortedKeys;
 }
 
 
 // Combine the algorithm functions
-std::map<int, int> combineAndCalculateMoviesRelevance(
+std::vector<int> combineAndCalculateMoviesRelevance(
         const std::vector<User> &allUsers, const std::vector<Movie> &allMovies,
         const User &givenUser, const Movie &givenMovie) {
 
@@ -127,8 +148,6 @@ std::map<int, int> combineAndCalculateMoviesRelevance(
     std::unordered_map<int, int> movieRelevance =
             sumMoviesRelevance(commonMoviesCount, allUsers, givenUser);
 
-    return sortKeysByValue(movieRelevance);
+    movieRelevance.erase(givenMovie.getMovieID());
+    return sortKeysByValues(movieRelevance);
 }
-
-
-

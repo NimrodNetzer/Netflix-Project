@@ -6,7 +6,7 @@
 #define MY_TEST_TESTCOUNTCOMMONMOVIESWITHGIVENUSER_H
 
 
-class TestcountCommonMoviesWithGivenUser {
+class TestCountCommonMoviesWithGivenUser {
 
 };
 

@@ -20,6 +20,8 @@ TEST(SumMoviesRelevanceTest, CalculatesCorrectRelevance) {
     user1.addMovieWatched(movie2);  // User 1 also watches movie 102
     user2.addMovieWatched(movie2);  // User 2 watches movie 102
     user2.addMovieWatched(movie3);  // User 2 also watches movie 103
+    user3.addMovieWatched(movie1);
+    user3.addMovieWatched(movie2);
     user3.addMovieWatched(movie4);  // User 3 watches movie 104
 
     // Step 4: Create the list of all users
@@ -27,8 +29,8 @@ TEST(SumMoviesRelevanceTest, CalculatesCorrectRelevance) {
 
     // Step 5: Create the commonMoviesCount map (users who watched a common movie)
     std::unordered_map<int, int> commonMoviesCount = {
-            {1, 2},  // User 1 has 2 common movies with others
-            {2, 1},  // User 2 has 1 common movie with others
+            {2, 1},  // User 1 has 2 common movies with others
+            {3, 2},  // User 2 has 1 common movie with others
     };
 
     // Step 6: Call the function to sum relevance of movies
