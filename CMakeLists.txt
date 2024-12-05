@@ -8,6 +8,4 @@ add_executable(Netflix-BIU
         RecommendationSystem/src/main.cpp
         RecommendationSystem/src/user.cpp
         RecommendationSystem/src/movie.cpp
-        RecommendationSystem/src/recommendations.cpp
-        RecommendationSystem/src/recommendations.h
 )

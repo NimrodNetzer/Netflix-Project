@@ -9,4 +9,5 @@ add_executable(RecommendationSystem src/main.cpp
         src/user.h
         src/recommendAlgo.cpp
         src/recommendAlgo.h
+        src/main.cpp
 )
