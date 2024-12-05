@@ -1,4 +1,4 @@
-#include "movie.h"
+#include "Movie.h"
 
 
 int Movie::getMovieID() const {

@@ -2,7 +2,7 @@
 #define USER_H
 #include <vector>
 
-#include "movie.h"
+#include "Movie.h"
 
 
 class User {
@@ -12,6 +12,7 @@ class User {
     public:
         User(const int id) : userID(id) {}
         int getUserID() const;
+        // add a movie the user watched to the moviesWatched vector
         void addMovieWatched(Movie movie);
         std::vector<Movie> getMoviesWatched() const;
 };
