@@ -7,11 +7,13 @@
 #include "help.h"
 #include <map>
 #include <vector>
+#include "IPersistence.h"
+#include "FilePersistence.h"
 
 // Helper function to initialize commands
-std::map<std::string, ICommand*> initializeCommands(std::vector<Movie>& movies, std::vector<User>& users) {
+std::map<std::string, ICommand*> initializeCommands(std::vector<Movie>& movies, std::vector<User>& users, IPersistence* persistence) {
     std::map<std::string, ICommand*> commands;
-    commands["add"] = new add(movies, users);
+    commands["add"] = new add(movies, users, persistence);
     commands["help"] = new Help();
     return commands;
 }
@@ -21,12 +23,15 @@ int main() {
         // Create sample vectors of movies and users
         std::vector<Movie> movies;
         std::vector<User> users;
+        IPersistence* persistence = new FilePersistence("data");
 
         // Initialize commands
-        std::map<std::string, ICommand*> commands = initializeCommands(movies, users);
+        std::map<std::string, ICommand*> commands = initializeCommands(movies, users, persistence);
 
         // Create a ConsoleMenu instance
         ConsoleMenu menu;
+
+        persistence->Load(movies, users);
 
         // Create the application instance
         App application(menu, commands, movies, users);

@@ -3,10 +3,11 @@
 #include <sstream>
 #include <algorithm>
 #include <optional>  // For std::optional
+#include "IPersistence.h"
 
 // Constructor implementation that initializes the 'add' command with lists of movies and users
-add::add(std::vector<Movie>& movies, std::vector<User>& users)
-        : m_movies(movies), m_users(users) {}
+add::add(std::vector<Movie>& movies, std::vector<User>& users, IPersistence* persistence)
+        : m_movies(movies), m_users(users), m_persistence(persistence) {}
 
 // Helper function to search for a movie by its ID in the provided list of movies.
 // Returns a pointer to the movie if found, or nullptr if not found.
@@ -84,5 +85,7 @@ void add::execute(std::string s) {
 
         foundUser->addMovieWatched(*result);
         std::cout << "Added Movie ID " << movieID << " to User ID " << userID << "." << std::endl;
+
     }
+    m_persistence->Save(m_movies, m_users);
 }
