@@ -14,7 +14,9 @@ add_executable(RecommendationSystem ${SOURCES} ${HEADERS}
         src/IMenu.cpp
         src/IMenu.h
         src/ConsoleMenu.cpp
-        src/ConsoleMenu.h)
+        src/ConsoleMenu.h
+        src/recommend.cpp
+        src/recommend.h)
 
 # Optionally, include the src directory for header file lookups
 target_include_directories(RecommendationSystem PRIVATE ${CMAKE_SOURCE_DIR}/src)

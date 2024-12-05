@@ -10,12 +10,15 @@
 #include <vector>
 #include "IPersistence.h"
 #include "FilePersistence.h"
+#include "recommendAlgo.h"
+#include "recommend.h"
 
 // Helper function to initialize commands
 std::map<std::string, ICommand*> initializeCommands(std::vector<Movie>& movies, std::vector<User>& users, IPersistence* persistence) {
     std::map<std::string, ICommand*> commands;
     commands["add"] = new add(movies, users, persistence);
     commands["help"] = new Help();
+    commands["recommend"] = new recommend(movies, users);
     return commands;
 }
 
