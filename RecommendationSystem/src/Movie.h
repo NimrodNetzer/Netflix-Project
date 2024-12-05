@@ -12,6 +12,7 @@ class Movie {
         Movie() : movieID(-1) {}
         Movie(const int id) : movieID(id) {}
         int getMovieID() const;
+
 };
 
 
