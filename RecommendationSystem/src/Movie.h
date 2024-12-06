@@ -11,6 +11,7 @@ class Movie {
     public:
         Movie() : movieID(-1) {}
         Movie(const int id) : movieID(id) {}
+        Movie(const Movie& other) : movieID(other.movieID) {}
         int getMovieID() const;
 
 };

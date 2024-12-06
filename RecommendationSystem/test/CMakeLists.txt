@@ -33,6 +33,7 @@ set(APP_SOURCES
         ../src/ICommand.cpp
         ../src/FilePersistence.cpp
         ../src/recommendAlgo.cpp
+        ../src/DataManager.cpp
 )
 
 set(APP_HEADERS
@@ -43,6 +44,7 @@ set(APP_HEADERS
         ../src/ICommand.h
         ../src/IPersistence.h
         ../src/FilePersistence.h
+        ../src/DataManager.h
 )
 
 # Add executable for tests

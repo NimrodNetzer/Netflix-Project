@@ -17,6 +17,7 @@ set(SOURCES
         src/recommend.cpp
         src/recommendAlgo.cpp
         src/User.cpp
+        src/DataManager.cpp
 )
 
 set(HEADERS
