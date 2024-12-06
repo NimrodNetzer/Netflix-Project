@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.29)
+cmake_minimum_required(VERSION 3.11)
 project(RecommendationSystem_Tests)
 set(CMAKE_CXX_STANDARD 20)
 
@@ -6,25 +6,52 @@ set(CMAKE_CXX_STANDARD 20)
 add_subdirectory(lib)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
-# 'Google_Tests_run' is the target name
-# 'test1.cpp test2.cpp' are source files with tests
-add_executable(RecommendationSystem_Tests test1.cpp
+# Test source files
+set(TEST_SOURCES
+        test1.cpp
         test2.cpp
-        test2.h
         test_movie.cpp
-        test_movie.h
-        ../src/Movie.cpp
-        ../src/Movie.h
-        ../src/User.cpp
-        ../src/User.h
         test_user.cpp
-        test_user.h
-        ../src/app.cpp
-        ../src/app.h
-        ../src/add.cpp
-        ../src/add.h
-        ../src/ICommand.cpp
-        ../src/ICommand.h
         test_add.cpp
-        test_add.h)
-target_link_libraries(my_test gtest gtest_main)
+        test_persistence.cpp
+        test_recommendAlgo.cpp
+)
+
+set(TEST_HEADERS
+        test2.h
+        test_movie.h
+        test_user.h
+        test_add.h
+)
+
+# Application source files
+set(APP_SOURCES
+        ../src/Movie.cpp
+        ../src/User.cpp
+        ../src/app.cpp
+        ../src/add.cpp
+        ../src/ICommand.cpp
+        ../src/FilePersistence.cpp
+        ../src/recommendAlgo.cpp
+)
+
+set(APP_HEADERS
+        ../src/Movie.h
+        ../src/User.h
+        ../src/app.h
+        ../src/add.h
+        ../src/ICommand.h
+        ../src/IPersistence.h
+        ../src/FilePersistence.h
+)
+
+# Add executable for tests
+add_executable(RecommendationSystem_Tests
+        ${TEST_SOURCES}
+        ${TEST_HEADERS}
+        ${APP_SOURCES}
+        ${APP_HEADERS}
+)
+
+# Link Google Test libraries
+target_link_libraries(RecommendationSystem_Tests gtest gtest_main)

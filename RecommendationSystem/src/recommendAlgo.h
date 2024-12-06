@@ -8,8 +8,8 @@
 #include "map"
 #include <unordered_map>
 #include <vector>
-#include "user.h"
-#include "movie.h"
+#include "User.h"
+#include "Movie.h"
 
 // Function declarations
 std::vector<User> watchedDesiredMovie(

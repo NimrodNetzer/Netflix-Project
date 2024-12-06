@@ -1,15 +1,16 @@
 #include "gtest/gtest.h"
-#include "../src/user.h"
+#include "../src/User.h"
 #include "../src/add.h"
+#include "../src/FilePersistence.h"
 #include <algorithm>  // For std::find_if
 
 TEST(Command, add) {
     // Create some sample movies and users
     std::vector<Movie> movies = {Movie(100), Movie(200), Movie(300), Movie(400)};
     std::vector<User> users = { User(10), User(20), User(30), User(40) };
-
+    IPersistence* persistence = new FilePersistence("data");
     // Create the 'add' command instance
-    add addCommand(movies, users);
+    add addCommand(movies, users, persistence);
 
     // Case 1: Add movies to an existing user (User ID 10)
     addCommand.execute("10 100 200");

@@ -2,8 +2,8 @@
 #define MY_TEST_ADD_H
 
 #include <vector>
-#include "movie.h"
-#include "user.h"
+#include "Movie.h"
+#include "User.h"
 #include "ICommand.h"  // Include the ICommand interface
 #include "IPersistence.h"
 

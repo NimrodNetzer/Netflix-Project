@@ -2,8 +2,8 @@
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
-#include "user.h"
-#include "movie.h"
+#include "User.h"
+#include "Movie.h"
 
 // A function to create list of users that watched the given movie
 std::vector<User> watchedDesiredMovie(

@@ -9,6 +9,7 @@
 #include "../src/IPersistence.h"
 #include "../src/FilePersistence.h"
 namespace fs = std::filesystem;
+const fs::path BASE_DIR = fs::path("test") / "test_data";
 
 // Delete all files and directories withing a directory
 void cleanDirectory(const fs::path& dir_path) {
@@ -34,7 +35,7 @@ void cleanDirectory(const fs::path& dir_path) {
 
 // Test the save method
 TEST(Persistence, Save) {
-    fs::path data_dir = "test/test_data/save";
+    fs::path data_dir = BASE_DIR / "save";
     fs::path movies_dir = data_dir / "movies";
     fs::path users_dir = data_dir / "users";
 
@@ -92,7 +93,7 @@ TEST(Persistence, Save) {
 
 // Test the load method
 TEST(Persistence, Load) {
-    std::string data_dir = "test/test_data/load";
+    std::string data_dir = BASE_DIR / "load";
     IPersistence* persistence = new FilePersistence(data_dir);
     std::vector<Movie> movies;
     std::vector<User> users;
@@ -132,9 +133,9 @@ TEST(Persistence, Load) {
 
 // Test save and load method
 TEST(Persistence, SaveLoad) {
-    std::string save_dir = "test/test_data/save";
+    std::string save_dir = BASE_DIR / "save";
     cleanDirectory(save_dir);
-    std::string data_dir = "test/test_data/load";
+    std::string data_dir = BASE_DIR / "load";
     // load users and movies
     IPersistence* persistence = new FilePersistence(data_dir);
     std::vector<Movie> movies_from_original_save;

@@ -5,8 +5,8 @@
 #include <vector>    // For std::vector to store movies and users
 #include <string>    // For std::string to handle command and input strings
 #include "ICommand.h" // Include ICommand interface for command execution
-#include "movie.h"    // Include Movie class definition
-#include "user.h"     // Include User class definition
+#include "Movie.h"    // Include Movie class definition
+#include "User.h"     // Include User class definition
 #include "IMenu.h"    // Include IMenu interface for menu interaction
 
 // The App class manages the application logic, delegating interaction to IMenu.

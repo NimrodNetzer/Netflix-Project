@@ -1,7 +1,7 @@
 #include "test_recommendAlgo.h"
 #include "gtest/gtest.h"
-#include "../src/movie.h"
-#include "../src/user.h"
+#include "../src/Movie.h"
+#include "../src/User.h"
 #include <vector>
 #include <algorithm>
 #include "../src/recommendAlgo.h"
