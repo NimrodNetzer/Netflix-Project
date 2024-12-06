@@ -1,5 +1,7 @@
 #include "DataManager.h"
 
+#include <stdexcept>
+
 DataManager& DataManager::getInstance() {
     static DataManager instance;
     return instance;
@@ -50,3 +52,26 @@ std::vector<int> DataManager::getMovieIds() const {
     return movieIds;
 }
 
+void DataManager::reset() {
+    users.clear();
+    movies.clear();
+    moviesWatchedByUser.clear();
+    usersWhoWatchedMovie.clear();
+    persistence = nullptr;
+}
+
+void DataManager::setPersistenceStrategy(IPersistence *persistence) {
+    DataManager::persistence = persistence;
+}
+
+void DataManager::save() const {
+    if(!persistence)
+        throw std::runtime_error("Persistence object is not initialized.");
+    persistence->Save();
+}
+
+void DataManager::load() const {
+    if(!persistence)
+        throw std::runtime_error("Persistence object is not initialized.");
+    persistence->Load();
+}

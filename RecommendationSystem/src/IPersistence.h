@@ -9,9 +9,9 @@
 class IPersistence {
     public:
         // save to the storage
-        virtual void Save(std::vector<Movie> &movies, std::vector<User> &users) = 0;
+        virtual void Save() = 0;
         // load from the storage
-        virtual void Load(std::vector<Movie> &movies, std::vector<User> &users) = 0;
+        virtual void Load() = 0;
 };
 
 #endif

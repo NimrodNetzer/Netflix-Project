@@ -87,5 +87,5 @@ void add::execute(std::string s) {
         std::cout << "Added Movie ID " << movieID << " to User ID " << userID << "." << std::endl;
 
     }
-    m_persistence->Save(m_movies, m_users);
+    m_persistence->Save();
 }

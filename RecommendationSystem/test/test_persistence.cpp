@@ -4,10 +4,10 @@
 #include <iostream>
 #include <filesystem>
 #include <fstream>
-
 #include <gtest/gtest.h>
 #include "../src/IPersistence.h"
 #include "../src/FilePersistence.h"
+#include "../src/DataManager.h"
 namespace fs = std::filesystem;
 const fs::path BASE_DIR = fs::path("test") / "test_data";
 
@@ -42,15 +42,20 @@ TEST(Persistence, Save) {
     // Generate test case
     cleanDirectory(data_dir); // clean the test folder
     IPersistence* persistence = new FilePersistence(data_dir);
-    std::vector<Movie> movies = { Movie(100), Movie(200), Movie(300) };
-    std::vector<User> users = { User(10), User(20), User(30) };
-
-    users[0].addMovieWatched(movies[0]);
-    users[0].addMovieWatched(movies[1]);
-    users[1].addMovieWatched(movies[2]);
-    users[2].addMovieWatched(movies[2]);
-    users[2].addMovieWatched(movies[1]);
-    persistence->Save(movies, users);
+    DataManager& data_manager = DataManager::getInstance();
+    data_manager.setPersistenceStrategy(persistence);
+    data_manager.addMovie(100);
+    data_manager.addMovie(200);
+    data_manager.addMovie(300);
+    data_manager.addUser(10);
+    data_manager.addUser(20);
+    data_manager.addUser(30);
+    data_manager.addUserWatchedMovie(10, 100);
+    data_manager.addUserWatchedMovie(10, 200);
+    data_manager.addUserWatchedMovie(20, 300);
+    data_manager.addUserWatchedMovie(30, 300);
+    data_manager.addUserWatchedMovie(30, 200);
+    data_manager.save();
 
     // Assertions for existence of directories
     ASSERT_TRUE(fs::exists(movies_dir));
@@ -88,46 +93,39 @@ TEST(Persistence, Save) {
     std::getline(file1, line);
     EXPECT_EQ(line, "300");
     file1.close();
+    data_manager.reset();
     delete persistence;
 }
 
 // Test the load method
 TEST(Persistence, Load) {
     std::string data_dir = BASE_DIR / "load";
+    DataManager& data_manager = DataManager::getInstance();
+    data_manager.reset();
     IPersistence* persistence = new FilePersistence(data_dir);
-    std::vector<Movie> movies;
-    std::vector<User> users;
+    data_manager.setPersistenceStrategy(persistence);
     // load movies and users from the file
-    persistence->Load(movies, users);
+    data_manager.load();
     std::vector<int> expected_users = {10, 20, 30};
     std::vector<int> expected_movies = {100, 200, 300};
     // check if data was loaded
-    ASSERT_FALSE(users.empty());
-    ASSERT_FALSE(movies.empty());
+    ASSERT_FALSE(data_manager.getUserIds().empty());
+    ASSERT_FALSE(data_manager.getMovieIds().empty());
     // Extract user IDs
-    std::vector<int> actual_user_ids;
-    std::transform(users.begin(), users.end(), std::back_inserter(actual_user_ids),
-                   [](const User& user) { return user.getUserID(); });
+    std::vector<int> actual_user_ids = data_manager.getUserIds();
     sort(actual_user_ids.begin(), actual_user_ids.end());
     // Extract movie IDs
-    std::vector<int> actual_movie_ids;
-    std::transform(movies.begin(), movies.end(), std::back_inserter(actual_movie_ids),
-                   [](const Movie& movie) { return movie.getMovieID(); });
+    std::vector<int> actual_movie_ids = data_manager.getMovieIds();
     sort(actual_movie_ids.begin(), actual_movie_ids.end());
 
     // Compare the vectors
     EXPECT_EQ(expected_users, actual_user_ids);
     EXPECT_EQ(expected_movies, actual_movie_ids);
-    std::vector<int> user1_movies;
-    auto userIt = std::find_if(users.begin(), users.end(), [](const User& user) {
-    return user.getUserID() == 10;
-    });
-    for (auto const& movie : userIt->getMoviesWatched()) {
-        user1_movies.push_back(movie.getMovieID());
-    }
+    std::vector<int> user1_movies = data_manager.getMoviesWatchedByUser(10);
     sort(user1_movies.begin(), user1_movies.end());
     std::vector<int> expected_watched_movies = {100, 200};
     EXPECT_EQ(user1_movies, expected_watched_movies);
+    data_manager.reset();
     delete persistence;
 }
 
@@ -136,43 +134,35 @@ TEST(Persistence, SaveLoad) {
     std::string save_dir = BASE_DIR / "save";
     cleanDirectory(save_dir);
     std::string data_dir = BASE_DIR / "load";
+    DataManager& data_manager = DataManager::getInstance();
     // load users and movies
     IPersistence* persistence = new FilePersistence(data_dir);
-    std::vector<Movie> movies_from_original_save;
-    std::vector<User> users_from_original_save;
-    persistence->Load(movies_from_original_save, users_from_original_save);
+    data_manager.reset();
+    data_manager.setPersistenceStrategy(persistence);
+    data_manager.load();
+    std::vector<int> users_from_original_save = data_manager.getUserIds();
+    std::vector<int> movies_from_original_save = data_manager.getMovieIds();
+    IPersistence* persistence2 = new FilePersistence(save_dir);
+    data_manager.setPersistenceStrategy(persistence2);
     delete persistence;
     // save the loaded movies and users
-    IPersistence* persistence2 = new FilePersistence(save_dir);
-    persistence2->Save(movies_from_original_save, users_from_original_save);
-    std::vector<Movie> movies_from_generated_save;
-    std::vector<User> users_from_generated_save;
+    data_manager.save();
     // load the new save
-    persistence2->Load(movies_from_generated_save, users_from_generated_save);
-    delete persistence2;
-    std::vector<int> movie_ids1, movie_ids2, user_ids1, user_ids2;
+    data_manager.reset();
+    data_manager.setPersistenceStrategy(persistence2);
+    data_manager.load();
+    std::vector<int> users_from_generated_save = data_manager.getUserIds();
+    std::vector<int> movies_from_generated_save = data_manager.getMovieIds();
     // insert user ids and movies ids to the vectors
-    for (const auto& movie : movies_from_original_save) {
-        movie_ids1.push_back(movie.getMovieID());
-    }
-    for (const auto& movie : movies_from_generated_save) {
-        movie_ids2.push_back(movie.getMovieID());
-    }
-
-    for (const auto& user : users_from_original_save) {
-        user_ids1.push_back(user.getUserID());
-    }
-    for (const auto& user : users_from_generated_save) {
-        user_ids2.push_back(user.getUserID());
-    }
 
     // Sort the ID vectors
-    std::sort(movie_ids1.begin(), movie_ids1.end());
-    std::sort(movie_ids2.begin(), movie_ids2.end());
-    std::sort(user_ids1.begin(), user_ids1.end());
-    std::sort(user_ids2.begin(), user_ids2.end());
+    std::sort(users_from_original_save.begin(), users_from_original_save.end());
+    std::sort(movies_from_original_save.begin(),movies_from_original_save.end());
+    std::sort(users_from_generated_save.begin(), users_from_generated_save.end());
+    std::sort(movies_from_generated_save.begin(), movies_from_generated_save.end());
     // Compare the vectors
-    EXPECT_EQ(user_ids1, user_ids2);
-    EXPECT_EQ(movie_ids1, movie_ids2);
-
+    EXPECT_EQ(users_from_original_save, users_from_generated_save);
+    EXPECT_EQ(movies_from_original_save, movies_from_generated_save);
+    data_manager.reset();
+    delete persistence2;
 }

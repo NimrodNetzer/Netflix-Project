@@ -6,6 +6,7 @@
 #define DATAMANAGER_H
 #include <unordered_map>
 
+#include "IPersistence.h"
 #include "User.h"
 
 
@@ -26,6 +27,11 @@ public:
     std::vector<int> getUserIds() const;
     std::vector<int> getMovieIds() const;
 
+    void reset();
+    void setPersistenceStrategy(IPersistence* persistence);
+    void save() const;
+    void load() const;
+
 private:
     DataManager() = default;
 
@@ -33,7 +39,7 @@ private:
     std::unordered_map<int, Movie> movies;
     std::unordered_map<int, std::vector<int>> moviesWatchedByUser;
     std::unordered_map<int, std::vector<int>> usersWhoWatchedMovie;
-
+    IPersistence* persistence = nullptr;
     // Delete copy and assignment
     DataManager(const DataManager&) = delete;
     DataManager& operator=(const DataManager&) = delete;

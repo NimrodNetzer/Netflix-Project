@@ -13,9 +13,9 @@ class FilePersistence : public IPersistence {
     public:
         FilePersistence(std::string folderName) : folderName(folderName) {} ;
         // Gets vectors of movies and users in the system and saves them to files.
-        void Save(std::vector<Movie> &movies, std::vector<User> &users) override;
+        void Save() override;
         // Receives two vector references to movies vector and users vector and loads the data into them.
-        void Load(std::vector<Movie> &movies, std::vector<User> &users) override;
+        void Load() override;
 };
 
 
