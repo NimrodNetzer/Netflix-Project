@@ -43,6 +43,7 @@ TEST(Persistence, Save) {
     cleanDirectory(data_dir); // clean the test folder
     IPersistence* persistence = new FilePersistence(data_dir);
     DataManager& data_manager = DataManager::getInstance();
+    data_manager.reset();
     data_manager.setPersistenceStrategy(persistence);
     data_manager.addMovie(100);
     data_manager.addMovie(200);
