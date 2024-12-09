@@ -22,6 +22,7 @@ set(TEST_HEADERS
         test_movie.h
         test_user.h
         test_add.h
+        test_persistence.h
 )
 
 # Application source files
@@ -45,6 +46,8 @@ set(APP_HEADERS
         ../src/IPersistence.h
         ../src/FilePersistence.h
         ../src/DataManager.h
+        test_new.cpp
+        test_new.h
 )
 
 # Add executable for tests

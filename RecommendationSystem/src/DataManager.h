@@ -25,6 +25,8 @@ public:
 
     std::vector<int> getUserIds() const;
     std::vector<int> getMovieIds() const;
+    void reset();
+    void addUserWatchedMovies(int userId, const std::vector<int> &movieIds);
 
 private:
     DataManager() = default;
@@ -37,6 +39,7 @@ private:
     // Delete copy and assignment
     DataManager(const DataManager&) = delete;
     DataManager& operator=(const DataManager&) = delete;
+
 };
 
 
