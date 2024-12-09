@@ -118,6 +118,7 @@ std::vector<int> sortKeysByValues(const std::unordered_map<int, int> &movieRelev
     std::vector<int> sortedKeys;
     for (const auto &pair: elements) {
         sortedKeys.push_back(pair.first);
+
     }
 
     size_t size = std::min(sortedKeys.size(), static_cast<size_t>(10));
