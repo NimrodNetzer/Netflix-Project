@@ -21,5 +21,3 @@ WORKDIR /usr/src/RecommendationSystem/
 
 # Run RecommendationSystem
 CMD ["./build/RecommendationSystem"]
-# To run the tests execute:
-# docker run --rm "build_name" ./test/build/RecommendationSystem_Tests
