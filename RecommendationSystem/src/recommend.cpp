@@ -2,15 +2,18 @@
 #include <iostream>
 #include <algorithm>
 #include "recommend.h"
+
+#include <DataManager.h>
+
 #include "recommendAlgo.h"
 #include <vector>
 
 // Constructor implementation that initializes the 'recommend' class with lists of movies and users
-recommend::recommend(std::vector<Movie>& movies, std::vector<User>& users)
-        : m_movies(movies), m_users(users) {}
+recommend::recommend() {}
 
 // Executes the recommendation command based on a provided input string
 void recommend::execute(std::string s) {
+    DataManager& data_manager = DataManager::getInstance();
     std::istringstream iss(s);  // Create a string stream to parse the input command
     int userID;
 
@@ -21,16 +24,12 @@ void recommend::execute(std::string s) {
     }
 
     // Search for the user with the specified user ID in the list of users
-    auto userIt = std::find_if(m_users.begin(), m_users.end(), [userID](const User &user) {
-        return user.getUserID() == userID;  // Check if the current user has the specified ID
-    });
+    bool userExists = data_manager.hasUser(userID);
 
-    if (userIt == m_users.end()) {  // If user not found
+    if (!userExists) {  // If user not found
         std::cout << "User with ID " << userID << " not found." << std::endl;
         return;
     }
-
-    User *foundUser = &(*userIt);  // Pointer to the found user
 
     int movieID;
 
@@ -41,19 +40,14 @@ void recommend::execute(std::string s) {
     }
 
     // Search for the movie with the specified movie ID in the list of movies
-    auto movieIt = std::find_if(m_movies.begin(), m_movies.end(), [movieID](const Movie &movie) {
-        return movie.getMovieID() == movieID;  // Check if the current movie has the specified ID
-    });
-
-    if (movieIt == m_movies.end()) {  // If movie not found
+    bool movieExists = data_manager.hasMovie(movieID);
+    if (!movieExists) {  // If movie not found
         std::cout << "Movie with ID " << movieID << " not found." << std::endl;
         return;
     }
 
-    Movie *foundMovie = &(*movieIt);  // Pointer to the found movie
-
     // Combine and calculate the relevance of movies
-    std::vector<int> sortedMovies = combineAndCalculateMoviesRelevance(m_users, m_movies, *foundUser, *foundMovie);
+    std::vector<int> sortedMovies = combineAndCalculateMoviesRelevance(data_manager.getUser(userID) ,data_manager.getMovie(movieID));
 
     // Output the sorted list of movie IDs
     for (size_t i = 0; i < sortedMovies.size(); ++i) {

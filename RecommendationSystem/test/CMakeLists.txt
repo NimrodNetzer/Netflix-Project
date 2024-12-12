@@ -46,8 +46,6 @@ set(APP_HEADERS
         ../src/IPersistence.h
         ../src/FilePersistence.h
         ../src/DataManager.h
-        test_new.cpp
-        test_new.h
 )
 
 # Add executable for tests

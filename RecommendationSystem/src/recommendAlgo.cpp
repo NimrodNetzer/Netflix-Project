@@ -66,16 +66,7 @@ sumMoviesRelevance(
     for (int user: dataManager.getUserIds()) {
         // Loop through each movie the user has watched
         for (Movie movie: dataManager.getMoviesWatchedByUser(user)) {
-            bool watched = false;  // Flag to track if the movie was watched by the given user
-
-            // Check if the given user has already watched the current movie
-            for (int givenUserWatchedMovie: dataManager.getMoviesWatchedByUser(givenUser.getUserID())) {
-                if (givenUserWatchedMovie == movie.getMovieID()) {
-                    watched = true; // Movie is watched by the given user, set the flag
-                    break;
-                }
-            }
-
+            bool watched = dataManager.userWatchedMovie(givenUser.getUserID() , movie.getMovieID());  // Flag to track if the movie was watched by the given user
             // Skip this movie if it was already watched by the given user
             if (watched) continue;
 

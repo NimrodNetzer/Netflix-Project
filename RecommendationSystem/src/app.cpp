@@ -3,9 +3,8 @@
 #include <exception>  // For std::exception
 
 // Constructor for the App class that initializes the menu, commands, movies, and users.
-App::App(IMenu& menu, const std::map<std::string, ICommand*>& commands,
-         std::vector<Movie>& movies, std::vector<User>& users)
-        : m_menu(menu), m_commands(commands), m_movies(movies), m_users(users) {}
+App::App(IMenu& menu, const std::map<std::string, ICommand*>& commands)
+        : m_menu(menu), m_commands(commands) {}
 
 // Main loop for the application, continuously accepting and executing commands.
 void App::run() {

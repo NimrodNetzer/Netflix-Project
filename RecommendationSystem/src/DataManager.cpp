@@ -1,5 +1,6 @@
 #include "DataManager.h"
 
+#include <algorithm>
 #include <stdexcept>
 
 DataManager& DataManager::getInstance() {
@@ -9,10 +10,12 @@ DataManager& DataManager::getInstance() {
 
 void DataManager::addUser(const User& user) {
     users.emplace(user.getUserID(), user);
+    moviesWatchedByUser[user.getUserID()] = {};
 }
 
 void DataManager::addMovie(const Movie& movie) {
     movies.emplace(movie.getMovieID(), movie);
+    usersWhoWatchedMovie[movie.getMovieID()] = {};
 }
 
 void DataManager::addUserWatchedMovie(int userId, int movieId) {
@@ -34,6 +37,26 @@ const User& DataManager::getUser(int userId) const {
 
 const Movie& DataManager::getMovie(int movieId) const {
     return movies.at(movieId);
+}
+
+bool DataManager::hasUser(int userId) const {
+    return users.find(userId) != users.end();
+}
+
+bool DataManager::hasMovie(int movieId) const {
+    return movies.find(movieId) != movies.end();
+}
+
+bool DataManager::userWatchedMovie(int userId, int movieId) const {
+    // Check if the user exists
+    auto userIt = moviesWatchedByUser.find(userId);
+    if (userIt == moviesWatchedByUser.end()) {
+        return false; // User does not exist, so they haven't watched the movie
+    }
+
+    // Check if the movie is in the list of movies watched by the user
+    const auto& watchedMovies = userIt->second;
+    return std::find(watchedMovies.begin(), watchedMovies.end(), movieId) != watchedMovies.end();
 }
 
 std::vector<int> DataManager::getMoviesWatchedByUser(int userId) const {

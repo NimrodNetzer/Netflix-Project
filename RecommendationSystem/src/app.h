@@ -13,8 +13,7 @@
 class App {
 public:
     // Constructor that initializes the App object with references to menu, commands, movies, and users.
-    App(IMenu& menu, const std::map<std::string, ICommand*>& commands,
-        std::vector<Movie>& movies, std::vector<User>& users);
+    App(IMenu& menu, const std::map<std::string, ICommand*>& commands);
 
     // Main method to run the application, processing commands in an interactive loop.
     void run();
@@ -26,11 +25,6 @@ private:
     // A map that associates command IDs (strings) with their corresponding command objects.
     std::map<std::string, ICommand*> m_commands;
 
-    // A vector holding all Movie objects available in the application.
-    std::vector<Movie> m_movies;
-
-    // A vector holding all User objects available in the application.
-    std::vector<User> m_users;
 };
 
 #endif // APP_H

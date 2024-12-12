@@ -21,6 +21,10 @@ public:
     const User& getUser(int userId) const;
     const Movie& getMovie(int movieId) const;
 
+    bool hasUser(int userId) const;
+    bool hasMovie(int movieId) const;
+    bool userWatchedMovie(int userId, int movieId) const;
+
     std::vector<int> getMoviesWatchedByUser(int userId) const;
     std::vector<int> getUsersWhoWatchedMovie(int movieId) const;
 
@@ -29,7 +33,6 @@ public:
     void reset();
     void addUserWatchedMovies(int userId, const std::vector<int> &movieIds);
 
-    void reset();
     void setPersistenceStrategy(IPersistence* persistence);
     void save() const;
     void load() const;

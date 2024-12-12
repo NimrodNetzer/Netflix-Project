@@ -1,4 +1,5 @@
 
+#include <DataManager.h>
 #include <iostream>
 #include <memory> // For smart pointers
 #include "ConsoleMenu.h"
@@ -14,31 +15,30 @@
 #include "recommend.h"
 
 // Helper function to initialize commands
-std::map<std::string, ICommand*> initializeCommands(std::vector<Movie>& movies, std::vector<User>& users, IPersistence* persistence) {
+std::map<std::string, ICommand*> initializeCommands() {
     std::map<std::string, ICommand*> commands;
-    commands["add"] = new add(movies, users, persistence);
+    commands["add"] = new add();
     commands["help"] = new Help();
-    commands["recommend"] = new recommend(movies, users);
+    commands["recommend"] = new recommend();
     return commands;
 }
 
 int main() {
     try {
         // Create sample vectors of movies and users
-        std::vector<Movie> movies;
-        std::vector<User> users;
         IPersistence* persistence = new FilePersistence("data");
-
+        DataManager& data_manager = DataManager::getInstance();
+        data_manager.setPersistenceStrategy(persistence);
         // Initialize commands
-        std::map<std::string, ICommand*> commands = initializeCommands(movies, users, persistence);
+        std::map<std::string, ICommand*> commands = initializeCommands();
 
         // Create a ConsoleMenu instance
         ConsoleMenu menu;
 
-        persistence->Load(movies, users);
+        data_manager.load();
 
         // Create the application instance
-        App application(menu, commands, movies, users);
+        App application(menu, commands);
 
         // Run the application
         application.run();
@@ -47,6 +47,7 @@ int main() {
         for (auto& command : commands) {
             delete command.second;
         }
+        delete persistence;
 
     } catch (const std::exception& e) {
         std::cerr << "An error occurred: " << e.what() << std::endl;
