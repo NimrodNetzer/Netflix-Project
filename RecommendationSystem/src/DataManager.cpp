@@ -20,6 +20,14 @@ void DataManager::addUserWatchedMovie(int userId, int movieId) {
     usersWhoWatchedMovie[movieId].push_back(userId);
 }
 
+
+void DataManager::addUserWatchedMovies(int userId, const std::vector<int>& movieIds) {
+    for (int movieId : movieIds) {
+        moviesWatchedByUser[userId].push_back(movieId);
+        usersWhoWatchedMovie[movieId].push_back(userId);
+    }
+}
+
 const User& DataManager::getUser(int userId) const {
     return users.at(userId);
 }

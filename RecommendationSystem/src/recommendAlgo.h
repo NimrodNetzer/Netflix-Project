@@ -12,24 +12,20 @@
 #include "Movie.h"
 
 // Function declarations
-std::vector<User> watchedDesiredMovie(
-        const std::vector<User> &allUsers,
-        const Movie &givenMovie);
-
 std::unordered_map<int, int> countCommonMoviesWithGivenUser(
-        const std::vector<User> &usersWatchedTargetMovieList,
+        const Movie &givenMovie,  // List of users to compare against the given user
         const User &givenUser);
 
-
 std::unordered_map<int, int>
-sumMoviesRelevance(std::unordered_map<int, int> &commonMoviesWithGivenUserCounterList,
-                   const std::vector<User> &allUsers, const User &givenUser);
+sumMoviesRelevance(
+        // Map of users and their common movie count with the given user
+        std::unordered_map<int, int> &commonMoviesWithGivenUserCounterList,
+        const User &givenUser);
 
 std::vector<int> sortKeysByValues(const std::unordered_map<int, int> &movieRelevance);
 
 
-std::vector<int> combineAndCalculateMoviesRelevance(
-        const std::vector<User> &allUsers, const std::vector<Movie> &allMovies,
-        const User &givenUser, const Movie &givenMovie);
+std::vector<int> combineAndCalculateMoviesRelevance(const User &givenUser, const Movie &givenMovie);
+
 
 #endif // RECOMMENDATIONSYSTEM_RECOMMENDALGO_H

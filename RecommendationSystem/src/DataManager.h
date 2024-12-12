@@ -26,6 +26,8 @@ public:
 
     std::vector<int> getUserIds() const;
     std::vector<int> getMovieIds() const;
+    void reset();
+    void addUserWatchedMovies(int userId, const std::vector<int> &movieIds);
 
     void reset();
     void setPersistenceStrategy(IPersistence* persistence);
@@ -43,6 +45,7 @@ private:
     // Delete copy and assignment
     DataManager(const DataManager&) = delete;
     DataManager& operator=(const DataManager&) = delete;
+
 };
 
 
