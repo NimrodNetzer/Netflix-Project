@@ -9,4 +9,4 @@ second run:
 `docker start -ai recommendation`
 
 To run the tests:
-`docker run --rm "build_name" ./test/build/RecommendationSystem_Tests`
+`docker run --rm "recsys" ./test/build/RecommendationSystem_Tests`
