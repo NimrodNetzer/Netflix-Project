@@ -17,6 +17,8 @@ public:
 
     // Method to execute some functionality with the movies and users
     void execute(std::string s) override;
+
+    void validateString(std::string s);
 };
 
 

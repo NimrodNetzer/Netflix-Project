@@ -18,7 +18,7 @@ public:
 
         // Check if the input is empty and throw an exception if it is.
         if (m_lastInput.empty()) {
-            throw std::invalid_argument("No command entered.");
+            throw std::invalid_argument("");
         }
         return 0; // Return a dummy command ID for now (placeholder).
     }

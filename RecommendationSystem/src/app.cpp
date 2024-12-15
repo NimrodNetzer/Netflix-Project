@@ -16,11 +16,6 @@ void App::run() {
             // Retrieve the last input from the menu.
             const std::string& commandLine = m_menu.getLastInput();
 
-            // Exit the loop if the user enters the 'exit' command.
-            if (commandLine == "exit") {
-                break;
-            }
-
             // Parse the command ID from the input.
             std::istringstream iss(commandLine);
             std::string commandID;
@@ -33,9 +28,6 @@ void App::run() {
                 std::string arguments;
                 std::getline(iss, arguments);
                 it->second->execute(arguments);
-            } else {
-                // If the command is not found, display an error message.
-                m_menu.displayError("Invalid command ID.");
             }
         } catch (const std::exception& e) {
             // Handle exceptions and display an error message using the menu.

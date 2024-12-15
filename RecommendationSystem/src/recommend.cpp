@@ -1,53 +1,88 @@
-#include <sstream>
-#include <iostream>
-#include <algorithm>
 #include "recommend.h"
-
-#include <DataManager.h>
-
-#include "recommendAlgo.h"
+#include <iostream>
+#include <sstream>
 #include <vector>
+#include <stdexcept>
+#include "DataManager.h"
+#include "recommendAlgo.h"
 
-// Constructor implementation that initializes the 'recommend' class with lists of movies and users
+// Constructor for the 'recommend' class
 recommend::recommend() {}
 
-// Executes the recommendation command based on a provided input string
-void recommend::execute(std::string s) {
-    DataManager& data_manager = DataManager::getInstance();
-    std::istringstream iss(s);  // Create a string stream to parse the input command
-    int userID;
+// Validates the input string for the 'recommend' command
+void recommend::validateString(std::string s) {
+    std::istringstream iss(s);
+    int userID, movieID;
 
-    // Extract the user ID from the command string. If extraction fails, print an error and return.
+    // Trim leading/trailing whitespace
+    s.erase(0, s.find_first_not_of(" \t\n\r\f\v"));
+    s.erase(s.find_last_not_of(" \t\n\r\f\v") + 1);
+
+    // Check if the input is empty
+    if (s.empty()) {
+        throw std::invalid_argument("");
+    }
+
+    // Check if userID exists and is valid
     if (!(iss >> userID)) {
-        std::cout << "Invalid command format: missing or invalid user ID." << std::endl;
-        return;
+        throw std::invalid_argument("");
     }
 
-    // Search for the user with the specified user ID in the list of users
-    bool userExists = data_manager.hasUser(userID);
-
-    if (!userExists) {  // If user not found
-        std::cout << "User with ID " << userID << " not found." << std::endl;
-        return;
+    // Validate that the userID is non-negative
+    if (userID < 0) {
+        throw std::invalid_argument("");
     }
 
-    int movieID;
-
-    // Extract the movie ID from the command string. If extraction fails, print an error and return.
+    // Check if movieID exists and is valid
     if (!(iss >> movieID)) {
-        std::cout << "Invalid command format: missing or invalid movie ID." << std::endl;
+        throw std::invalid_argument("");
+    }
+
+    // Validate that the movieID is non-negative
+    if (movieID < 0) {
+        throw std::invalid_argument("");
+    }
+
+    // Ensure no additional invalid characters are present
+    std::string extra;
+    if (iss >> extra) {
+        throw std::invalid_argument("");
+    }
+
+    // Additional domain-specific validations (if applicable)
+    // Example: Validate if userID or movieID ranges are reasonable.
+    if (userID > 1'000'000 || movieID > 1'000'000) {  // Example range check
+        throw std::invalid_argument("");
+    }
+}
+
+// Executes the 'recommend' command
+void recommend::execute(std::string s) {
+    try {
+        validateString(s);
+    } catch (const std::invalid_argument& e) {
+        std::cout << e.what() << std::endl;
         return;
     }
 
-    // Search for the movie with the specified movie ID in the list of movies
-    bool movieExists = data_manager.hasMovie(movieID);
-    if (!movieExists) {  // If movie not found
-        std::cout << "Movie with ID " << movieID << " not found." << std::endl;
+    DataManager& data_manager = DataManager::getInstance();
+    std::istringstream iss(s);
+    int userID, movieID;
+    iss >> userID >> movieID;
+
+    // Check if user exists
+    if (!data_manager.hasUser(userID)) {
         return;
     }
 
-    // Combine and calculate the relevance of movies
-    std::vector<int> sortedMovies = combineAndCalculateMoviesRelevance(data_manager.getUser(userID) ,data_manager.getMovie(movieID));
+    // Check if movie exists
+    if (!data_manager.hasMovie(movieID)) {
+        return;
+    }
+
+    // Calculate recommendations
+    std::vector<int> sortedMovies = combineAndCalculateMoviesRelevance(
+            data_manager.getUser(userID), data_manager.getMovie(movieID));
 
     // Output the sorted list of movie IDs
     for (size_t i = 0; i < sortedMovies.size(); ++i) {
