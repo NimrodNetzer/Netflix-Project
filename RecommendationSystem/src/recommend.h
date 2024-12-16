@@ -1,25 +1,21 @@
-//
-// Created by orlib on 05/12/2024.
-//
-
 #ifndef RECOMMENDATIONSYSTEM_RECOMMEND_H
 #define RECOMMENDATIONSYSTEM_RECOMMEND_H
 
-
 #include <vector>
+#include <string>
 #include "ICommand.h"
-#include "Movie.h"
-#include "User.h"
+#include "IMenu.h"
 
 class recommend : public ICommand {
 public:
-    recommend();
+    explicit recommend(IMenu& menu); // Constructor accepting IMenu
 
-    // Method to execute some functionality with the movies and users
-    void execute(std::string s) override;
+    void execute(std::string s) override; // Overridden execute method
 
     void validateString(std::string s);
-};
 
+private:
+    IMenu& m_menu; // Reference to an IMenu instance
+};
 
 #endif //RECOMMENDATIONSYSTEM_RECOMMEND_H

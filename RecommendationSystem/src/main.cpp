@@ -14,36 +14,29 @@
 #include "recommendAlgo.h"
 #include "recommend.h"
 
-// Helper function to initialize commands
-std::map<std::string, ICommand*> initializeCommands() {
+std::map<std::string, ICommand*> initializeCommands(IMenu& menu) {
     std::map<std::string, ICommand*> commands;
-    commands["add"] = new add();
-    commands["help"] = new Help();
-    commands["recommend"] = new recommend();
+    commands["add"] = new add();           // No change for add
+    commands["help"] = new Help(menu);    // Pass menu to Help
+    commands["recommend"] = new recommend(menu); // Pass menu to recommend
     return commands;
 }
 
 int main() {
     try {
-        // Create sample vectors of movies and users
+        ConsoleMenu menu;
+
+        // Initialize commands with ConsoleMenu
+        std::map<std::string, ICommand*> commands = initializeCommands(menu);
+
         IPersistence* persistence = new FilePersistence("data");
         DataManager& data_manager = DataManager::getInstance();
         data_manager.setPersistenceStrategy(persistence);
-        // Initialize commands
-        std::map<std::string, ICommand*> commands = initializeCommands();
-
-        // Create a ConsoleMenu instance
-        ConsoleMenu menu;
-
         data_manager.load();
 
-        // Create the application instance
         App application(menu, commands);
-
-        // Run the application
         application.run();
 
-        // Clean up dynamically allocated commands
         for (auto& command : commands) {
             delete command.second;
         }
@@ -51,12 +44,13 @@ int main() {
 
     } catch (const std::exception& e) {
         std::cerr << "An error occurred: " << e.what() << std::endl;
-        return 1; // Return non-zero to indicate failure
+        return 1;
     } catch (...) {
         std::cerr << "An unknown error occurred." << std::endl;
-        return 1; // Return non-zero to indicate failure
+        return 1;
     }
 
-    return 0; // Return zero to indicate success
+    return 0;
 }
+
 

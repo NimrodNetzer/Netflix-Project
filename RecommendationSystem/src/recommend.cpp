@@ -1,67 +1,66 @@
 #include "recommend.h"
-#include <iostream>
 #include <sstream>
-#include <vector>
 #include <stdexcept>
 #include "DataManager.h"
 #include "recommendAlgo.h"
 
-// Constructor for the 'recommend' class
-recommend::recommend() {}
+recommend::recommend(IMenu& menu) : m_menu(menu) {}
 
-// Validates the input string for the 'recommend' command
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <cctype>  // For isdigit
+
 void recommend::validateString(std::string s) {
-    std::istringstream iss(s);
-    int userID, movieID;
-
-    // Trim leading/trailing whitespace
+    // Trim leading and trailing whitespace
     s.erase(0, s.find_first_not_of(" \t\n\r\f\v"));
     s.erase(s.find_last_not_of(" \t\n\r\f\v") + 1);
 
-    // Check if the input is empty
+    // Check if the string is empty after trimming
     if (s.empty()) {
         throw std::invalid_argument("");
     }
 
-    // Check if userID exists and is valid
+    std::istringstream iss(s);
+    int userID, movieID;
+
+    // Validate the first part (userID)
     if (!(iss >> userID)) {
         throw std::invalid_argument("");
     }
-
-    // Validate that the userID is non-negative
     if (userID < 0) {
         throw std::invalid_argument("");
     }
 
-    // Check if movieID exists and is valid
+    // Validate the second part (movieID)
     if (!(iss >> movieID)) {
         throw std::invalid_argument("");
     }
-
-    // Validate that the movieID is non-negative
     if (movieID < 0) {
         throw std::invalid_argument("");
     }
 
-    // Ensure no additional invalid characters are present
+    // Check if there is any extra input after the movie ID
     std::string extra;
     if (iss >> extra) {
-        throw std::invalid_argument("");
+        throw std::invalid_argument("" + extra);
     }
 
-    // Additional domain-specific validations (if applicable)
-    // Example: Validate if userID or movieID ranges are reasonable.
-    if (userID > 1'000'000 || movieID > 1'000'000) {  // Example range check
-        throw std::invalid_argument("");
+    // Optionally, you can check if all characters are digits in the string
+    // but this approach works well for IDs that should be numeric
+    for (char c : s) {
+        if (!std::isdigit(c) && !std::isspace(c)) {
+            throw std::invalid_argument("");
+        }
     }
 }
 
-// Executes the 'recommend' command
+
 void recommend::execute(std::string s) {
     try {
         validateString(s);
     } catch (const std::invalid_argument& e) {
-        std::cout << e.what() << std::endl;
+        m_menu.displayError(e.what());
         return;
     }
 
@@ -70,26 +69,18 @@ void recommend::execute(std::string s) {
     int userID, movieID;
     iss >> userID >> movieID;
 
-    // Check if user exists
     if (!data_manager.hasUser(userID)) {
+        m_menu.displayError("");
         return;
     }
 
-    // Check if movie exists
     if (!data_manager.hasMovie(movieID)) {
+        m_menu.displayError("");
         return;
     }
 
-    // Calculate recommendations
     std::vector<int> sortedMovies = combineAndCalculateMoviesRelevance(
             data_manager.getUser(userID), data_manager.getMovie(movieID));
-
-    // Output the sorted list of movie IDs
-    for (size_t i = 0; i < sortedMovies.size(); ++i) {
-        std::cout << sortedMovies[i];
-        if (i < sortedMovies.size() - 1) {
-            std::cout << ", ";
-        }
-    }
-    std::cout << std::endl;
+    m_menu.displayMovieList(sortedMovies);
 }
+
