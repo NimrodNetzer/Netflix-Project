@@ -2,9 +2,9 @@
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
-#include "User.h"
-#include "Movie.h"
-#include "DataManager.h"
+#include "objects/User.h"
+#include "objects/Movie.h"
+#include "Data/DataManager.h"
 
 // Function to count the number of common movies between the given user and other users in the provided list
 std::unordered_map<int, int> countCommonMoviesWithGivenUser(
@@ -121,8 +121,7 @@ std::vector<int> sortKeysByValues(const std::unordered_map<int, int> &movieRelev
 std::vector<int> combineAndCalculateMoviesRelevance(const User &givenUser, const Movie &givenMovie) {
 
     // Step 2: Get the count of common movies with the given user
-    std::unordered_map<int, int> commonMoviesCount =
-            countCommonMoviesWithGivenUser(givenMovie, givenUser);
+    std::unordered_map<int, int> commonMoviesCount = countCommonMoviesWithGivenUser(givenMovie, givenUser);
 
     // Step 3: Get the movie relevance based on the number of common movies
     std::unordered_map<int, int> movieRelevance =

@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <string>
-#include "ICommand.h"
-#include "IMenu.h"
+#include "Interfaces/ICommand.h"
+#include "Menus/IMenu.h"
 
 // 'recommend' class that implements the ICommand interface
 class recommend : public ICommand {

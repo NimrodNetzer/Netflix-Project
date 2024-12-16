@@ -1,6 +1,6 @@
 #include "test_movie.h"
 #include <gtest/gtest.h>
-#include "../src/Movie.h"
+#include "objects/Movie.h"
 TEST(Movie, Constructor) {
     Movie movie(100);
     EXPECT_EQ(movie.getMovieID(), 100);

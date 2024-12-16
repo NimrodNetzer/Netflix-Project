@@ -5,34 +5,34 @@ set(CMAKE_CXX_STANDARD 20)
 
 # Explicitly list all the source and header files
 set(SOURCES
-        src/add.cpp
-        src/app.cpp
-        src/ConsoleMenu.cpp
-        src/FilePersistence.cpp
-        src/help.cpp
-        src/ICommand.cpp
-        src/IMenu.cpp
-        src/main.cpp
-        src/Movie.cpp
-        src/recommend.cpp
-        src/recommendAlgo.cpp
-        src/User.cpp
-        src/DataManager.cpp
+        src/Commands/add.cpp
+        src/Core/app.cpp
+        src/Menus/ConsoleMenu.cpp
+        src/Data/FilePersistence.cpp
+        src/Commands/help.cpp
+        src/Interfaces/ICommand.cpp
+        src/Menus/IMenu.cpp
+        src/Core/main.cpp
+        src/objects/Movie.cpp
+        src/Commands/recommend.cpp
+        src/Commands/recommendAlgo.cpp
+        src/objects/User.cpp
+        src/Data/DataManager.cpp
 )
 
 set(HEADERS
-        src/add.h
-        src/app.h
-        src/ConsoleMenu.h
-        src/FilePersistence.h
-        src/help.h
-        src/ICommand.h
-        src/IMenu.h
-        src/IPersistence.h
-        src/Movie.h
-        src/recommend.h
-        src/recommendAlgo.h
-        src/User.h
+        src/Commands/add.h
+        src/Core/app.h
+        src/Menus/ConsoleMenu.h
+        src/Data/FilePersistence.h
+        src/Commands/help.h
+        src/Interfaces/ICommand.h
+        src/Menus/IMenu.h
+        src/Interfaces/IPersistence.h
+        src/objects/Movie.h
+        src/Commands/recommend.h
+        src/Commands/recommendAlgo.h
+        src/objects/User.h
 )
 
 # Add the executable

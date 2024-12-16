@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
-#include "../src/DataManager.h"
-#include "../src/User.h"
-#include "../src/Movie.h"
-#include "../src/recommendAlgo.h"
+#include "DataManage/DataManager.h"
+#include "objects/User.h"
+#include "objects/Movie.h"
+#include "Commands/recommendAlgo.h"
 #include <unordered_map>
 #include <vector>
 #include <algorithm>

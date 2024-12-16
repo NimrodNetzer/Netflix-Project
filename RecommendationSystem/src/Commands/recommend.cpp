@@ -1,7 +1,7 @@
 #include "recommend.h"
 #include <sstream>
 #include <stdexcept>
-#include "DataManager.h"
+#include "Data/DataManager.h"
 #include "recommendAlgo.h"
 
 recommend::recommend(IMenu& menu) : m_menu(menu) {}

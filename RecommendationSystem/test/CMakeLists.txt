@@ -24,25 +24,25 @@ set(TEST_HEADERS
 
 # Application source files
 set(APP_SOURCES
-        ../src/Movie.cpp
-        ../src/User.cpp
-        ../src/app.cpp
-        ../src/add.cpp
-        ../src/ICommand.cpp
-        ../src/FilePersistence.cpp
-        ../src/recommendAlgo.cpp
-        ../src/DataManager.cpp
+        ../src/objects/Movie.cpp
+        ../src/objects/User.cpp
+        ../src/Core/app.cpp
+        ../src/Commands/add.cpp
+        ../src/Interfaces/ICommand.cpp
+        ../src/Data/FilePersistence.cpp
+        ../src/Commands/recommendAlgo.cpp
+        ../src/Data/DataManager.cpp
 )
 
 set(APP_HEADERS
-        ../src/Movie.h
-        ../src/User.h
-        ../src/app.h
-        ../src/add.h
-        ../src/ICommand.h
-        ../src/IPersistence.h
-        ../src/FilePersistence.h
-        ../src/DataManager.h
+        ../src/objects/Movie.h
+        ../src/objects/User.h
+        ../src/Core/app.h
+        ../src/Commands/add.h
+        ../src/Interfaces/ICommand.h
+        ../src/Interfaces/IPersistence.h
+        ../src/Data/FilePersistence.h
+        ../src/Data/DataManager.h
 )
 
 # Add executable for tests

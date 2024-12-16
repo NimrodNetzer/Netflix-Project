@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
-#include "../src/User.h"
-#include "../src/add.h"
-#include "../src/FilePersistence.h"
-#include "../src/DataManager.h"
+#include "objects/User.h"
+#include "Commands/add.h"
+#include "DataManage/FilePersistence.h"
+#include "DataManage/DataManager.h"
 #include <algorithm>  // For std::sort
 #include <filesystem>
 

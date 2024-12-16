@@ -1,18 +1,18 @@
 
-#include <DataManager.h>
+#include "Data/DataManager.h"
 #include <iostream>
 #include <memory> // For smart pointers
-#include "ConsoleMenu.h"
-#include "ICommand.h"
-#include "add.h"
-#include "app.h"
-#include "help.h"
+#include "Menus/ConsoleMenu.h"
+#include "Interfaces/ICommand.h"
+#include "Commands/add.h"
+#include "Core/app.h"
+#include "Commands/help.h"
 #include <map>
 #include <vector>
-#include "IPersistence.h"
-#include "FilePersistence.h"
-#include "recommendAlgo.h"
-#include "recommend.h"
+#include "Interfaces/IPersistence.h"
+#include "Data/FilePersistence.h"
+#include "Commands/recommendAlgo.h"
+#include "Commands/recommend.h"
 
 std::map<std::string, ICommand*> initializeCommands(IMenu& menu) {
     std::map<std::string, ICommand*> commands;

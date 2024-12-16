@@ -1,8 +1,8 @@
 #ifndef HELP_H
 #define HELP_H
 
-#include "ICommand.h"  // Include the ICommand interface for command functionality
-#include "IMenu.h"     // Include the IMenu interface for menu interaction
+#include "Interfaces/ICommand.h"  // Include the ICommand interface for command functionality
+#include "Menus/IMenu.h"     // Include the IMenu interface for menu interaction
 
 // The Help class inherits from ICommand and provides functionality for the 'help' command
 class Help : public ICommand {

@@ -5,9 +5,9 @@
 #include <filesystem>
 #include <fstream>
 #include <gtest/gtest.h>
-#include "../src/IPersistence.h"
-#include "../src/FilePersistence.h"
-#include "../src/DataManager.h"
+#include "Interfaces/IPersistence.h"
+#include "DataManage/FilePersistence.h"
+#include "DataManage/DataManager.h"
 namespace fs = std::filesystem;
 const fs::path BASE_DIR = fs::path("test") / "test_data";
 

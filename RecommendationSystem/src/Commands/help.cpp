@@ -1,4 +1,4 @@
-#include "help.h"
+#include "Commands/help.h"
 
 // Constructor that takes a reference to an IMenu object and initializes m_menu
 Help::Help(IMenu& menu) : m_menu(menu) {}

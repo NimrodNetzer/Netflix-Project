@@ -1,9 +1,9 @@
 #ifndef FILEPERSISTENCE_H
 #define FILEPERSISTENCE_H
 #include <vector>
-#include "Movie.h"
-#include "User.h"
-#include "IPersistence.h"
+#include "objects/Movie.h"
+#include "objects/User.h"
+#include "Interfaces/IPersistence.h"
 
 // Object for persisting users and movies to files
 class FilePersistence : public IPersistence {

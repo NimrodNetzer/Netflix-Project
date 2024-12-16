@@ -4,10 +4,10 @@
 #include <map>        // For std::map to store command mappings
 #include <vector>    // For std::vector to store movies and users
 #include <string>    // For std::string to handle command and input strings
-#include "ICommand.h" // Include ICommand interface for command execution
-#include "Movie.h"    // Include Movie class definition
-#include "User.h"     // Include User class definition
-#include "IMenu.h"    // Include IMenu interface for menu interaction
+#include "Interfaces/ICommand.h" // Include ICommand interface for command execution
+#include "objects/Movie.h"    // Include Movie class definition
+#include "objects/User.h"     // Include User class definition
+#include "Menus/IMenu.h"    // Include IMenu interface for menu interaction
 
 // The App class manages the application logic, delegating interaction to IMenu.
 class App {
