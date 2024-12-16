@@ -1,12 +1,31 @@
 # Netflix-BIU
 שלום, מאחר והצוות היה במילואים יש לנו הארכה. נא לא לבדוק את הפרוייקט כרגע, תודה רבה.
 
-`docker build -t recsys .`
-first run:
-`docker run -it --name recommendation recsys`
+# Recommendation System
 
-second run:
-`docker start -ai recommendation`
+## Build the Docker Image
+To build the Docker image, run the following command:
+```bash
+docker build -t recommendation-build .
+```
 
-To run the tests:
-`docker run --rm "recsys" ./test/build/RecommendationSystem_Tests`
+## Running the Container
+
+### First Run
+To create and run the container for the first time, execute:
+```bash
+docker run -it --init --name recommendation-system recommendation-build
+```
+
+### Subsequent Runs
+To start the container after it has already been created, use:
+```bash
+docker start -ai recommendation-system
+```
+
+## Running Tests
+To run the tests, use the following command:
+```bash
+docker run --rm recommendation-build ./test/build/RecommendationSystem_Tests
+```
+This command will run the tests in a disposable container, which will be removed after the tests complete.
