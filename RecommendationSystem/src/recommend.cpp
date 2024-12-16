@@ -55,32 +55,43 @@ void recommend::validateString(std::string s) {
     }
 }
 
-
 void recommend::execute(std::string s) {
     try {
+        // Validate the input string, ensuring it has the correct format
         validateString(s);
     } catch (const std::invalid_argument& e) {
+        // If validation fails, display an error message and exit the function
         m_menu.displayError(e.what());
         return;
     }
 
+    // Get the singleton instance of DataManager to manage data
     DataManager& data_manager = DataManager::getInstance();
+
+    // Initialize an input stream from the string to extract the userID and movieID
     std::istringstream iss(s);
     int userID, movieID;
     iss >> userID >> movieID;
 
+    // Check if the user with the specified userID exists in the data manager
     if (!data_manager.hasUser(userID)) {
-        m_menu.displayError("");
+        // If user does not exist, display an error and exit
+        m_menu.displayError("User not found.");
         return;
     }
 
+    // Check if the movie with the specified movieID exists in the data manager
     if (!data_manager.hasMovie(movieID)) {
-        m_menu.displayError("");
+        // If movie does not exist, display an error and exit
+        m_menu.displayError("Movie not found.");
         return;
     }
 
+    // Combine and calculate movie relevance based on user data and movie data
     std::vector<int> sortedMovies = combineAndCalculateMoviesRelevance(
             data_manager.getUser(userID), data_manager.getMovie(movieID));
+
+    // Display the list of relevant movies to the user
     m_menu.displayMovieList(sortedMovies);
 }
 
