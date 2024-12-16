@@ -8,8 +8,6 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 # Test source files
 set(TEST_SOURCES
-        test1.cpp
-        test2.cpp
         test_movie.cpp
         test_user.cpp
         test_add.cpp
@@ -18,7 +16,6 @@ set(TEST_SOURCES
 )
 
 set(TEST_HEADERS
-        test2.h
         test_movie.h
         test_user.h
         test_add.h
