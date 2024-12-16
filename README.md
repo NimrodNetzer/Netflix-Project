@@ -1,5 +1,4 @@
 # Netflix-BIU
-שלום, מאחר והצוות היה במילואים יש לנו הארכה. נא לא לבדוק את הפרוייקט כרגע, תודה רבה.
 # Recommendation System
 
 This project implements a recommendation system in C++ for suggesting movies to users based on their viewing preferences. The system operates with the following functionalities:
