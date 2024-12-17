@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <winsock2.h> // For Winsock functions (Windows)
 
 class SocketMenu {
 public:

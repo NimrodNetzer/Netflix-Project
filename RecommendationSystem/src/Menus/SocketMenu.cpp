@@ -1,4 +1,5 @@
 #include "SocketMenu.h"
+#include <winsock2.h>
 
 // Constructor to initialize the socket
 SocketMenu::SocketMenu(int clientSocket) : m_socket(clientSocket) {

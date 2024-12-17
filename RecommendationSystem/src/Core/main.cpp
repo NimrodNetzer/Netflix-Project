@@ -16,6 +16,7 @@
 #include "Commands/post.h"
 #include "Commands/patch.h"
 #include "Commands/Delete.h"
+#include "Server/Server.h"
 
 std::map<std::string, ICommand*> initializeCommands(IMenu& menu) {
     std::map<std::string, ICommand*> commands;
@@ -56,7 +57,8 @@ int main() {
         std::cerr << "An unknown error occurred." << std::endl;
         return 1;
     }
-
+    Server server;
+    //server.run();
     return 0;
 }
 

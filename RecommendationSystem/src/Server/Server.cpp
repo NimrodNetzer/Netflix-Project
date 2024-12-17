@@ -8,10 +8,11 @@
 #include <string>
 #include <cstring>
 #include <unistd.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
 
-#define PORT 8082
+
+#define PORT 8100
 #define MAX_CLIENTS 3
 #define BUFFER_SIZE 1024
 
@@ -50,6 +51,11 @@ void Server::handleClient(int clientSocket) {
 
 
 void Server::run() {
+    WSADATA wsaData;
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+        std::cerr << "WSAStartup failed." << std::endl;
+        exit(EXIT_FAILURE);
+    }
     int serverSocket, clientSocket;
     struct sockaddr_in serverAddr, clientAddr;
     socklen_t clientAddrLen = sizeof(clientAddr);
@@ -62,7 +68,7 @@ void Server::run() {
 
     // Configure server address
     serverAddr.sin_family = AF_INET;
-    serverAddr.sin_addr.s_addr = INADDR_ANY;
+    serverAddr.sin_addr.s_addr = htonl(INADDR_ANY); // Ensure proper conversion
     serverAddr.sin_port = htons(PORT);
 
     // Bind the socket
