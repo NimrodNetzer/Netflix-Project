@@ -7,9 +7,9 @@
 
 #include <unordered_map>
 #include <vector>
-#include "Interfaces/IPersistence.h"
-#include "objects/User.h"
-#include "objects/Movie.h"
+#include "../Interfaces/IPersistence.h"
+#include "../objects/User.h"
+#include "../objects/Movie.h"
 
 class DataManager {
 public:

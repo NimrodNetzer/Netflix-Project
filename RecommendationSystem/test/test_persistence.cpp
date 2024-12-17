@@ -4,14 +4,16 @@
 #include <iostream>
 #include <filesystem>
 #include <fstream>
+#include <string>  // Added for std::string and std::stoi
+#include <cstdlib>  // Added for std::stoi
 #include <gtest/gtest.h>
-#include "Interfaces/IPersistence.h"
-#include "DataManage/FilePersistence.h"
-#include "DataManage/DataManager.h"
+#include "../src/Interfaces/IPersistence.h"
+#include "../src/Data/FilePersistence.h"
+#include "../src/Data/DataManager.h"
 namespace fs = std::filesystem;
 const fs::path BASE_DIR = fs::path("test") / "test_data";
 
-// Delete all files and directories withing a directory
+// Delete all files and directories within a directory
 void cleanDirectory(const fs::path& dir_path) {
     try {
         if (fs::exists(dir_path) && fs::is_directory(dir_path)) {
@@ -41,7 +43,7 @@ TEST(Persistence, Save) {
 
     // Generate test case
     cleanDirectory(data_dir); // clean the test folder
-    IPersistence* persistence = new FilePersistence(data_dir);
+    IPersistence* persistence = new FilePersistence(data_dir.string());  // Convert path to string
     DataManager& data_manager = DataManager::getInstance();
     data_manager.reset();
     data_manager.setPersistenceStrategy(persistence);
@@ -65,7 +67,7 @@ TEST(Persistence, Save) {
     // Check saved movies
     std::vector<int> saved_movies;
     for (auto const& dir_entry : fs::directory_iterator(movies_dir)) {
-        saved_movies.push_back(atoi(dir_entry.path().filename().c_str()));
+        saved_movies.push_back(std::stoi(dir_entry.path().filename().string()));  // Convert filename to string and use std::stoi
     }
     std::sort(saved_movies.begin(), saved_movies.end());
     std::vector<int> expected_movies = {100, 200, 300};
@@ -74,7 +76,7 @@ TEST(Persistence, Save) {
     // Check saved users
     std::vector<int> saved_users;
     for (auto const& dir_entry : fs::directory_iterator(users_dir)) {
-        saved_users.push_back(atoi(dir_entry.path().filename().c_str()));
+        saved_users.push_back(std::stoi(dir_entry.path().filename().string()));  // Convert filename to string and use std::stoi
     }
     std::vector<int> expected_users = {10, 20, 30};
     std::sort(saved_users.begin(), saved_users.end());
@@ -100,10 +102,10 @@ TEST(Persistence, Save) {
 
 // Test the load method
 TEST(Persistence, Load) {
-    std::string data_dir = BASE_DIR / "load";
+    std::string data_dir = (BASE_DIR / "load").string();  // Convert fs::path to std::string
     DataManager& data_manager = DataManager::getInstance();
     data_manager.reset();
-    IPersistence* persistence = new FilePersistence(data_dir);
+    IPersistence* persistence = new FilePersistence(data_dir);  // Pass string to constructor
     data_manager.setPersistenceStrategy(persistence);
     // load movies and users from the file
     data_manager.load();
@@ -132,18 +134,18 @@ TEST(Persistence, Load) {
 
 // Test save and load method
 TEST(Persistence, SaveLoad) {
-    std::string save_dir = BASE_DIR / "save";
+    std::string save_dir = (BASE_DIR / "save").string();  // Convert fs::path to std::string
     cleanDirectory(save_dir);
-    std::string data_dir = BASE_DIR / "load";
+    std::string data_dir = (BASE_DIR / "load").string();  // Convert fs::path to std::string
     DataManager& data_manager = DataManager::getInstance();
     // load users and movies
-    IPersistence* persistence = new FilePersistence(data_dir);
+    IPersistence* persistence = new FilePersistence(data_dir);  // Pass string to constructor
     data_manager.reset();
     data_manager.setPersistenceStrategy(persistence);
     data_manager.load();
     std::vector<int> users_from_original_save = data_manager.getUserIds();
     std::vector<int> movies_from_original_save = data_manager.getMovieIds();
-    IPersistence* persistence2 = new FilePersistence(save_dir);
+    IPersistence* persistence2 = new FilePersistence(save_dir);  // Pass string to constructor
     data_manager.setPersistenceStrategy(persistence2);
     delete persistence;
     // save the loaded movies and users
@@ -158,7 +160,7 @@ TEST(Persistence, SaveLoad) {
 
     // Sort the ID vectors
     std::sort(users_from_original_save.begin(), users_from_original_save.end());
-    std::sort(movies_from_original_save.begin(),movies_from_original_save.end());
+    std::sort(movies_from_original_save.begin(), movies_from_original_save.end());
     std::sort(users_from_generated_save.begin(), users_from_generated_save.end());
     std::sort(movies_from_generated_save.begin(), movies_from_generated_save.end());
     // Compare the vectors

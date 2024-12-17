@@ -2,10 +2,10 @@
 #define MY_TEST_ADD_H
 
 #include <vector>
-#include "objects/Movie.h"
-#include "objects/User.h"
-#include "Interfaces/ICommand.h"  // Include the ICommand interface
-#include "Interfaces/IPersistence.h"
+#include "../objects/Movie.h"
+#include "../objects/User.h"
+#include "../Interfaces/ICommand.h"  // Include the ICommand interface
+#include "../Interfaces/IPersistence.h"
 
 class add : public ICommand {
 public:

@@ -1,9 +1,9 @@
-#include "Commands/add.h"
+#include "../Commands/add.h"
 #include <iostream>
 #include <sstream>
 #include <vector>
 #include <stdexcept>
-#include "Data/DataManager.h"
+#include "../Data/DataManager.h"
 #include <unordered_set>
 
 // Constructor for the 'add' class

@@ -1,8 +1,9 @@
 #include "gtest/gtest.h"
-#include "objects/User.h"
-#include "Commands/add.h"
-#include "DataManage/FilePersistence.h"
-#include "DataManage/DataManager.h"
+#include "../src/objects/User.h"
+#include "../src/Commands/add.h"
+#include "../src/Data/FilePersistence.h"
+#include "../src/Data//DataManager.h"
+#include "../src/Interfaces/IPersistence.h"
 #include <algorithm>  // For std::sort
 #include <filesystem>
 
@@ -12,7 +13,8 @@ const fs::path BASE_DIR = fs::path("test") / "test_data";
 
 TEST(Command, add) {
     DataManager& dataManager = DataManager::getInstance();
-    IPersistence* persistence = new FilePersistence(BASE_DIR / "save");
+    std::filesystem::path path = BASE_DIR / "save";
+    IPersistence* persistence = new FilePersistence(path.string());
     // Reset DataManager state before running tests
     dataManager.reset();
     dataManager.setPersistenceStrategy(persistence);

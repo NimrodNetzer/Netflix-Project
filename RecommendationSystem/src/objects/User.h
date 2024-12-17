@@ -1,7 +1,7 @@
 #ifndef USER_H
 #define USER_H
 #include <vector>
-#include "objects/Movie.h"
+#include "../objects/Movie.h"
 
 // User class represents a user in the movie recommendation system
 class User {

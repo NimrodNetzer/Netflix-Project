@@ -8,8 +8,8 @@
 #include "map"
 #include <unordered_map>
 #include <vector>
-#include "objects/User.h"
-#include "objects/Movie.h"
+#include "../objects/User.h"
+#include "../objects/Movie.h"
 
 // Function to count the common movies between a given user and a specific movie
 // It compares the list of users who watched the given movie and counts common movies with the given user

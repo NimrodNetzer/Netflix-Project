@@ -2,9 +2,9 @@
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
-#include "objects/User.h"
-#include "objects/Movie.h"
-#include "Data/DataManager.h"
+#include "../objects/User.h"
+#include "../objects/Movie.h"
+#include "../Data/DataManager.h"
 
 // Function to count the number of common movies between the given user and other users in the provided list
 std::unordered_map<int, int> countCommonMoviesWithGivenUser(
