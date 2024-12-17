@@ -40,6 +40,7 @@ set(HEADERS
         src/Commands/Delete.cpp
         src/Server/Server.cpp
         src/Menus/SocketMenu.h
+        src/Server/Server.h
 )
 
 # Add the executable

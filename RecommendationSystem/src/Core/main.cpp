@@ -35,20 +35,18 @@ int main() {
         ConsoleMenu menu;
 
         // Initialize commands with ConsoleMenu
-        std::map<std::string, ICommand*> commands = initializeCommands(menu);
+        //std::map<std::string, ICommand*> commands = initializeCommands(menu);
 
         IPersistence* persistence = new FilePersistence("data");
         DataManager& data_manager = DataManager::getInstance();
         data_manager.setPersistenceStrategy(persistence);
         data_manager.load();
 
-        App application(menu, commands);
-        application.run();
+        //application.run();
 
-        for (auto& command : commands) {
-            delete command.second;
-        }
-        delete persistence;
+        //for (auto& command : commands) {
+        //    delete command.second;
+        //}
 
     } catch (const std::exception& e) {
         std::cerr << "An error occurred: " << e.what() << std::endl;
@@ -58,7 +56,7 @@ int main() {
         return 1;
     }
     Server server;
-    //server.run();
+    server.run();
     return 0;
 }
 

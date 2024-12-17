@@ -17,36 +17,35 @@
 #define BUFFER_SIZE 1024
 
 #include "Server.h"
+#include "Core/app.h"
+#include "Commands/Delete.h"
+#include "Menus/SocketMenu.h"
+#include "Commands/add.h"
+#include "Commands/help.h"
+#include "Commands/recommend.h"
+#include "Commands/patch.h"
+#include "Commands/post.h"
+
+std::map<std::string, ICommand*> Server::initializeCommands(IMenu& menu) {
+    std::map<std::string, ICommand*> commands;
+    commands["add"] = new add();           // No change for add
+    commands["help"] = new Help(menu);    // Pass menu to Help
+    commands["get"] = new recommend(menu); // Pass menu to recommend
+    commands["post"] = new post(menu);
+    commands["patch"] = new patch(menu);
+    commands["delete"] = new Delete(menu);
+
+    return commands;
+}
 
 void Server::handleClient(int clientSocket) {
     char buffer[BUFFER_SIZE] = {0};
+    SocketMenu menu(clientSocket);
+    std::map<std::string, ICommand*> commands = initializeCommands(menu);
+    App application(menu, commands);
+    application.run();
 
-    while (true) {
-        int bytesRead = recv(clientSocket, buffer, BUFFER_SIZE, 0);
-        if (bytesRead <= 0) {
-            std::cout << "Client " << clientSocket << " disconnected.\n";
-            close(clientSocket);
-            break;
-        }
 
-        std::string clientMessage(buffer);
-
-        // Check if the client sent "goodbye"
-        if (clientMessage.find("goodbye") != std::string::npos) {
-            std::string goodbyeResponse = "goodbye :)";
-            send(clientSocket, goodbyeResponse.c_str(), goodbyeResponse.size(), 0);
-            std::cout << "Client said goodbye. Connection closed.\n";
-            close(clientSocket);
-            break;
-        }
-
-        // Respond to other messages
-        std::cout << "Client "<< clientSocket << " send: " << clientMessage << std::endl;
-        std::string response = "Message : " + clientMessage + " :)";
-        send(clientSocket, response.c_str(), response.size(), 0);
-
-        memset(buffer, 0, BUFFER_SIZE);
-    }
 }
 
 

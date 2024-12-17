@@ -16,6 +16,9 @@ void App::run() {
             // Retrieve the last input from the menu.
             const std::string& commandLine = m_menu.getLastInput();
 
+            if(commandLine == "stop")
+                return;
+
             // Parse the command ID from the input.
             std::istringstream iss(commandLine);
             std::string commandID;
@@ -28,6 +31,10 @@ void App::run() {
                 std::string arguments;
                 std::getline(iss, arguments);
                 it->second->execute(arguments);
+            }
+            else{
+                m_menu.displayBadRequestError("400 Bad Request");
+                continue;
             }
         } catch (const std::exception& e) {
             // Handle exceptions and display an error message using the menu.

@@ -92,7 +92,6 @@ void recommend::execute(std::string s) {
             data_manager.getUser(userID), data_manager.getMovie(movieID));
 
     // Display the list of relevant movies to the user
-    m_menu.displayMessage("200 ok");
     m_menu.displayMovieList(sortedMovies);
 }
 
