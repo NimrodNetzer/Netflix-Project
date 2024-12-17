@@ -33,11 +33,7 @@ set(HEADERS
         src/Commands/recommend.h
         src/Commands/recommendAlgo.h
         src/objects/User.h
-        src/Commands/patch.cpp
-        src/Commands/patch.h
-        src/Commands/post.cpp
-        src/Commands/Delete.cpp
-        src/Commands/Delete.h
+        src/Menus/SocketMenu.cpp
 )
 
 # Add the executable

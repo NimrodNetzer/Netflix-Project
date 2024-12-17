@@ -3,3 +3,5 @@
 //
 
 #include "ConsoleMenu.h"
+
+// Connect to sockets in order to receive the data and print it
