@@ -13,6 +13,7 @@ set(TEST_SOURCES
         test_add.cpp
         test_persistence.cpp
         test_recommendAlgo.cpp
+        test_Delete.cpp
 )
 
 set(TEST_HEADERS
@@ -20,6 +21,7 @@ set(TEST_HEADERS
         test_user.h
         test_add.h
         test_persistence.h
+        test_Delete.h
 )
 
 # Application source files
@@ -32,6 +34,7 @@ set(APP_SOURCES
         ../src/Data/FilePersistence.cpp
         ../src/Commands/recommendAlgo.cpp
         ../src/Data/DataManager.cpp
+        ../src/Commands/Delete.cpp
 )
 
 set(APP_HEADERS
@@ -43,6 +46,8 @@ set(APP_HEADERS
         ../src/Interfaces/IPersistence.h
         ../src/Data/FilePersistence.h
         ../src/Data/DataManager.h
+        ../src/Commands/Delete.h
+        test_recommendAlgo.h
 )
 
 # Add executable for tests

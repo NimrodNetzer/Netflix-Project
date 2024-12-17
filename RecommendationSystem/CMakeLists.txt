@@ -18,6 +18,7 @@ set(SOURCES
         src/Commands/recommendAlgo.cpp
         src/objects/User.cpp
         src/Data/DataManager.cpp
+        src/Commands/Delete.cpp
 )
 
 set(HEADERS
@@ -35,6 +36,7 @@ set(HEADERS
         src/objects/User.h
         src/Commands/patch.cpp
         src/Commands/patch.h
+        src/Commands/Delete.h
 )
 
 # Add the executable

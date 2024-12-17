@@ -6,6 +6,7 @@
 #include "../src/Interfaces/IPersistence.h"
 #include <algorithm>  // For std::sort
 #include <filesystem>
+#include "../src/objects/Movie.h"
 
 
 namespace fs = std::filesystem;

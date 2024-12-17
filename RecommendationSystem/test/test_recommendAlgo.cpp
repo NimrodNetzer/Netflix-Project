@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../src/Data//DataManager.h"
+#include "../src/Data/DataManager.h"
 #include "../src/objects/User.h"
 #include "../src/objects/Movie.h"
 #include "../src/Commands/recommendAlgo.h"
