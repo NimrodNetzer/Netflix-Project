@@ -2,8 +2,8 @@
 #define DELETE_H
 
 #include <string>
-#include "Interfaces/ICommand.h"
-#include "Menus/IMenu.h"
+#include "../Interfaces/ICommand.h"
+#include "../Menus/IMenu.h"
 
 class Delete : public ICommand {
 public:

@@ -2,7 +2,7 @@
 #include <sstream>
 #include <iostream>
 #include <unordered_set>
-#include "Data/DataManager.h"
+#include "../Data/DataManager.h"
 
 Delete::Delete(IMenu& menu) : m_menu(menu) {}
 
@@ -94,6 +94,24 @@ void Delete::execute(std::string s) {
     // Check if the user exists
     if (!data_manager.hasUser(userID)) {
         std::cout << "User does not exist." << std::endl;
+        m_menu.displayLogicError("404 Not Found");
+        return;
+    }
+
+    // Check if the movie IDs exist in the user's watched movies list
+    std::vector<int> nonExistentMovies;
+    for (int movieId : movieIds) {
+        if (!data_manager.userWatchedMovie(userID, movieId)) {
+            nonExistentMovies.push_back(movieId);
+        }
+    }
+
+    if (!nonExistentMovies.empty()) {
+        std::cout << "The following movie IDs do not exist in the user's watched list: ";
+        for (int nonExistentMovie : nonExistentMovies) {
+            std::cout << nonExistentMovie << " ";
+        }
+        std::cout << std::endl;
         m_menu.displayLogicError("404 Not Found");
         return;
     }
