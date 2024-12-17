@@ -36,6 +36,8 @@ set(HEADERS
         src/Commands/patch.cpp
         src/Commands/patch.h
         src/Commands/post.cpp
+        src/Commands/Delete.cpp
+        src/Commands/Delete.h
 )
 
 # Add the executable

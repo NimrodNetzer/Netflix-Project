@@ -15,6 +15,7 @@
 #include "Commands/recommend.h"
 #include "Commands/post.h"
 #include "Commands/patch.h"
+#include "Commands/Delete.h"
 
 std::map<std::string, ICommand*> initializeCommands(IMenu& menu) {
     std::map<std::string, ICommand*> commands;
@@ -23,6 +24,8 @@ std::map<std::string, ICommand*> initializeCommands(IMenu& menu) {
     commands["get"] = new recommend(menu); // Pass menu to recommend
     commands["post"] = new post(menu);
     commands["patch"] = new patch(menu);
+    commands["delete"] = new Delete(menu);
+
     return commands;
 }
 

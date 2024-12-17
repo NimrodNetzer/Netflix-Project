@@ -137,3 +137,26 @@ void DataManager::load() const {
     }
     persistence->Load(); // Delegate the load operation to the persistence object
 }
+
+// Function that removes one or more movies from the user's watched movies list
+void DataManager::deleteUserMovies(int userId, const std::vector<int>& movieIds) {
+    if (hasUser(userId)) { // Check if the user exists
+        for (int movieId : movieIds) { // Iterate through the list of movie IDs to delete
+            if (hasMovie(movieId)) { // Check if the movie exists
+                // Remove the movie from the user's watched list
+                auto& watchedMovies = moviesWatchedByUser[userId];
+                auto it = std::find(watchedMovies.begin(), watchedMovies.end(), movieId);
+
+                if (it != watchedMovies.end()) { // If the movie is found
+                    watchedMovies.erase(it); // Remove the movie from the list
+                }
+
+                // Also remove the user from the list of users who watched this movie
+                auto& usersWhoWatched = usersWhoWatchedMovie[movieId];
+                usersWhoWatched.erase(std::remove(usersWhoWatched.begin(), usersWhoWatched.end(), userId), usersWhoWatched.end());
+            }
+        }
+        persistence->Save();
+    }
+}
+

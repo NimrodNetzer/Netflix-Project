@@ -67,6 +67,9 @@ public:
     // Loads data using the current persistence strategy
     void load() const;
 
+    //removes one or more movies from the user's watched movies list
+    void deleteUserMovies(int userId, const std::vector<int>& movieIds);
+
 private:
     // Private constructor to enforce the singleton pattern
     DataManager() = default;
