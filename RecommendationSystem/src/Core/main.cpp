@@ -13,12 +13,16 @@
 #include "Data/FilePersistence.h"
 #include "Commands/recommendAlgo.h"
 #include "Commands/recommend.h"
+#include "Commands/post.h"
+#include "Commands/patch.h"
 
 std::map<std::string, ICommand*> initializeCommands(IMenu& menu) {
     std::map<std::string, ICommand*> commands;
     commands["add"] = new add();           // No change for add
     commands["help"] = new Help(menu);    // Pass menu to Help
-    commands["recommend"] = new recommend(menu); // Pass menu to recommend
+    commands["get"] = new recommend(menu); // Pass menu to recommend
+    commands["post"] = new post(menu);
+    commands["patch"] = new patch(menu);
     return commands;
 }
 

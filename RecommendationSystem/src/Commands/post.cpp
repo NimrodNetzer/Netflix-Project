@@ -1,14 +1,14 @@
-#include "patch.h"
+#include "post.h"
 #include <sstream>
 #include <iostream>
 #include "Data/DataManager.h"
 #include "add.h"
 
-// Constructor definition for the 'patch' class
-patch::patch(IMenu& menu) : m_menu(menu) {}
+// Constructor definition for the 'post' class
+post::post(IMenu& menu) : m_menu(menu) {}
 
-void patch::execute(std::string s) {
-    // Create an 'add' object for validation and execution (reuse add command if needed)
+void post::execute(std::string s) {
+    // Create an 'add' object
     add addCommand;
 
     // Validate the input string
@@ -26,24 +26,24 @@ void patch::execute(std::string s) {
     int userID;
     iss >> userID;
 
-    // Check if the user exists
-    if (!data_manager.hasUser(userID)) {
-        std::cout << "User not found." << std::endl;
+    // Check if the user already exists
+    if (data_manager.hasUser(userID)) {
+        std::cout << "User already exists." << std::endl;
         m_menu.displayLogicError("404 Not Found");
         return;
     }
 
     // Use a try-catch block only around the 'execute' method of add
     try {
-        // Update the user and movie data (the actual patch operation)
+        // Execute the add command (e.g., create user and add movies)
         addCommand.execute(s);
     } catch (const std::exception& e) {
-        // Catch any exceptions that may arise during the execution of the patch command
-        std::cout << "Error executing patch command: " << e.what() << std::endl;
+        // Catch any exceptions that may arise during the execution of the add command
+        std::cout << "Error executing add command: " << e.what() << std::endl;
         m_menu.displayBadRequestError("400 Bad Request");
         return;
     }
 
     // Success response
-    m_menu.displayMessage("204 No Content");
+    m_menu.displayMessage("201 Created");
 }

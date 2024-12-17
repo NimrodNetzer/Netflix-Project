@@ -12,8 +12,11 @@ public:
     // Pure virtual function for getting the next command from the user input
     virtual int nextCommand() = 0;
 
-    // Pure virtual function for displaying an error message
-    virtual void displayError(const std::string& message) = 0;
+    // Pure virtual function for displaying a logic error message (404 Not Found)
+    virtual void displayLogicError(const std::string& message) = 0;
+
+    // Pure virtual function for displaying a bad request error message (400 Bad Request)
+    virtual void displayBadRequestError(const std::string& message) = 0;
 
     // Pure virtual function to get the last user input as a string
     virtual const std::string& getLastInput() const = 0;

@@ -31,7 +31,7 @@ void App::run() {
             }
         } catch (const std::exception& e) {
             // Handle exceptions and display an error message using the menu.
-            m_menu.displayError(e.what());
+            m_menu.displayBadRequestError("400 Bad Request");
         }
     }
 }

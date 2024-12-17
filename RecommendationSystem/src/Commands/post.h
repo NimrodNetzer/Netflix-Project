@@ -1,5 +1,5 @@
-#ifndef PATCH_H
-#define PATCH_H
+#ifndef POST_H
+#define POST_H
 
 #include <vector>
 #include <string>
@@ -7,10 +7,10 @@
 #include "Menus/IMenu.h"
 
 // 'recommend' class that implements the ICommand interface
-class patch : public ICommand {
+class post : public ICommand {
 public:
     // Constructor that accepts a reference to an IMenu instance
-    explicit patch(IMenu& menu);
+    explicit post(IMenu& menu);
 
     // Overridden execute method from ICommand interface
     // Takes a string 's' as input, processes it and provides recommendations

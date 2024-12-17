@@ -6,56 +6,49 @@
 #include <string>
 #include <vector>
 
-// Derived class implementing the IMenu interface
 class ConsoleMenu : public IMenu {
 public:
-    // Default constructor
     ConsoleMenu() = default;
 
-    // Override all virtual methods from IMenu
-
-    // Method to prompt the user for a command and read the input
     int nextCommand() override {
-        std::cout << "Enter command: "; // Display prompt
-        std::getline(std::cin, m_lastInput); // Get user input
+        std::cout << "Enter command: ";
+        std::getline(std::cin, m_lastInput);
 
-        // If input is empty, throw an exception (could be extended to handle specific cases)
-        if (m_lastInput.empty()){
-            throw std::invalid_argument("Input cannot be empty.");
+        if (m_lastInput.empty()) {
+            std::cout << "Input cannot be empty. Please enter a valid command." << std::endl;
+            return -1;  // Indicating invalid input
         }
-        return 0; // Returning 0 as a placeholder (this could be adjusted based on your needs)
+        return 0;  // Successfully read a command
     }
 
-    // Method to display an error message to the user
-    void displayError(const std::string& message) override {
-        std::cerr << "Error: " << message << std::endl; // Print error to standard error
-    }
-
-    // Method to return the last input received from the user
     const std::string& getLastInput() const override {
-        return m_lastInput; // Return the stored last input
+        return m_lastInput;
     }
 
-    // Method to display a general message to the user
     void displayMessage(const std::string& message) override {
-        std::cout << message << std::endl; // Output message to standard output (console)
+        std::cout << message << std::endl;
     }
 
-    // Method to display a list of movie IDs (represented as integers)
     void displayMovieList(const std::vector<int>& movies) override {
-        for (size_t i = 0; i < movies.size(); ++i) { // Loop through all movie IDs
-            std::cout << movies[i]; // Print each movie ID
-
-            // If not the last movie in the list, add a comma separator
+        std::cout << "Movies List: ";
+        for (size_t i = 0; i < movies.size(); ++i) {
+            std::cout << movies[i];
             if (i < movies.size() - 1) {
                 std::cout << ", ";
             }
         }
-        std::cout << std::endl; // End the line after the list
+        std::cout << std::endl;
+    }
+
+    void displayLogicError(const std::string& message) override {
+        std::cout << "404 Not Found: " << message << std::endl;
+    }
+
+    void displayBadRequestError(const std::string& message) override {
+        std::cout << "400 Bad Request: " << message << std::endl;
     }
 
 private:
-    // Member variable to store the last input string from the user
     std::string m_lastInput;
 };
 
