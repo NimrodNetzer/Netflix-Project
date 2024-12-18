@@ -45,6 +45,8 @@ set(HEADERS
         src/Server/Executor.h
         src/Server/SimpleExecutor.h
         src/Server/SimpleExecutor.cpp
+        src/Server/ClientHandler.h
+        src/Server/ClientHandler.cpp
 )
 
 # Add the executable
