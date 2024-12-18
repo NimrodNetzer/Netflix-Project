@@ -1,6 +1,13 @@
 #include "SocketMenu.h"
-#include <netinet/in.h>
+#ifdef _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#pragma comment(lib, "ws2_32.lib") // Link with Winsock library
+#else
+#include <unistd.h>
 #include <arpa/inet.h>
+#include <netinet/in.h>
+#endif
 
 // Constructor to initialize the socket
 SocketMenu::SocketMenu(int clientSocket) : m_socket(clientSocket) {
