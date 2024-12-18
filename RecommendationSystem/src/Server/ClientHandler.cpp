@@ -30,6 +30,7 @@ std::map<std::string, ICommand*> ClientHandler::initializeCommands(IMenu& menu) 
 }
 
 void ClientHandler::run() {
+    std::cout << "running";
     try {
         SocketMenu menu(clientSocket); // Menu linked to client socket
 

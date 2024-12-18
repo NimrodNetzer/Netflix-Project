@@ -9,6 +9,7 @@
 #include "Interfaces/ICommand.h"
 #include "Menus/IMenu.h"
 #include "Menus/SocketMenu.h"
+#include "SimpleExecutor.h"
 
 #
 
@@ -20,7 +21,7 @@ class Server {
 
 private:
     std::map<std::string, ICommand*> initializeCommands(IMenu& menu);
-
+    SimpleExecutor executor;
 };
 
 

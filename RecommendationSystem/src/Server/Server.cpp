@@ -30,7 +30,7 @@
 
 void Server::handleClient(int client_sock) {
     ClientHandler handler(client_sock);
-    handler.run();
+    executor.execute(handler);
 }
 
 
