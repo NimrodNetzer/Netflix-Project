@@ -17,6 +17,8 @@
 #define BUFFER_SIZE 1024
 
 #include "Server.h"
+
+#include "ClientHandler.h"
 #include "Core/app.h"
 #include "Commands/Delete.h"
 #include "Menus/SocketMenu.h"
@@ -26,26 +28,9 @@
 #include "Commands/patch.h"
 #include "Commands/post.h"
 
-std::map<std::string, ICommand*> Server::initializeCommands(IMenu& menu) {
-    std::map<std::string, ICommand*> commands;
-    commands["add"] = new add();           // No change for add
-    commands["help"] = new Help(menu);    // Pass menu to Help
-    commands["get"] = new recommend(menu); // Pass menu to recommend
-    commands["post"] = new post(menu);
-    commands["patch"] = new patch(menu);
-    commands["delete"] = new Delete(menu);
-
-    return commands;
-}
-
-void Server::handleClient(int clientSocket) {
-    char buffer[BUFFER_SIZE] = {0};
-    SocketMenu menu(clientSocket);
-    std::map<std::string, ICommand*> commands = initializeCommands(menu);
-    App application(menu, commands);
-    application.run();
-
-
+void Server::handleClient(int client_sock) {
+    ClientHandler handler(client_sock);
+    handler.run();
 }
 
 
