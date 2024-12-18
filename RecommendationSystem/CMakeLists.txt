@@ -41,6 +41,10 @@ set(HEADERS
         src/Server/Server.cpp
         src/Menus/SocketMenu.h
         src/Server/Server.h
+        src/Server/Runnable.h
+        src/Server/Executor.h
+        src/Server/SimpleExecutor.h
+        src/Server/SimpleExecutor.cpp
 )
 
 # Add the executable
