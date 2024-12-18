@@ -11,7 +11,7 @@ class Executor {
     public:
     virtual ~Executor() = default;
 
-    virtual void execute(Runnable& task) = 0;
+    virtual void execute(Runnable* task) = 0;
 };
 
 

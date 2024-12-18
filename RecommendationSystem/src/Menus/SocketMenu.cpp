@@ -1,12 +1,13 @@
 #include "SocketMenu.h"
-#include <winsock2.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 // Constructor to initialize the socket
 SocketMenu::SocketMenu(int clientSocket) : m_socket(clientSocket) {
-    if (clientSocket == INVALID_SOCKET) {
-        std::cerr << "Invalid socket." << std::endl;
-        exit(1);  // Exit the program if socket is invalid
-    }
+    //if (clientSocket == INVALID_SOCKET) {
+    //    std::cerr << "Invalid socket." << std::endl;
+    //    exit(1);  // Exit the program if socket is invalid
+    //}
 }
 
 // Method to prompt the user for a command and read the input from the socket
@@ -41,7 +42,7 @@ void SocketMenu::displayMessage(const std::string& message) {
 // Method to display a list of movie IDs (represented as integers)
 void SocketMenu::displayMovieList(const std::vector<int>& movies) {
     std::string movieList;
-
+    std::cout << movies.size() << std::endl;
     // Construct the movie list as a comma-separated string
     for (size_t i = 0; i < movies.size(); ++i) {
         movieList += std::to_string(movies[i]);

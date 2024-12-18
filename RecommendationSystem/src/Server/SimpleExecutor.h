@@ -7,7 +7,7 @@
 
 class SimpleExecutor : public Executor {
 public:
-    void execute(Runnable& task) override;
+    void execute(Runnable* task) override;
     ~SimpleExecutor() override {
         for (std::thread &t : threads) {
             if (t.joinable()) {
