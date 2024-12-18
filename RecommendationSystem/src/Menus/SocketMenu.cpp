@@ -18,7 +18,6 @@ int SocketMenu::nextCommand() {
         m_lastInput = std::string(buffer); // Store the input as the last received message
         return 0;
     } else if (bytesReceived == 0) {
-        m_lastInput = "stop";
         std::cerr << "Connection closed by the server." << std::endl;
         return -1; // Connection closed
     } else {

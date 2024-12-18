@@ -22,7 +22,8 @@ def main():
         if command.lower() == 'exit':
             print("Exiting...")
             break
-
+        if len(command) == 0:
+            command = '\n'
         # Send the command to the server
         client_socket.send(command.encode())
 

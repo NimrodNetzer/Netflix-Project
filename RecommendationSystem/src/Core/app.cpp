@@ -11,13 +11,14 @@ void App::run() {
     while (true) {
         try {
             // Display the menu and get the user's command input.
-            m_menu.nextCommand();
-
+            int res = m_menu.nextCommand();
+            if(res == -1) {
+                return;
+            }
             // Retrieve the last input from the menu.
             const std::string& commandLine = m_menu.getLastInput();
 
-            if(commandLine == "stop")
-                return;
+
 
             // Parse the command ID from the input.
             std::istringstream iss(commandLine);
