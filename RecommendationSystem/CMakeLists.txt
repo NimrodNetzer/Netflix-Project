@@ -51,7 +51,7 @@ set(HEADERS
 
 # Add the executable
 add_executable(RecommendationSystem ${SOURCES} ${HEADERS})
-target_link_libraries(RecommendationSystem ws2_32)
+#target_link_libraries(RecommendationSystem ws2_32)
 
 # Include the src directory for header file lookups
 target_include_directories(RecommendationSystem PRIVATE ${CMAKE_SOURCE_DIR}/src)

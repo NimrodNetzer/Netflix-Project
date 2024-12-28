@@ -49,6 +49,7 @@ void ClientHandler::run() {
     } catch (...) {
         std::cerr << "Unknown error occurred while handling client." << std::endl;
     }
+    std::cout << "closing connection" << std::endl;
     // Close the client socket
     close(clientSocket);
 }

@@ -11,30 +11,35 @@ This project implements a recommendation system in C++ for suggesting movies to 
 The project follows SOLID principles and is designed for scalability, enabling seamless updates and extensions to the codebase. The recommendation algorithm is based on calculating the similarity of users and their movie-watching patterns, prioritizing movies watched by users with higher similarity scores.
 
 
+## Cd to RecommendationSystem
+```bash
+cd RecommendationSystem
+```
+
 ## Build the Docker Image
 To build the Docker image, run the following command:
 ```bash
-docker build -t recommendation-build .
+docker compose build
 ```
 
 ## Running the Container
 
-### First Run
+### Run the server
 To create and run the container for the first time, execute:
 ```bash
-docker run -it --init --name recommendation-system recommendation-build
+docker compose up server
 ```
 
-### Subsequent Runs
+### Run the client
 To start the container after it has already been created, use:
 ```bash
-docker start -ai recommendation-system
+docker compose run --rm client
 ```
 
 ## Running Tests
 To run the tests, use the following command:
 ```bash
-docker run --rm recommendation-build ./test/build/RecommendationSystem_Tests
+docker compose run --rm test
 ```
 This command will run the tests in a disposable container, which will be removed after the tests complete.
 

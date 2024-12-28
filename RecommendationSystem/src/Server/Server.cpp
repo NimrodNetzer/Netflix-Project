@@ -18,7 +18,7 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #endif
-#define PORT 8001
+#define PORT 8080
 #define MAX_CLIENTS 3
 #define BUFFER_SIZE 1024
 
@@ -68,6 +68,7 @@ void Server::run() {
 
 
     while (true) {
+        std::cout << "*" << std::endl;
         if ((clientSocket = accept(serverSocket, (struct sockaddr *)&clientAddr, &clientAddrLen)) < 0) {
             perror("Accept failed");
             continue;

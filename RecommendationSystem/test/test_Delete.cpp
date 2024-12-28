@@ -2,8 +2,8 @@
 #include <gtest/gtest.h>
 #include "../src/Data/DataManager.h"
 #include "../src/Commands/Delete.h"
-#include "../src/Objects/User.h"
-#include "../src/Objects/Movie.h"
+#include "../src/objects/User.h"
+#include "../src/objects/Movie.h"
 #include "../src/Data/FilePersistence.h"
 #include "../src/Interfaces/IPersistence.h"
 #include <algorithm>
