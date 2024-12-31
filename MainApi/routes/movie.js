@@ -1,5 +1,5 @@
 const express = require('express');
-const { createMovieController, getMovie, deleteMovie} = require('../controllers/movie');
+const { createMovieController, getMovie, deleteMovie, updateMovie} = require('../controllers/movie');
 
 const router = express.Router();
 
@@ -9,5 +9,5 @@ router.route('/')
 router.route('/:id')
     .get(getMovie)
     .delete(deleteMovie)
-
+    .put(updateMovie)
 module.exports = router;

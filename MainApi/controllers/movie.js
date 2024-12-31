@@ -1,4 +1,4 @@
-const { createMovie, getMovieById, deleteMovieById } = require('../services/movie');
+const { createMovie, getMovieById, deleteMovieById, replaceMovieById } = require('../services/movie');
 
 const createMovieController = async (req, res) => {
   try {
@@ -41,7 +41,25 @@ const deleteMovie = async (req, res) => {
     res.json(movie);
 }
 
+const updateMovie = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const movieUpdates = req.body;
+    const updatedMovie = await replaceMovieById(id, movieUpdates);
+
+    res.status(200).json({
+      message: 'Movie updated successfully',
+      data: updatedMovie,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message || 'An error occurred while updating the movie',
+    });
+  }
+};
+
+
 
 module.exports = {
-  createMovieController, getMovie, deleteMovie
+  createMovieController, getMovie, deleteMovie, updateMovie
 };

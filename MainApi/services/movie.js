@@ -44,6 +44,31 @@ const getMovieById = async (movieId) => {
     }
   };
 
+  const replaceMovieById = async (id, movieUpdates) => {
+    try {
+      // Validate the incoming data first
+      const tempMovie = new Movie(movieUpdates);
+      await tempMovie.validate(); // This ensures the data conforms to the schema
+  
+      // Find and delete the original document
+      const existingMovie = await Movie.findById(id);
+      if (!existingMovie) {
+        throw new Error('Movie not found');
+      }
+      await existingMovie.deleteOne(); // Delete the original document
+  
+      // Create and save the new movie with the same ID
+      tempMovie._id = id; // Preserve the original ID
+      const newMovie = await tempMovie.save(); // Save the validated new document
+  
+      return newMovie;
+    } catch (error) {
+      throw new Error(error.message || 'Failed to replace movie');
+    }
+  };
+  
+  
+
 module.exports = {
-  createMovie, getMovieById, deleteMovieById
+  createMovie, getMovieById, deleteMovieById, replaceMovieById
 };
