@@ -91,3 +91,5 @@ fabric.properties
 *.vsix
 
 ./RecommendationSystem/data/*
+
+/MainApi/node_modules/*
