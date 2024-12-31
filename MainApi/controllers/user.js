@@ -1,0 +1,53 @@
+// controllers/user.js
+
+// Import the user service to handle the logic
+const userService = require('../services/user');
+
+/**
+ * Create a new user
+ * @param {Object} req - The request object containing user data (email, password, nickname, picture)
+ * @param {Object} res - The response object to send the created user or errors
+ */
+const createUser = async (req, res) => {
+    try {
+        const { email, password, nickname, picture } = req.body; // Extract user data from request
+        const user = await userService.createUser(email, password, nickname, picture);
+        res.status(201).json(user); // Respond with the created user
+    } catch (error) {
+        res.status(400).json({ errors: [error.message] }); // Handle errors
+    }
+};
+
+/**
+ * Retrieve all users
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object to send the list of users
+ */
+const getUsers = async (req, res) => {
+    try {
+        const users = await userService.getUsers(); // Fetch all users from the service
+        res.status(200).json(users); // Respond with the list of users
+    } catch (error) {
+        res.status(500).json({ errors: [error.message] }); // Handle server errors
+    }
+};
+
+/**
+ * Retrieve a specific user by ID
+ * @param {Object} req - The request object containing user ID in the params
+ * @param {Object} res - The response object to send the user data or errors
+ */
+const getUser = async (req, res) => {
+    try {
+        const user = await userService.getUserById(req.params.id); // Fetch user by ID
+        if (!user) {
+            return res.status(404).json({ errors: ['User not found'] }); // Handle not found case
+        }
+        res.status(200).json(user); // Respond with the user data
+    } catch (error) {
+        res.status(400).json({ errors: [error.message] }); // Handle errors
+    }
+};
+
+// Export all user-related functions
+module.exports = { createUser, getUsers, getUser };
