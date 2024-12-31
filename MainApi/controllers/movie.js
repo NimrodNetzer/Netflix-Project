@@ -5,11 +5,10 @@ const createMovieController = async (req, res) => {
     const movieData = req.body;
     const newMovie = await createMovie(movieData);
     res.status(201).json({
-      message: 'Movie created successfully',
-      data: newMovie,
+      newMovie
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(400).json({
       message: error.message || 'An error occurred while creating the movie',
     });
   }
@@ -23,8 +22,7 @@ const getMovie = async (req, res) => {
       const movie = await getMovieById(id);
   
       res.status(200).json({
-        message: 'Movie fetched successfully',
-        data: movie,
+        movie
       });
     } catch (error) {
       res.status(404).json({
@@ -48,11 +46,10 @@ const updateMovie = async (req, res) => {
     const updatedMovie = await replaceMovieById(id, movieUpdates);
 
     res.status(200).json({
-      message: 'Movie updated successfully',
-      data: updatedMovie,
+      updatedMovie
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(400).json({
       message: error.message || 'An error occurred while updating the movie',
     });
   }
