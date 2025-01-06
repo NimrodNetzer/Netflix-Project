@@ -1,4 +1,4 @@
-const { createMovie, getMovieById, deleteMovieById, replaceMovieById } = require('../services/movie');
+const { createMovie, getMovieById, deleteMovieById, replaceMovieById, getMoviesByPromotedCategories } = require('../services/movie');
 
 const createMovieController = async (req, res) => {
   try {
@@ -55,8 +55,20 @@ const updateMovie = async (req, res) => {
   }
 };
 
-
+const getMovies = async (req, res) => {
+  try {
+    const groupedMovies = await getMoviesByPromotedCategories();
+    res.status(200).json({
+      message: 'Movies by promoted categories fetched successfully',
+      data: groupedMovies,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message || 'An error occurred while fetching movies by promoted categories',
+    });
+  }
+};
 
 module.exports = {
-  createMovieController, getMovie, deleteMovie, updateMovie
+  createMovieController, getMovie, deleteMovie, updateMovie, getMovies
 };

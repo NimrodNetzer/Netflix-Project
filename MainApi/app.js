@@ -16,8 +16,6 @@ require('custom-env').env(process.env.NODE_ENV, './config');
 
 // Connect to MongoDB using the connection string from environment variables
 mongoose.connect(process.env.CONNECTION_STRING, {
-    useNewUrlParser: true, // Use new URL parser for MongoDB connection
-    useUnifiedTopology: true, // Enable new server discovery and monitoring engine
 }).then(() => console.log('Connected to MongoDB')).catch(err => console.error('MongoDB connection error:', err));
 
 // Initialize the Express application
