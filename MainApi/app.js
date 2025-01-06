@@ -1,38 +1,41 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const movieRoutes = require('./routs/movie'); // Movie routes
-const searchRoutes = require('./routs/search'); // Search routes
 
-// Connect to MongoDB with proper error handling
-mongoose.connect("mongodb://127.0.0.1:27017/test", { // Using the 'movies' database
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-  .then(() => console.log('MongoDB connected successfully.'))
-  .catch((err) => console.error('MongoDB connection error:', err));
+// Import required modules
+const express = require('express'); // Framework for building web applications
+const bodyParser = require('body-parser'); // Middleware for parsing request bodies
+const cors = require('cors'); // Middleware for enabling Cross-Origin Resource Sharing
+const mongoose = require('mongoose'); // Library for interacting with MongoDB
+const movieRoutes = require('./routes/movie');
+const categoryRoutes = require('./routes/category');
 
-// Create the Express app
+// Import route files
+const users = require('./routes/user'); // Routes for user-related operations
+const tokens = require('./routes/token'); // Routes for token-related operations
+
+// Load environment variables based on the current environment
+require('custom-env').env(process.env.NODE_ENV, './config');
+
+// Connect to MongoDB using the connection string from environment variables
+mongoose.connect(process.env.CONNECTION_STRING, {
+}).then(() => console.log('Connected to MongoDB')).catch(err => console.error('MongoDB connection error:', err));
+
+// Initialize the Express application
 const app = express();
 
-// Middleware
-app.use(cors()); // Enable CORS for cross-origin requests
-app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded data
-app.use(express.json()); // Parse JSON data
+// Enable CORS to allow requests from other origins
 
-// Routes
-app.use('/api/movies', movieRoutes); // Movie-related routes
-app.use('/api/movies/search', searchRoutes); // Search routes
+app.use(cors());
 
-// Error handling middleware (for better debugging and response)
-app.use((err, req, res, next) => {
-    console.error(err.stack); // Log the error
-    res.status(500).json({ error: 'An internal server error occurred.' }); // Send a generic error response
-});
+// Use body-parser to parse URL-encoded bodies and JSON
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
-// Start the server
-const PORT = process.env.PORT || 4000; // Use environment variable or default to 4000
+// Define routes for the application
+app.use('/api/users', users); // Routes for user operations (e.g., create, update, delete users)
+app.use('/api/tokens', tokens); // Routes for token operations (e.g., validate, create tokens)
+app.use('/api/movies', movieRoutes);
+app.use('/api/categories', categoryRoutes);
+// Start the server and listen on the port specified in environment variables
+const PORT = process.env.PORT || 3000; // Default to port 3000 if not specified
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
