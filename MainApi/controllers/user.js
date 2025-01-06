@@ -11,6 +11,7 @@ const userService = require('../services/user');
 const createUser = async (req, res) => {
     try {
         const { email, password, nickname, picture } = req.body; // Extract user data from request
+        console.log(`User created; email: ${email} password: ${password} nickname: ${nickname} picture: ${picture}`);
         const user = await userService.createUser(email, password, nickname, picture);
         res.status(201).json(user); // Respond with the created user
     } catch (error) {

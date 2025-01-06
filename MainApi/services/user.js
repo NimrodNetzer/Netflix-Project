@@ -1,6 +1,7 @@
 // Import mongoose to validate ObjectId and the User model
 const mongoose = require('mongoose');
 const User = require('../models/user');
+const user = require('../models/user');
 
 /**
  * Create a new user
@@ -11,8 +12,10 @@ const User = require('../models/user');
  * @returns {Object} The created user
  */
 const createUser = async (email, password, nickname, picture) => {
+    const users = (await User.find({})).length; // Fetch all users from the database
+
     try {
-        const user = new User({ email, password, nickname, picture });
+        const user = new User({ _id: users + 1, email, password, nickname, picture });
         return await user.save(); // Save the user to the database
     } catch (error) {
         throw new Error(`Error creating user: ${error.message}`);

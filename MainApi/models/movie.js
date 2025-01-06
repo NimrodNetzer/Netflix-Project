@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const movieSchema = new mongoose.Schema({
+  _id: {
+    type: String, // Allow custom IDs as strings
+    required: true // Make the `_id` field mandatory
+},
   name: {
     type: String,
     required: true,

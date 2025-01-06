@@ -7,6 +7,10 @@ const Schema = mongoose.Schema;
  * Defines the structure for storing user data in the database.
  */
 const UserSchema = new Schema({
+    _id: {
+        type: String, // Allow custom IDs as strings
+        required: true // Make the `_id` field mandatory
+    },
     email: {
         type: String, // User's email
         required: true, // Email is mandatory
@@ -27,8 +31,13 @@ const UserSchema = new Schema({
     createdAt: {
         type: Date, // Timestamp for when the user was created
         default: Date.now // Automatically set the current date and time
-    }
-});
+    }, 
+    moviesList:
+        [{
+            movieId: { type: String}, // ID of the movie
+            watchedAt: { type: Date, default: Date.now } // Timestamp for when the movie was added/watched
+}]
+    });
 
 // Export the User model based on the schema
 module.exports = mongoose.model('User', UserSchema);

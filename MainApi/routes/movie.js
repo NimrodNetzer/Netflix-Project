@@ -1,13 +1,30 @@
 const express = require('express');
-const { createMovieController, getMovie, deleteMovie, updateMovie} = require('../controllers/movie');
+const { 
+    createMovieController, 
+    getMovie, 
+    deleteMovie, 
+    updateMovie, 
+    getRecommendations, 
+    addRecommendation 
+} = require('../controllers/movie');
 
 const router = express.Router();
 
-// POST route to create a new movie
-router.route('/')
+// Movie Routes
+router
+    .route('/')
     .post(createMovieController);
-router.route('/:id')
+
+router
+    .route('/:id')
     .get(getMovie)
     .delete(deleteMovie)
-    .put(updateMovie)
+    .put(updateMovie);
+
+// Recommendation Routes
+router
+    .route('/:id/recommend')
+    .get(getRecommendations) // Fetch recommended movies
+    .post(addRecommendation); // Add watched movie for recommendation
+
 module.exports = router;

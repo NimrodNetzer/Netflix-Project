@@ -3,7 +3,10 @@ const Movie = require('../models/movie'); // Path to your Movie model
 const createMovie = async (movieData) => {
   try {
     // Create a new movie instance
-    const newMovie = new Movie(movieData);
+    const newMovie = new Movie({
+      _id: 5, // Use the custom ID
+      ...movieData // Spread the rest of the movie data
+  });
 
     // Save the movie to the database
     const savedMovie = await newMovie.save();
