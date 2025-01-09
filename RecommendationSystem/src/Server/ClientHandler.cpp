@@ -20,12 +20,11 @@
 
 std::map<std::string, ICommand*> ClientHandler::initializeCommands(IMenu& menu) {
     std::map<std::string, ICommand*> commands;
-    commands["add"] = new add();
-    commands["help"] = new Help(menu);
-    commands["get"] = new recommend(menu);
-    commands["post"] = new post(menu);
-    commands["patch"] = new patch(menu);
-    commands["delete"] = new Delete(menu);
+    commands["HELP"] = new Help(menu);
+    commands["GET"] = new recommend(menu);
+    commands["POST"] = new post(menu);
+    commands["PATCH"] = new patch(menu);
+    commands["DELETE"] = new Delete(menu);
     return commands;
 }
 
