@@ -1,5 +1,6 @@
 // Import mongoose to define the schema and interact with the database
 const mongoose = require('mongoose');
+const counter = require('./counter')
 const Schema = mongoose.Schema;
 
 /**
@@ -39,5 +40,11 @@ const UserSchema = new Schema({
 }]
     });
 
+UserSchema.pre('save', async function (next) {
+    if (!this._id) {
+        this._id = await getNextSequence('userId');
+    }
+    next();
+});
 // Export the User model based on the schema
 module.exports = mongoose.model('User', UserSchema);
