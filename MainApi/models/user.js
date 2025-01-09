@@ -9,8 +9,7 @@ const Schema = mongoose.Schema;
  */
 const UserSchema = new Schema({
     _id: {
-        type: String, // Allow custom IDs as strings
-        required: true // Make the `_id` field mandatory
+        type: Number
     },
     email: {
         type: String, // User's email
@@ -42,7 +41,7 @@ const UserSchema = new Schema({
 
 UserSchema.pre('save', async function (next) {
     if (!this._id) {
-        this._id = await getNextSequence('userId');
+        this._id = await counter.getNextSequence('userId');
     }
     next();
 });
