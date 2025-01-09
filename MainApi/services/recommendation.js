@@ -24,35 +24,27 @@ const fetchRecommendations = async (userId, movieId) => {
 
 const addRecommendation = async (userId, movieId) => {
     try {
-        const postRequest = `POST ${userId} ${movieId}\n`;
-        console.log(`Sending POST request to Recommendation System: ${postRequest}`);
-        const response = await socketClient.send(postRequest);
-
-        console.log(`Response from Recommendation System: ${response}`);
-
-        if (response.startsWith('404')) {
-            const patchRequest = `PATCH ${userId} ${movieId}\n`;
-            console.log(`Sending PATCH request to Recommendation System: ${patchRequest}`);
-            const patchResponse = await socketClient.send(patchRequest);
-
-            console.log(`Response from Recommendation System (PATCH): ${patchResponse}`);
-
-            if (patchResponse.startsWith('204')) {
-                await updateMongoDBMoviesList(userId, movieId);
-                return 'Recommendation created successfully via PATCH';
-            } else {
-                throw new Error(`Failed to add movie via PATCH: ${patchResponse}`);
-            }
-        } else if (response.startsWith('201')) {
-            await updateMongoDBMoviesList(userId, movieId);
-            return 'Recommendation added successfully';
-        } else {
-            throw new Error(`Unexpected response from server: ${response}`);
+      await updateMongoDBMoviesList(userId, movieId);
+   
+      const postResponse = await socketClient.send(`POST ${userId} ${movieId}\n`);
+      
+      if (postResponse.startsWith('201')) {
+        return 'Recommendation added successfully';
+      }
+      
+      if (postResponse.startsWith('404')) {
+        const patchResponse = await socketClient.send(`PATCH ${userId} ${movieId}\n`);
+        if (patchResponse.startsWith('204')) {
+          return 'Recommendation created successfully via PATCH';
         }
+        throw new Error(`PATCH failed: ${patchResponse}`);
+      }
+      
+      throw new Error(`Unexpected response: ${postResponse}`); 
     } catch (error) {
-        console.error('Error communicating with Recommendation System:', error);
-        error.status = 500;
-        throw error;
+      console.error('Recommendation System error:', error);
+      error.status = 500;
+      throw error;
     }
 };
 
@@ -76,7 +68,27 @@ const updateMongoDBMoviesList = async (userId, movieId) => {
     }
 };
 
+
+const deleteWatchedMovie = async (movieId) => {
+    try {
+      await User.updateMany({}, { $pull: { moviesList: { movieId } } });
+      const users = await User.find({});
+      
+      for (const user of users) {
+        await socketClient.send(`DELETE ${user._id} ${movieId}\n`);
+      }
+      
+      return `Movie ${movieId} deleted from ${users.length} users`;
+    } catch (error) {
+      console.error('Delete recommendation error:', error);
+      error.status = 500;
+      throw error;
+    }
+};
+   
+
 module.exports = {
     fetchRecommendations,
     addRecommendation,
+    deleteWatchedMovie
 };
