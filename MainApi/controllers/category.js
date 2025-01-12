@@ -9,19 +9,23 @@ const getCategories = async (req, res) => {
     const categories = await categoryService.getCategories(filters);
     res.json(categories);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(404).json({ error: error.message });
   }
 };
 
 const createCategory = async (req, res) => {
   try {
     const { name, promoted } = req.body;
-    if (!name || typeof promoted !== 'boolean') {
-      return res.status(400).json({ error: 'Invalid input' });
+    if (!name) {
+      return res.status(400).json({ error: 'Name is required' });
     }
 
     const category = await categoryService.createCategory(name, promoted);
-    res.status(201).json(category);
+    const categoryUrl = `/api/categories/${category._id}`;
+    
+    // Set Location header
+    res.setHeader('Location', categoryUrl);
+    res.status(201).json();
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -31,9 +35,11 @@ const getCategory = async (req, res) => {
   try {
     const { id } = req.params;
     const category = await categoryService.getCategoryById(id);
+    
     if (!category) {
       return res.status(404).json({ error: 'Category not found' });
     }
+
     res.json(category);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -49,7 +55,9 @@ const updateCategory = async (req, res) => {
     if (!category) {
       return res.status(404).json({ error: 'Category not found' });
     }
-    res.json(category);
+    const categoryUrl = `/api/categories/${category._id}`;
+    res.setHeader('Location', categoryUrl);
+    res.json();
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

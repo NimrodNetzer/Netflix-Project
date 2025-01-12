@@ -3,6 +3,11 @@ const Category = require('../models/category');
 
 // Create a new category
 const createCategory = async (name, promoted) => {
+  const existingCategory = await Category.findOne({ name });
+  if (existingCategory) {
+    throw new Error(`Category with name '${name}' already exists.`);
+  }
+
   try {
     const category = new Category({ name, promoted });
     return await category.save();
@@ -13,20 +18,16 @@ const createCategory = async (name, promoted) => {
 
 // Get a category by ID
 const getCategoryById = async (id) => {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new Error('Invalid ObjectId format');
-  }
-
   try {
     const category = await Category.findById(id);
     if (!category) {
-      throw new Error('Category not found');
+      return null;
     }
     return category;
-  } catch (error) {
-    throw new Error(`Error fetching category by ID: ${error.message}`);
+  } catch (error){
+    return null;
   }
-};
+}
 
 // Get all categories with optional filters
 const getCategories = async (filters = {}) => {
@@ -39,15 +40,10 @@ const getCategories = async (filters = {}) => {
 
 // Update a category by ID
 const updateCategory = async (id, name, promoted) => {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new Error('Invalid ObjectId format');
-  }
-
+  const category = await getCategoryById(id);
+  if(!category)
+    return null;
   try {
-    const category = await Category.findById(id);
-    if (!category) {
-      return null;
-    }
 
     // Update fields
     if (name) category.name = name;
@@ -62,16 +58,11 @@ const updateCategory = async (id, name, promoted) => {
 
 // Delete a category by ID
 const deleteCategory = async (id) => {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new Error('Invalid ObjectId format');
-  }
+  const category = await getCategoryById(id);
 
+  if(!category)
+    return null;
   try {
-    const category = await Category.findById(id);
-    if (!category) {
-      return null;
-    }
-
     await category.deleteOne();
     return category;
   } catch (error) {
