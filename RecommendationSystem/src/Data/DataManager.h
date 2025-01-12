@@ -10,6 +10,8 @@
 #include "../Interfaces/IPersistence.h"
 #include "../objects/User.h"
 #include "../objects/Movie.h"
+#include <mutex>
+#include <shared_mutex>
 
 class DataManager {
 public:
@@ -89,6 +91,8 @@ private:
     // Pointer to the persistence strategy
     IPersistence* persistence = nullptr;
 
+    mutable std::shared_mutex dataMutex;  // For read-write operations
+    mutable std::shared_mutex persistenceMutex;  // For persistence operations
     // Deleted copy constructor and assignment operator to prevent copying
     DataManager(const DataManager&) = delete;
     DataManager& operator=(const DataManager&) = delete;
