@@ -3,19 +3,66 @@ const Category = require('../models/category'); // Path to your Movie model
 
 const createMovie = async (movieData) => {
   try {
-    // Create a new movie instance
-    const newMovie = new Movie({
-      ...movieData // Spread the rest of the movie data
-  });
+    // Required field validation
+    const requiredFields = ['name', 'description', 'picture', 'age', 'time', 'releaseDate', 'quality', 'categoryId', 'author'];
+    for (const field of requiredFields) {
+      if (!movieData[field]) {
+        throw new Error(`Missing required field: ${field}`);
+      }
+    }
 
-    // Save the movie to the database
+    // Specific field validations
+    if (typeof movieData.name !== 'string' || movieData.name.trim() === '') {
+      throw new Error('Invalid name: must be a non-empty string');
+    }
+    if (typeof movieData.description !== 'string' || movieData.description.length < 20) {
+      throw new Error('Invalid description: must be at least 20 characters long');
+    }
+    if (!/^https?:\/\/\S+\.\S+$/.test(movieData.picture)) {
+      throw new Error('Invalid picture URL');
+    }
+    if (!Number.isInteger(movieData.age) || movieData.age < 0 || movieData.age > 18) {
+      throw new Error('Invalid age: must be an integer between 0 and 18');
+    }
+    if (!/^\d+h \d+m$/.test(movieData.time)) {
+      throw new Error('Invalid time format: must be in the format "Xh Ym"');
+    }
+    if (isNaN(new Date(movieData.releaseDate).getTime())) {
+      throw new Error('Invalid releaseDate: must be a valid date');
+    }
+    if (!['HD', 'SD', '4K'].includes(movieData.quality)) {
+      throw new Error('Invalid quality: must be one of "HD", "SD", or "4K"');
+    }
+    if (!movieData.categoryId.match(/^[a-fA-F0-9]{24}$/)) {
+      throw new Error('Invalid categoryId: must be a valid ObjectId');
+    }
+
+    // Optional validations
+    if (movieData.cast) {
+      if (!Array.isArray(movieData.cast)) {
+        throw new Error('Invalid cast: must be an array');
+      }
+      movieData.cast.forEach((member, index) => {
+        if (!member.name) {
+          throw new Error(`Invalid cast member at index ${index}: missing name`);
+        }
+      });
+    }
+
+    // Check for duplicates
+    const existingMovie = await Movie.findOne({ name: movieData.name, releaseDate: movieData.releaseDate });
+    if (existingMovie) {
+      throw new Error('A movie with the same name and release date already exists');
+    }
+
+    // Create and save the movie
+    const newMovie = new Movie({ ...movieData });
     const savedMovie = await newMovie.save();
 
     return savedMovie;
   } catch (error) {
-    // Handle and log errors
     console.error('Error creating movie:', error);
-    throw new Error('Failed to create movie');
+    throw new Error(error.message || 'Failed to create movie');
   }
 };
 

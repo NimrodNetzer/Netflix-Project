@@ -1,4 +1,4 @@
-const { createMovie, getMovieById, deleteMovieById, replaceMovieById } = require('../services/movie');
+const { createMovie, getMovieById, deleteMovieById, replaceMovieById, getMoviesByPromotedCategories } = require('../services/movie');
 const socketClient = require('../utils/socketClient');
 const User = require('../models/user');
 
@@ -17,7 +17,7 @@ const createMovieController = async (req, res) => {
 
         const movieData = req.body;
         const newMovie = await createMovie(movieData);
-        res.status(201).json({ newMovie });
+        res.status(201).location(`/api/movies/${newMovie._id}`).send();
     } catch (error) {
         res.status(400).json({ message: error.message || 'An error occurred while creating the movie' });
     }
