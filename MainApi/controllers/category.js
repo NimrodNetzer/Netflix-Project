@@ -27,7 +27,7 @@ const createCategory = async (req, res) => {
     res.setHeader('Location', categoryUrl);
     res.status(201).json();
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -48,18 +48,27 @@ const getCategory = async (req, res) => {
 
 const updateCategory = async (req, res) => {
   try {
+    const allowedFields = ['name', 'promoted'];
+
+    const bodyKeys = Object.keys(req.body);
+    const hasInvalidField = bodyKeys.some((key) => !allowedFields.includes(key));
+
+    if (hasInvalidField) {
+      return res.status(400).json({
+        error: 'Only "name" and "promoted" fields are allowed.',
+      });
+    }
     const { id } = req.params;
     const { name, promoted } = req.body;
-
     const category = await categoryService.updateCategory(id, name, promoted);
     if (!category) {
       return res.status(404).json({ error: 'Category not found' });
     }
     const categoryUrl = `/api/categories/${category._id}`;
     res.setHeader('Location', categoryUrl);
-    res.json();
+    res.status(204).json();
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -70,6 +79,8 @@ const deleteCategory = async (req, res) => {
     if (!category) {
       return res.status(404).json({ error: 'Category not found' });
     }
+    const categoryUrl = `/api/categories/${category._id}`;
+    res.setHeader('Location', categoryUrl);
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: error.message });
