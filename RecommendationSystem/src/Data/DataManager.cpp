@@ -124,7 +124,7 @@ void DataManager::setPersistenceStrategy(IPersistence* persistence) {
 
 // Saves the data using the persistence strategy
 void DataManager::save() const {
-    std::shared_lock lock(persistenceMutex); // Lock for read access
+    std::unique_lock lock(persistenceMutex); // Lock for read access
     if (!persistence) {
         throw std::runtime_error("Persistence object is not initialized.");
     }
@@ -133,7 +133,7 @@ void DataManager::save() const {
 
 // Loads the data using the persistence strategy
 void DataManager::load() const {
-    std::shared_lock lock(persistenceMutex); // Lock for read access
+    std::unique_lock lock(persistenceMutex); // Lock for read access
     if (!persistence) {
         throw std::runtime_error("Persistence object is not initialized.");
     }
@@ -142,22 +142,41 @@ void DataManager::load() const {
 
 // Function that removes one or more movies from the user's watched movies list
 void DataManager::deleteUserMovies(int userId, const std::vector<int>& movieIds) {
-    std::unique_lock lock(dataMutex); // Lock for write access
-    if (hasUser(userId)) {
+    std::unique_lock dataLock(dataMutex);
+
+    // Check if user exists directly from the users map
+    auto userIt = users.find(userId);
+    if (userIt != users.end()) {
+        // For each movie, verify it exists, then remove relationships
         for (int movieId : movieIds) {
-            if (hasMovie(movieId)) {
+            auto movieIt = movies.find(movieId);
+            if (movieIt != movies.end()) {
+                // Remove the movie from this user's watched list
                 auto& watchedMovies = moviesWatchedByUser[userId];
                 auto it = std::find(watchedMovies.begin(), watchedMovies.end(), movieId);
                 if (it != watchedMovies.end()) {
                     watchedMovies.erase(it);
                 }
+
+                // Remove the user from this movie's watchers list
                 auto& usersWhoWatched = usersWhoWatchedMovie[movieId];
-                usersWhoWatched.erase(std::remove(usersWhoWatched.begin(), usersWhoWatched.end(), userId), usersWhoWatched.end());
+                usersWhoWatched.erase(
+                    std::remove(usersWhoWatched.begin(), usersWhoWatched.end(), userId),
+                    usersWhoWatched.end()
+                );
             }
         }
     }
-    std::shared_lock lockPersistence(persistenceMutex); // Lock for read access
+
+    // Release the data lock before acquiring the persistence lock
+    dataLock.unlock();
+
+    // Acquire exclusive (write) access to the persistence strategy
+    std::unique_lock persistenceLock(persistenceMutex);
+
+    // If persistence is initialized, save changes
     if (persistence) {
         persistence->Save();
     }
 }
+
