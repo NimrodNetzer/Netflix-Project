@@ -22,8 +22,10 @@ const createUser = async (req, res) => {
 
         // Create the new user
         const user = await userService.createUser(email, password, nickname, picture);
-        res.status(201).json(user); // Respond with the created user
-    } catch (error) {
+        res.status(201)
+        .location(`/api/users/${user._id}`)
+        .send();
+        } catch (error) {
         res.status(400).json({ errors: [error.message] }); // Handle errors
     }
 };
