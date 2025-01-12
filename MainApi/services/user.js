@@ -53,5 +53,8 @@ const getUsers = async () => {
         throw new Error(`Error fetching users: ${error.message}`);
     }
 };
+const getUserByEmail = async (email) => {
+    return await User.findOne({ email }); // Query the database for a user with the given email
+};
 
-module.exports = { createUser, getUserById, getUsers };
+module.exports = { createUser, getUserById, getUsers, getUserByEmail };
