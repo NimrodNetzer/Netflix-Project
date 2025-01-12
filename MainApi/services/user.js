@@ -30,6 +30,12 @@ const createUser = async (email, password, nickname, picture) => {
             throw new Error('Invalid email format.');
         }
 
+        // Validate password: At least 6 characters, allow special characters, English letters only
+        const passwordRegex = /^[\x20-\x7E]{6,}$/;
+        if (!passwordRegex.test(password)) {
+            throw new Error('Password must be at least 6 characters long and contain only English letters, numbers, or special characters.');
+        }
+
         // Create a new user instance
         const user = new User({ email, password, nickname, picture });
         return await user.save(); // Save the user to the database
@@ -45,6 +51,7 @@ const createUser = async (email, password, nickname, picture) => {
         throw new Error(`Error creating user: ${error.message}`);
     }
 };
+
 
 
 
