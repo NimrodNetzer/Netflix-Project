@@ -1,4 +1,5 @@
 const Movie = require('../models/movie'); // Path to your Movie model
+const Category = require('../models/category'); // Path to your Movie model
 
 const createMovie = async (movieData) => {
   try {
@@ -69,8 +70,31 @@ const getMovieById = async (movieId) => {
     }
   };
   
+  const getMoviesByPromotedCategories = async () => {
+    // Fetch categories with promoted set to true
+    const promotedCategories = await Category.find({ promoted: true });
+  
+    if (promotedCategories.length === 0) {
+      throw new Error('No promoted categories found');
+    }
+  
+    // Map category IDs
+    const categoryIds = promotedCategories.map((category) => category._id);
+  
+    // Fetch movies belonging to the promoted categories
+    const movies = await Movie.find({ categoryId: { $in: categoryIds } })
+      .populate('categoryId', 'name promoted') // Include category name and promoted fields
+      .exec();
+  
+    // Group movies by category
+    return promotedCategories.map((category) => ({
+      category: category.name,
+      promoted: category.promoted,
+      movies: movies.filter((movie) => movie.categoryId._id.toString() === category._id.toString()),
+    }));
+  };
   
 
 module.exports = {
-  createMovie, getMovieById, deleteMovieById, replaceMovieById
+  createMovie, getMovieById, deleteMovieById, replaceMovieById, getMoviesByPromotedCategories
 };

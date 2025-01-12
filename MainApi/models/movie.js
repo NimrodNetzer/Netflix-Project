@@ -32,11 +32,11 @@ const movieSchema = new mongoose.Schema({
     type: String, // e.g., "HD", "SD", "4K"
     required: true,
   },
- // categoryId: {
- //   type: mongoose.Schema.Types.ObjectId,
- //   ref: 'Category',
-  //  required: true,
- // },
+  categoryId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
+    required: true,
+  },
   cast: [
     {
       name: { type: String, required: true },
