@@ -9,7 +9,6 @@ const userController = require('../controllers/user'); // Import user controller
  * - POST: Create a new user
  */
 router.route('/')
-    .get(userController.getUsers) // Retrieve all users
     .post(userController.createUser); // Create a new user
 
 /**
