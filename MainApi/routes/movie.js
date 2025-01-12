@@ -5,7 +5,8 @@ const {
     deleteMovie, 
     updateMovie, 
     getRecommendations, 
-    addRecommendation 
+    addRecommendation,
+    getMovies 
 } = require('../controllers/movie');
 
 const router = express.Router();
@@ -13,7 +14,8 @@ const router = express.Router();
 // Movie Routes
 router
     .route('/')
-    .post(createMovieController);
+    .post(createMovieController)
+    .get(getMovies);
 
 router
     .route('/:id')

@@ -23,6 +23,15 @@ const createMovieController = async (req, res) => {
     }
 };
 
+const getMovies = async (req, res) => {
+    try {
+        const movies = await getMoviesByPromotedCategories();
+        res.status(200).json({ movies });
+    } catch (error) {
+        res.status(400).json({ message: error.message || 'An error occurred while creating the movie' });
+    }
+};
+
 // Get a movie by ID
 const getMovie = async (req, res) => {
     try {
@@ -160,4 +169,5 @@ module.exports = {
     updateMovie,
     getRecommendations,
     addRecommendation,
+    getMovies
 };
