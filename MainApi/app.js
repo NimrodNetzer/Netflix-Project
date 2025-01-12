@@ -13,11 +13,11 @@ const users = require('./routes/user'); // Routes for user-related operations
 const tokens = require('./routes/token'); // Routes for token-related operations
 
 // Load environment variables based on the current environment
-require('custom-env').env(process.env.NODE_ENV, './config');
+//require('custom-env').env(process.env.NODE_ENV, './config');
 
-// Connect to MongoDB using the connection string from environment variables
-mongoose.connect(process.env.CONNECTION_STRING, {
-}).then(() => console.log('Connected to MongoDB')).catch(err => console.error('MongoDB connection error:', err));
+mongoose.connect("mongodb://127.0.0.1:27017")
+  .then(() => console.log('Connected to MongoDB'))
+  .catch((err) => console.error('MongoDB connection error:', err));
 
 // Initialize the Express application
 const app = express();

@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
+const counter = require('./counter');
 
 const movieSchema = new mongoose.Schema({
+  _id: { type: Number },
   name: {
     type: String,
     required: true,
@@ -54,6 +56,14 @@ const movieSchema = new mongoose.Schema({
   },
 }, {
   timestamps: true, // Adds createdAt and updatedAt fields
+});
+
+movieSchema.pre('save', async function (next) {
+  if (!this.movieId) {
+      this._id = await counter.getNextSequence('movieId');
+  }
+  console.log(this._id);
+  next();
 });
 
 const Movie = mongoose.model('Movie', movieSchema);

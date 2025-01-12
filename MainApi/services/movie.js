@@ -4,7 +4,9 @@ const Category = require('../models/category'); // Path to your Movie model
 const createMovie = async (movieData) => {
   try {
     // Create a new movie instance
-    const newMovie = new Movie(movieData);
+    const newMovie = new Movie({
+      ...movieData // Spread the rest of the movie data
+  });
 
     // Save the movie to the database
     const savedMovie = await newMovie.save();

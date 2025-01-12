@@ -1,5 +1,6 @@
 // Import mongoose to define the schema and interact with the database
 const mongoose = require('mongoose');
+const counter = require('./counter')
 const Schema = mongoose.Schema;
 
 /**
@@ -7,6 +8,9 @@ const Schema = mongoose.Schema;
  * Defines the structure for storing user data in the database.
  */
 const UserSchema = new Schema({
+    _id: {
+        type: Number
+    },
     email: {
         type: String, // User's email
         required: true, // Email is mandatory
@@ -27,8 +31,19 @@ const UserSchema = new Schema({
     createdAt: {
         type: Date, // Timestamp for when the user was created
         default: Date.now // Automatically set the current date and time
-    }
-});
+    }, 
+    moviesList:
+        [{
+            movieId: { type: String}, // ID of the movie
+            watchedAt: { type: Date, default: Date.now } // Timestamp for when the movie was added/watched
+}]
+    });
 
+UserSchema.pre('save', async function (next) {
+    if (!this._id) {
+        this._id = await counter.getNextSequence('userId');
+    }
+    next();
+});
 // Export the User model based on the schema
 module.exports = mongoose.model('User', UserSchema);
