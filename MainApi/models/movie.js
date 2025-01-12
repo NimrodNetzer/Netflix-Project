@@ -59,12 +59,16 @@ const movieSchema = new mongoose.Schema({
 });
 
 movieSchema.pre('save', async function (next) {
-  if (!this.movieId) {
-      this._id = await counter.getNextSequence('movieId');
+  // Only generate a new ID if the document is new and does not already have an _id
+  if (this.isNew && !this._id) {
+    this._id = await counter.getNextSequence('movieId');
+    console.log(`Assigned new Movie ID: ${this._id}`);
+  } else {
+    console.log(`Preserving existing Movie ID: ${this._id}`);
   }
-  console.log(this._id);
   next();
 });
+
 
 const Movie = mongoose.model('Movie', movieSchema);
 

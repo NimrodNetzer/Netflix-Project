@@ -34,24 +34,34 @@ const getMovie = async (req, res) => {
     }
 };
 
-// Delete a movie by ID
 const deleteMovie = async (req, res) => {
     try {
         const id = req.params.id;
+
+        // Delete the movie in the database
         const movie = await deleteMovieById(id);
-        const message = await recommendationService.deleteWatchedMovie(id);
-        console.log(message);
         if (!movie) {
             return res.status(404).json({ message: 'Movie not found' });
         }
 
+        // Call the recommendation service to delete the watched movie
+        try {
+            const message = await recommendationService.deleteWatchedMovie(id);
+            console.log(message);
+        } catch (error) {
+            console.error('Error connecting to Recommendation Service:', error);
+            return res.status(500).json({ message: 'Cannot connect to the server' });
+        }
+
         res.status(200).json({ message: 'Movie deleted successfully', movie });
     } catch (error) {
+        console.error('Error deleting movie:', error);
         res.status(500).json({
             message: error.message || 'An error occurred while deleting the movie',
         });
     }
 };
+
 
 // Update a movie by ID
 const updateMovie = async (req, res) => {
