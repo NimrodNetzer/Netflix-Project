@@ -41,7 +41,7 @@ const getUsers = async (req, res) => {
         const users = await userService.getUsers(); // Fetch all users from the service
         res.status(200).json(users); // Respond with the list of users
     } catch (error) {
-        res.status(500).json({ errors: [error.message] }); // Handle server errors
+        res.status(400).json({ errors: [error.message] }); // Handle server errors
     }
 };
 
