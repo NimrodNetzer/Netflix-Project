@@ -89,6 +89,7 @@ const getMovieById = async (movieId) => {
     // Group movies by category
     return promotedCategories.map((category) => ({
       category: category.name,
+      category_id: category._id,
       promoted: category.promoted,
       movies: movies.filter((movie) => movie.categoryId._id.toString() === category._id.toString()),
     }));
