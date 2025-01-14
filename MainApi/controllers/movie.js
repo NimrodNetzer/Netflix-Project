@@ -1,11 +1,5 @@
 const { createMovie, getMovieById, deleteMovieById, replaceMovieById, getMoviesByPromotedCategories } = require('../services/movie');
-const socketClient = require('../utils/socketClient');
-const User = require('../models/user');
-
-// Recommendation System configuration
-const RECOMMENDATION_SYSTEM_HOST = '127.0.0.1';
-const RECOMMENDATION_SYSTEM_PORT = 8080;
-
+const recommendationService = require('../services/recommendation')
 // Create a new movie
 const createMovieController = async (req, res) => {
     try {
@@ -53,7 +47,8 @@ const deleteMovie = async (req, res) => {
     try {
         const id = req.params.id;
         const movie = await deleteMovieById(id);
-
+        const message = await recommendationService.deleteWatchedMovie(id);
+        console.log(message);
         if (!movie) {
             return res.status(404).json({ message: 'Movie not found' });
         }
@@ -84,6 +79,7 @@ const updateMovie = async (req, res) => {
 
 // Fetch recommended movies
 const getRecommendations = async (req, res) => {
+    console.log('Loading recommendations');
     const { id } = req.params;
     const userId = req.headers['user-id'];
 
@@ -92,22 +88,21 @@ const getRecommendations = async (req, res) => {
     }
 
     try {
-        const request = `GET ${userId} ${id}\n`;
-        const response = await socketClient.send(request);
-
-        if (response.startsWith('404')) {
-            return res.status(404).json({ error: 'User or Movie not found' });
-        }
-
-        const recommendedMovies = response.split(',').map((movieId) => parseInt(movieId.trim(), 10));
+        const recommendedMovies = await recommendationService.fetchRecommendations(userId, id);
         res.json({ recommendedMovies });
     } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch recommendations', details: error.message });
+        console.error('Error fetching recommendations:', error);
+        res.status(error.status || 500).json({
+            error: error.message || 'Failed to fetch recommendations',
+            details: error.details || null,
+        });
     }
 };
 
 // Add a recommendation
+
 const addRecommendation = async (req, res) => {
+    console.log('Adding recommendation');
     const { id } = req.params;
     const userId = req.headers['user-id'];
 
@@ -116,51 +111,18 @@ const addRecommendation = async (req, res) => {
     }
 
     try {
-        const postRequest = `POST ${userId} ${id}\n`;
-        const response = await socketClient.send(postRequest);
-
-        if (response.startsWith('404')) {
-            // Attempt a PATCH request if POST fails
-            const patchRequest = `PATCH ${userId} ${id}\n`;
-            const patchResponse = await socketClient.send(patchRequest);
-
-            if (patchResponse.startsWith('204')) {
-                await updateMongoDBMoviesList(userId, id);
-                return res.status(204).json({ message: 'Recommendation created successfully via PATCH' });
-            } else {
-                return res.status(500).json({ error: 'Failed to add movie via PATCH', details: patchResponse });
-            }
-        } else if (response.startsWith('201')) {
-            await updateMongoDBMoviesList(userId, id);
-            return res.status(201).json({ message: 'Recommendation added successfully' });
-        } else {
-            return res.status(500).json({ error: 'Unexpected response from server', details: response });
-        }
+        const message = await recommendationService.addRecommendation(userId, id);
+        res.status(201).json({ message });
     } catch (error) {
-        res.status(500).json({ error: 'Failed to communicate with Recommendation System', details: error.message });
+        console.error('Error adding recommendation:', error);
+        res.status(error.status || 500).json({
+            error: error.message || 'Failed to add recommendation',
+            details: error.details || null,
+        });
     }
 };
 
-// Update MongoDB movies list
-const updateMongoDBMoviesList = async (userId, movieId) => {
-    try {
-        const result = await User.findByIdAndUpdate(
-            userId,
-            { $addToSet: { moviesList: { movieId } } },
-            { new: true, upsert: false }
-        );
 
-        if (!result) {
-            throw new Error(`User with ID ${userId} not found`);
-        }
-
-        console.log(`Movie ${movieId} successfully added to User ${userId}'s moviesList.`);
-        return result;
-    } catch (error) {
-        console.error(`Error adding movie to User ${userId}:`, error.message);
-        throw error;
-    }
-};
 
 module.exports = {
     createMovieController,

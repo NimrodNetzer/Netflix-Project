@@ -1,16 +1,13 @@
 
-// Import required modules
-const express = require('express'); // Framework for building web applications
-const bodyParser = require('body-parser'); // Middleware for parsing request bodies
-const cors = require('cors'); // Middleware for enabling Cross-Origin Resource Sharing
-const mongoose = require('mongoose'); // Library for interacting with MongoDB
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const mongoose = require('mongoose');
 const movieRoutes = require('./routes/movie');
 const categoryRoutes = require('./routes/category');
 const searchRoutes = require('./routes/search');
-
-// Import route files
-const users = require('./routes/user'); // Routes for user-related operations
-const tokens = require('./routes/token'); // Routes for token-related operations
+const users = require('./routes/user');
+const tokens = require('./routes/token');
 
 // Load environment variables based on the current environment
 //require('custom-env').env(process.env.NODE_ENV, './config');
