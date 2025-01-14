@@ -1,7 +1,9 @@
 const express = require('express');
 const categoryController = require('../controllers/category');
-
+const {validateUserIdHeader} = require('./authenticate')
 const router = express.Router();
+
+router.use(validateUserIdHeader);
 
 router
   .route('/')
