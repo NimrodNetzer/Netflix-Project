@@ -1,0 +1,38 @@
+services:
+
+  recommendation_server:
+    build:
+      context: ../RecommendationSystem/
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    container_name: recommendation_server
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Map container port to host port
+    environment:
+      NODE_ENV: "${NODE_ENV}"
+      CONNECTION_STRING: "mongodb://mongo:27017" # Use the MongoDB service name
+      RECOMMENDATION_IP: "recommendation_server"
+      "RECOMMENDATION_PORT": 8080
+      PORT: "3000"
+    depends_on:
+      - mongo
+    volumes:
+      - ./app:/app # Mount source code for development
+    
+  mongo:
+    image: mongo:6
+    container_name: mongodb1
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db # Persist MongoDB data
+
+volumes:
+  mongo_data:
+

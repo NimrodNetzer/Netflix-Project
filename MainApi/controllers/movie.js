@@ -47,11 +47,13 @@ const deleteMovie = async (req, res) => {
     try {
         const id = req.params.id;
         const movie = await deleteMovieById(id);
-        const message = await recommendationService.deleteWatchedMovie(id);
-        console.log(message);
+
         if (!movie) {
             return res.status(404).json({ message: 'Movie not found' });
         }
+
+        const message = await recommendationService.deleteWatchedMovie(id);
+        console.log(message);
 
         res.status(200).json({ message: 'Movie deleted successfully', movie });
     } catch (error) {
