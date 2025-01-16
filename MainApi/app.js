@@ -9,9 +9,11 @@ const searchRoutes = require('./routes/search');
 const users = require('./routes/user');
 const tokens = require('./routes/token');
 
-require('custom-env').env(process.env.NODE_ENV, './config');
+if (process.env.NODE_ENV !== 'prod') {
+  require('custom-env').env(process.env.NODE_ENV, './config');
+}
 
-mongoose.connect(process.env.CONNECTION_STRING + '/netflix')
+mongoose.connect(process.env.CONNECTION_STRING)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
