@@ -44,6 +44,6 @@ docker compose run --rm test
 This command will run the tests in a disposable container, which will be removed after the tests complete.
 
 # Run Example:
-![image](https://github.com/user-attachments/assets/db55e084-7962-41e0-b241-e16bfa3ef4b6)
+![image](https://github.com/user-attachments/assets/d06d622b-0306-45e4-ba21-6ffa834802e4)
 
 
