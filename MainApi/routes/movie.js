@@ -8,8 +8,10 @@ const {
     addRecommendation,
     getMovies 
 } = require('../controllers/movie');
+const isAuthenticated = require('./auth'); // Import the authentication middleware
 
 const router = express.Router();
+router.use(isAuthenticated);
 
 // Movie Routes
 router

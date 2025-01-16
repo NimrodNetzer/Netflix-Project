@@ -1,8 +1,10 @@
 const express = require('express');
 const categoryController = require('../controllers/category');
+const isAuthenticated = require('./auth'); // Import the authentication middleware
+
 
 const router = express.Router();
-
+router.use(isAuthenticated);
 router
   .route('/')
   .get(categoryController.getCategories)
