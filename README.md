@@ -11,7 +11,7 @@ This project implements a recommendation system in C++ for suggesting movies to 
 The project follows SOLID principles and is designed for scalability, enabling seamless updates and extensions to the codebase. The recommendation algorithm is based on calculating the similarity of users and their movie-watching patterns, prioritizing movies watched by users with higher similarity scores.
 
 
-## Cd to RecommendationSystem
+## How to run
 ```bash
 cd RecommendationSystem
 ```
