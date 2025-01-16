@@ -1,4 +1,7 @@
-<img src="https://github.com/user-attachments/assets/287abe5b-9e8d-4be0-9e79-98ce6ce3edc4" alt="image_with_exercise3" width="300">
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/287abe5b-9e8d-4be0-9e79-98ce6ce3edc4" alt="image_with_exercise3" width="500">
+</div>
+<br>
 
 # Recommendation System
 
