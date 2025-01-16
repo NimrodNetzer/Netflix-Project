@@ -1,4 +1,5 @@
-# Netflix-BIU
+<img src="https://github.com/user-attachments/assets/07f90e3a-d4d7-473c-920f-6d83e9693cc5" alt="Netflix-BIU Logo" width="300">
+
 # Recommendation System
 
 This project implements a recommendation system in C++ for suggesting movies to users based on their viewing preferences. The system operates with the following functionalities:
