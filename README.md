@@ -2,7 +2,8 @@
 
 # Recommendation System
 
-This project integrates a recommendation system in C++ with a Node.js server and MongoDB database, providing functionalities for user management, authentication, dynamic database operations, and personalized movie suggestions based on viewing preferences. The system operates with the following functionalities:
+This project integrates a recommendation system in C++ with a Node.js server and MongoDB database, providing functionalities for user management, authentication, dynamic database operations, and personalized movie suggestions based on viewing preferences. <br>
+The system operates with the following functionalities:
 
 1. Server-Based Architecture: A robust Node.js server acts as the backbone of the system, handling all API requests and coordinating between the client and the recommendation system.
 
@@ -14,10 +15,11 @@ This project integrates a recommendation system in C++ with a Node.js server and
 
 5. Authentication and Authorization: Users are authenticated through tokens for secure access to the system.
 
-The project follows SOLID principles and ensures scalability and extensibility. It supports a wide range of functionalities including user management, authentication, dynamic database operations, and personalized movie recommendations, making it a comprehensive platform for managing and exploring user-specific movie content.
+The project follows SOLID principles and ensures scalability and extensibility.  <br>
+It supports a wide range of functionalities including user management, authentication, dynamic database operations, and personalized movie recommendations, making it a comprehensive platform for managing and exploring user-specific movie content.\
+<br>
 
-
-The server exposes the following key endpoints:
+**The server exposes the following key endpoints:**
 ### User Management
 
 - **`POST /api/users`**: Create a new user by submitting their details in JSON format.
