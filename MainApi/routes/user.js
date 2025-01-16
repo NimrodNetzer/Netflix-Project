@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user'); // Import user controller
+const isAuthenticated = require('./auth'); // Import the authentication middleware
 
 /**
  * Routes for user operations
@@ -18,7 +19,7 @@ router.route('/')
  * - PATCH: Update a user's details by ID
  */
 router.route('/:id')
-    .get(userController.getUser) // Retrieve user by ID
+    .get(isAuthenticated,userController.getUser) // Retrieve user by ID
     
 // Export the router
 module.exports = router;

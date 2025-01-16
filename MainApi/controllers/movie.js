@@ -1,3 +1,4 @@
+const { request } = require('express');
 const { createMovie, getMovieById, deleteMovieById, replaceMovieById, getMoviesByPromotedCategories } = require('../services/movie');
 const recommendationService = require('../services/recommendation')
 // Create a new movie
@@ -19,7 +20,7 @@ const createMovieController = async (req, res) => {
 
 const getMovies = async (req, res) => {
     try {
-        const movies = await getMoviesByPromotedCategories();
+        const movies = await getMoviesByPromotedCategories(req.headers['user-id']);
         res.status(200).json({ movies });
     } catch (error) {
         res.status(400).json({ message: error.message || 'An error occurred while creating the movie' });
@@ -36,7 +37,7 @@ const getMovie = async (req, res) => {
             return res.status(404).json({ message: 'Movie not found' });
         }
 
-        res.status(200).json({ movie });
+        res.status(200).json( movie );
     } catch (error) {
         res.status(500).json({ message: error.message || 'An error occurred while fetching the movie' });
     }
@@ -55,7 +56,7 @@ const deleteMovie = async (req, res) => {
         const message = await recommendationService.deleteWatchedMovie(id);
         console.log(message);
 
-        res.status(200).json({ message: 'Movie deleted successfully', movie });
+        res.status(204).send();
     } catch (error) {
         res.status(500).json({ message: error.message || 'An error occurred while deleting the movie' });
     }
@@ -73,7 +74,7 @@ const updateMovie = async (req, res) => {
             return res.status(404).json({ message: 'Movie not found' });
         }
 
-        res.status(200).json({ updatedMovie });
+        res.status(204).location(`/api/movies/${updatedMovie._id}`).send();
     } catch (error) {
         res.status(400).json({ message: error.message || 'An error occurred while updating the movie' });
     }

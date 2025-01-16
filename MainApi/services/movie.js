@@ -1,5 +1,6 @@
 const Movie = require('../models/movie'); // Path to your Movie model
 const Category = require('../models/category'); // Path to your Movie model
+const User = require('../models/user'); // Path to your User model
 
 const createMovie = async (movieData) => {
   try {
@@ -71,7 +72,7 @@ const getMovieById = async (movieId) => {
       // Populate category and any other referenced fields if needed
       const movie = await Movie.findById(movieId);
       if (!movie) {
-        throw new Error('Movie not found');
+        return null;
       }
       return movie;
     } catch (error) {
@@ -117,30 +118,76 @@ const getMovieById = async (movieId) => {
     }
   };
   
-  const getMoviesByPromotedCategories = async () => {
-    // Fetch categories with promoted set to true
-    const promotedCategories = await Category.find({ promoted: true });
-  
-    if (promotedCategories.length === 0) {
-      throw new Error('No promoted categories found');
+  const getMoviesByPromotedCategories = async (userId) => {
+    // Fetch the user's watched movies
+    const user = await User.findById(userId).exec();
+    if (!user) {
+        throw new Error('User not found.');
     }
-  
-    // Map category IDs
-    const categoryIds = promotedCategories.map((category) => category._id);
-  
-    // Fetch movies belonging to the promoted categories
-    const movies = await Movie.find({ categoryId: { $in: categoryIds } })
-      .populate('categoryId', 'name promoted') // Include category name and promoted fields
-      .exec();
-  
-    // Group movies by category
-    return promotedCategories.map((category) => ({
-      category: category.name,
-      category_id: category._id,
-      promoted: category.promoted,
-      movies: movies.filter((movie) => movie.categoryId._id.toString() === category._id.toString()),
-    }));
-  };
+
+    // Get the last 20 movies the user watched (sorted by `watchedAt` in descending order)
+    const watchedMovies = user.moviesList
+        .sort((a, b) => new Date(b.watchedAt) - new Date(a.watchedAt)) // Sort by watchedAt descending
+        .slice(0, 20) // Take the last 20 watched movies
+        .map((movie) => movie.movieId); // Extract movie IDs
+
+    // Fetch promoted categories
+    const promotedCategories = await Category.find({ promoted: true });
+
+    if (promotedCategories.length === 0) {
+        throw new Error('No promoted categories found.');
+    }
+
+    // Map promoted category IDs
+    const promotedCategoryIds = promotedCategories.map((category) => category._id);
+
+    // Fetch movies in promoted categories that the user hasn't watched yet
+    const movies = await Movie.find({
+        categoryId: { $in: promotedCategoryIds },
+        _id: { $nin: watchedMovies } // Exclude movies the user has watched
+    })
+        .populate('categoryId', 'name promoted') // Include category details
+        .exec();
+
+    // Group movies by category and select up to 20 random movies per category
+    const promotedMovies = promotedCategories.map((category) => {
+        const categoryMovies = movies
+            .filter((movie) => movie.categoryId._id.toString() === category._id.toString())
+            .sort(() => 0.5 - Math.random()) // Shuffle the movies
+            .slice(0, 20); // Take up to 20 movies
+
+        return {
+            category: category.name,
+            category_id: category._id,
+            promoted: category.promoted,
+            movies: categoryMovies
+        };
+    });
+
+    // Select up to 20 random watched movies
+
+    const randomWatchedMovies = watchedMovies
+        .sort(() => 0.5 - Math.random()) // Shuffle the movies
+        .slice(0, 20); // Limit to 20 movies
+    
+    // Step 3: Fetch movie details from the database
+    const finalMovies = await Movie.find({ _id: { $in: randomWatchedMovies } })
+    .lean() // Return plain JavaScript objects instead of Mongoose documents
+    .exec();
+
+
+    // Add a special category for watched movies
+    const specialCategory = {
+        category: 'Watched Movies',
+        category_id: null, // No specific ID for this category
+        promoted: false,
+        movies: finalMovies
+    };
+
+    // Combine promoted movies and the special watched category
+    return [...promotedMovies, specialCategory];
+};
+
   
 
 module.exports = {

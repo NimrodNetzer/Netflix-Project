@@ -1,10 +1,10 @@
 const express = require('express');
 const categoryController = require('../controllers/category');
-const {validateUserIdHeader} = require('./authenticate')
+const isAuthenticated = require('./auth'); // Import the authentication middleware
+
+
 const router = express.Router();
-
-router.use(validateUserIdHeader);
-
+router.use(isAuthenticated);
 router
   .route('/')
   .get(categoryController.getCategories)
