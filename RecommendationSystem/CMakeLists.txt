@@ -18,6 +18,7 @@ set(SOURCES
         src/Commands/recommendAlgo.cpp
         src/objects/User.cpp
         src/Data/DataManager.cpp
+        src/Commands/post.cpp
 )
 
 set(HEADERS
@@ -33,10 +34,24 @@ set(HEADERS
         src/Commands/recommend.h
         src/Commands/recommendAlgo.h
         src/objects/User.h
+        src/Menus/SocketMenu.cpp
+        src/Commands/post.cpp
+        src/Commands/patch.cpp
+        src/Commands/Delete.cpp
+        src/Server/Server.cpp
+        src/Menus/SocketMenu.h
+        src/Server/Server.h
+        src/Server/Runnable.h
+        src/Server/Executor.h
+        src/Server/SimpleExecutor.h
+        src/Server/SimpleExecutor.cpp
+        src/Server/ClientHandler.h
+        src/Server/ClientHandler.cpp
 )
 
 # Add the executable
 add_executable(RecommendationSystem ${SOURCES} ${HEADERS})
+#target_link_libraries(RecommendationSystem ws2_32)
 
 # Include the src directory for header file lookups
 target_include_directories(RecommendationSystem PRIVATE ${CMAKE_SOURCE_DIR}/src)

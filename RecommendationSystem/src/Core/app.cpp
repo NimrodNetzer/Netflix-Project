@@ -11,10 +11,14 @@ void App::run() {
     while (true) {
         try {
             // Display the menu and get the user's command input.
-            m_menu.nextCommand();
-
+            int res = m_menu.nextCommand();
+            if(res == -1) {
+                return;
+            }
             // Retrieve the last input from the menu.
             const std::string& commandLine = m_menu.getLastInput();
+
+
 
             // Parse the command ID from the input.
             std::istringstream iss(commandLine);
@@ -29,9 +33,13 @@ void App::run() {
                 std::getline(iss, arguments);
                 it->second->execute(arguments);
             }
+            else{
+                m_menu.displayBadRequestError("400 Bad Request");
+                continue;
+            }
         } catch (const std::exception& e) {
             // Handle exceptions and display an error message using the menu.
-            m_menu.displayError(e.what());
+            m_menu.displayBadRequestError("400 Bad Request");
         }
     }
 }

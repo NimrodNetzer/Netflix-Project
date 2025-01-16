@@ -1,0 +1,14 @@
+//
+// Created by nimro on 17/12/2024.
+//
+
+#ifndef RECOMMENDATIONSYSTEM_TEST_DELETE_H
+#define RECOMMENDATIONSYSTEM_TEST_DELETE_H
+
+
+class test_Delete {
+
+};
+
+
+#endif //RECOMMENDATIONSYSTEM_TEST_DELETE_H

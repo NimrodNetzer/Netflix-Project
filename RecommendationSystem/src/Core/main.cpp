@@ -13,43 +13,20 @@
 #include "Data/FilePersistence.h"
 #include "Commands/recommendAlgo.h"
 #include "Commands/recommend.h"
+#include "Commands/post.h"
+#include "Commands/patch.h"
+#include "Commands/Delete.h"
+#include "Server/Server.h"
 
-std::map<std::string, ICommand*> initializeCommands(IMenu& menu) {
-    std::map<std::string, ICommand*> commands;
-    commands["add"] = new add();           // No change for add
-    commands["help"] = new Help(menu);    // Pass menu to Help
-    commands["recommend"] = new recommend(menu); // Pass menu to recommend
-    return commands;
-}
 
 int main() {
-    try {
-        ConsoleMenu menu;
-
-        // Initialize commands with ConsoleMenu
-        std::map<std::string, ICommand*> commands = initializeCommands(menu);
-
-        IPersistence* persistence = new FilePersistence("data");
-        DataManager& data_manager = DataManager::getInstance();
-        data_manager.setPersistenceStrategy(persistence);
-        data_manager.load();
-
-        App application(menu, commands);
-        application.run();
-
-        for (auto& command : commands) {
-            delete command.second;
-        }
-        delete persistence;
-
-    } catch (const std::exception& e) {
-        std::cerr << "An error occurred: " << e.what() << std::endl;
-        return 1;
-    } catch (...) {
-        std::cerr << "An unknown error occurred." << std::endl;
-        return 1;
-    }
-
+    IPersistence* persistence = new FilePersistence("data");
+    DataManager& data_manager = DataManager::getInstance();
+    data_manager.setPersistenceStrategy(persistence);
+    data_manager.load();
+    Server server;
+    server.run();
+    delete persistence;
     return 0;
 }
 

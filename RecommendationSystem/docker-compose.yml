@@ -1,0 +1,24 @@
+services:
+  server:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    container_name: recommendation_server
+
+  client:
+    build:
+      context: ./src/Client/
+      dockerfile: Dockerfile
+    container_name: recommendation_client
+    # Client service is not run by default
+    entrypoint: [ "python", "Client.py" ]
+    command: [ "server", "8080" ]
+
+  test:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: recommendation_test
+    entrypoint: ["./test/build/RecommendationSystem_Tests"]

@@ -61,7 +61,7 @@ void recommend::execute(std::string s) {
         validateString(s);
     } catch (const std::invalid_argument& e) {
         // If validation fails, display an error message and exit the function
-        m_menu.displayError(e.what());
+        m_menu.displayBadRequestError("400 Bad Request");
         return;
     }
 
@@ -76,14 +76,14 @@ void recommend::execute(std::string s) {
     // Check if the user with the specified userID exists in the data manager
     if (!data_manager.hasUser(userID)) {
         // If user does not exist, display an error and exit
-        m_menu.displayError("User not found.");
+        m_menu.displayLogicError("404 Not Found");
         return;
     }
 
     // Check if the movie with the specified movieID exists in the data manager
     if (!data_manager.hasMovie(movieID)) {
         // If movie does not exist, display an error and exit
-        m_menu.displayError("Movie not found.");
+        m_menu.displayLogicError("404 Not Found");
         return;
     }
 
