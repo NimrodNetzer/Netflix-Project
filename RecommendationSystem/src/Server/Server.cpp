@@ -24,7 +24,7 @@
 
 void Server::handleClient(int client_sock) {
     ClientHandler* handler = new ClientHandler(client_sock);
-    executor.execute(handler);
+    executor->execute(handler);
 }
 
 
