@@ -3,10 +3,13 @@
 
 This project implements a recommendation system in C++ for suggesting movies to users based on their viewing preferences. The system operates with the following functionalities:
 
+# Features
 1. Add Users and Movies: Assign movies to specific users, allowing dynamic updates to the database.
 2. Generate Recommendations: Suggest up to 10 movies for a user based on the viewing history of users with similar preferences.
 3. Persistent Data Handling: Ensures that data persists across program sessions by saving and loading from files.
 4. Command-Line Interface: Supports commands for adding data, generating recommendations, and displaying help.
+5. Server-Based Architecture: The system is centered around a C++ server that handles core functionalities, including managing user data, movies, and generating recommendations.
+6. Python Client Integration: Clients connect to the server using a Python-based client, facilitating communication and interactions with the recommendation system.
 
 The project follows SOLID principles and is designed for scalability, enabling seamless updates and extensions to the codebase. The recommendation algorithm is based on calculating the similarity of users and their movie-watching patterns, prioritizing movies watched by users with higher similarity scores.
 
