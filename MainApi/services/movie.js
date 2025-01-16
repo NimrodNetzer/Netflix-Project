@@ -4,6 +4,7 @@ const User = require('../models/user'); // Path to your User model
 
 const createMovie = async (movieData) => {
   try {
+
     // Required field validation
     const requiredFields = ['name', 'description', 'picture', 'age', 'time', 'releaseDate', 'quality', 'categoryId', 'author'];
     for (const field of requiredFields) {
@@ -11,7 +12,10 @@ const createMovie = async (movieData) => {
         throw new Error(`Missing required field: ${field}`);
       }
     }
-
+    const category = await Category.findById(movieData.categoryId);
+    if (!category) {
+      throw new Error(`Category with id: ${movieData.categoryId} does not exists.`)
+    }
     // Specific field validations
     if (typeof movieData.name !== 'string' || movieData.name.trim() === '') {
       throw new Error('Invalid name: must be a non-empty string');
