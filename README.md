@@ -28,13 +28,13 @@ docker compose build
 ## Running the Container
 
 ### Run the server
-To create and run the container for the first time, execute:
+To run the server execute:
 ```bash
 docker compose up server
 ```
 
 ### Run the client
-To start the container after it has already been created, use:
+To connect to the server with the python client:
 ```bash
 docker compose run --rm client
 ```
