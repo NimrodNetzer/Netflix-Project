@@ -45,7 +45,7 @@ const movieSchema = new mongoose.Schema({
   ],
   properties: {
     type: Map,
-    of: String, // You can use other types depending on your requirements
+    of: String,
   },
   movieData: {
     type: Object,

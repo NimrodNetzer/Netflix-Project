@@ -55,12 +55,23 @@ const addRecommendation = async (userId, movieId) => {
 
 const updateMongoDBMoviesList = async (userId, movieId) => {
     try {
-        const result = await User.findByIdAndUpdate(
-            userId,
-            { $addToSet: { moviesList: { movieId } } },
-            { new: true, upsert: false }
-        );
-
+      await User.updateOne(
+        { _id: userId },
+        { $pull: { moviesList: { movieId } } }
+      );
+      const result = await User.findOneAndUpdate(
+        { _id: userId },
+        {
+          $push: {
+            moviesList: {
+              $each: [{ movieId, watchedAt: new Date() }],
+              $position: 0,   // Insert at the beginning
+              $slice: 20      // Limit the array to 20 items
+            }
+          }
+        },
+        { new: true }
+      );
         if (!result) {
             throw new Error(`User with ID ${userId} not found`);
         }

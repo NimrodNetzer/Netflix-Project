@@ -34,7 +34,7 @@ const UserSchema = new Schema({
     }, 
     moviesList:
         [{
-            movieId: { type: String}, // ID of the movie
+            movieId: { type: Number, ref: 'Movie'}, // ID of the movie
             watchedAt: { type: Date, default: Date.now } // Timestamp for when the movie was added/watched
 }]
     });

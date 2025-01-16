@@ -11,7 +11,7 @@ const tokens = require('./routes/token');
 
 require('custom-env').env(process.env.NODE_ENV, './config');
 
-mongoose.connect(process.env.CONNECTION_STRING)
+mongoose.connect(process.env.CONNECTION_STRING + '/netflix')
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err));
 

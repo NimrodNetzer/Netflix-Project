@@ -120,7 +120,7 @@ const getMovieById = async (movieId) => {
   
   const getMoviesByPromotedCategories = async (userId) => {
     // Fetch the user's watched movies
-    const user = await User.findById(userId).exec();
+    const user = await User.findById(userId).populate('moviesList.movieId').exec();
     if (!user) {
         throw new Error('User not found.');
     }
@@ -168,20 +168,14 @@ const getMovieById = async (movieId) => {
 
     const randomWatchedMovies = watchedMovies
         .sort(() => 0.5 - Math.random()) // Shuffle the movies
-        .slice(0, 20); // Limit to 20 movies
     
-    // Step 3: Fetch movie details from the database
-    const finalMovies = await Movie.find({ _id: { $in: randomWatchedMovies } })
-    .lean() // Return plain JavaScript objects instead of Mongoose documents
-    .exec();
-
 
     // Add a special category for watched movies
     const specialCategory = {
         category: 'Watched Movies',
         category_id: null, // No specific ID for this category
         promoted: false,
-        movies: finalMovies
+        movies: randomWatchedMovies
     };
 
     // Combine promoted movies and the special watched category
