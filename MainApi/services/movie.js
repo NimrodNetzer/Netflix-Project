@@ -121,70 +121,72 @@ const getMovieById = async (movieId) => {
       throw new Error(error.message || 'Failed to replace movie');
     }
   };
-  
   const getMoviesByPromotedCategories = async (userId) => {
-    // Fetch the user's watched movies
-    const user = await User.findById(userId).populate('moviesList.movieId').exec();
-    if (!user) {
-        throw new Error('User not found.');
-    }
-
-    // Get the last 20 movies the user watched (sorted by `watchedAt` in descending order)
-    const watchedMovies = user.moviesList
-        .sort((a, b) => new Date(b.watchedAt) - new Date(a.watchedAt)) // Sort by watchedAt descending
-        .slice(0, 20) // Take the last 20 watched movies
-        .map((movie) => movie.movieId); // Extract movie IDs
-
-    // Fetch promoted categories
-    const promotedCategories = await Category.find({ promoted: true });
-
-    if (promotedCategories.length === 0) {
-        throw new Error('No promoted categories found.');
-    }
-
-    // Map promoted category IDs
-    const promotedCategoryIds = promotedCategories.map((category) => category._id);
-
-    // Fetch movies in promoted categories that the user hasn't watched yet
-    const movies = await Movie.find({
-        categoryId: { $in: promotedCategoryIds },
-        _id: { $nin: watchedMovies } // Exclude movies the user has watched
-    })
-        .populate('categoryId', 'name promoted') // Include category details
-        .exec();
-
-    // Group movies by category and select up to 20 random movies per category
-    const promotedMovies = promotedCategories.map((category) => {
-        const categoryMovies = movies
-            .filter((movie) => movie.categoryId._id.toString() === category._id.toString())
-            .sort(() => 0.5 - Math.random()) // Shuffle the movies
-            .slice(0, 20); // Take up to 20 movies
-
-        return {
-            category: category.name,
-            category_id: category._id,
-            promoted: category.promoted,
-            movies: categoryMovies
-        };
-    });
-
-    // Select up to 20 random watched movies
-
-    const randomWatchedMovies = watchedMovies
-        .sort(() => 0.5 - Math.random()) // Shuffle the movies
+    // 1. Fetch the user and their watched movies
+    const user = await User.findById(userId)
+      .populate('moviesList.movieId')
+      .exec();
     
-
-    // Add a special category for watched movies
-    const specialCategory = {
-        category: 'Watched Movies',
-        category_id: null, // No specific ID for this category
-        promoted: false,
-        movies: randomWatchedMovies
+    if (!user) {
+      throw new Error('User not found.');
+    }
+  
+    // 2. Get the last 20 watched movies (sorted by `watchedAt` descending)
+    const recentlyWatchedMovies = user.moviesList
+      .sort((a, b) => new Date(b.watchedAt) - new Date(a.watchedAt))
+      .slice(0, 20);
+  
+    // 3. Fetch all promoted categories
+    const promotedCategories = await Category.find({ promoted: true });
+    if (promotedCategories.length === 0) {
+      throw new Error('No promoted categories found.');
+    }
+  
+    // 4. Collect IDs of the watched movies
+    const watchedMovieIds = recentlyWatchedMovies.map(
+      (movieRecord) => movieRecord.movieId._id
+    );
+  
+    // 5. Fetch movies from promoted categories that are not in the watched list
+    const unWatchedPromotedMovies = await Movie.find({
+      categoryId: { $in: promotedCategories.map((cat) => cat._id) },
+      _id: { $nin: watchedMovieIds },
+    })
+      .populate('categoryId', 'name promoted')
+      .exec();
+  
+    // 6. Group promoted movies by category, picking up to 20 random for each
+    const promotedMoviesGrouped = promotedCategories.map((category) => {
+      const moviesInCategory = unWatchedPromotedMovies
+        .filter((movie) => movie.categoryId._id.toString() === category._id.toString())
+        .sort(() => 0.5 - Math.random()) // Randomize
+        .slice(0, 20);                   // Take up to 20
+  
+      return {
+        category: category.name,
+        category_id: category._id,
+        promoted: category.promoted,
+        movies: moviesInCategory,
+      };
+    });
+  
+    // 7. Randomize the watched movies array
+    const shuffledWatchedMovies = recentlyWatchedMovies
+      .sort(() => 0.5 - Math.random());
+  
+    // 8. Create a special category for watched movies
+    const watchedCategory = {
+      category: 'Watched Movies',
+      category_id: null,  // or any placeholder
+      promoted: false,
+      movies: shuffledWatchedMovies.map((entry) => entry.movieId), 
+      // If you want the full array with `watchedAt` and other details, remove `.map(...)`
     };
-
-    // Combine promoted movies and the special watched category
-    return [...promotedMovies, specialCategory];
-};
+  
+    // 9. Combine results and return
+    return [...promotedMoviesGrouped, watchedCategory];
+  };
+  
 
   
 

@@ -138,7 +138,7 @@ def main():
      print(f"Created {len(movies)} movies.")
 
      # Example: Add first movie to the watched list of first user
-     for i in range(1, 100):
+     for i in range(1, 1000):
         add_movie_to_watched(1, 1)
 
 if __name__ == "__main__":

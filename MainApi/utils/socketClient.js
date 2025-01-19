@@ -68,6 +68,7 @@ class SocketClient {
     }
   
     disconnect() {
+      console.log(this.client, this.isConnected);
       if (this.client && this.isConnected) {
         this.client.destroy();
         this.isConnected = false;
