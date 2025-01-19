@@ -44,30 +44,6 @@ It supports a wide range of functionalities including user management, authentic
 - **`POST /api/categories`**: Add 
 
 
-# Project Design Overview
-
-This section outlines how the project design addresses changes in requirements while adhering to best practices such as scalability, adaptability, and extensibility.
-
-### Key Questions:
-
-1. Does the fact that command names have changed require the code to be "closed for modification but open for extension"?  
-2. Does adding new commands require the code to be "closed for modification but open for extension"?  
-3. Does changing the output of commands require the code to be "closed for modification but open for extension"?  
-4. Does changing the input/output method from the console to sockets require the code to be "closed for modification but open for extension"?
-
-### Answers:
-
-1. **Changes in Command Names:**  
-   The fact that command names have changed did not require modifications to the core logic of the code, except for updating the dictionary used in `clientHandler` to map the new command names. For example, the `add` command was reused as an instance in operations like `post` and `patch` in this exercise without changing its internal logic.
-
-2. **Adding New Commands:**  
-   Adding new commands did not require modifying the existing code. This was achieved by designing the code according to the **Command Pattern**, where all operations implement a shared `ICommand` interface. This allowed the application to execute commands without needing to know their specific implementations, making the system open for extension but closed for modification.
-
-3. **Changes in Command Outputs:**  
-   Changes in the command outputs required minimal adjustments. For example, modifications were made to the `recommend` operation, which works independently, without impacting other commands like `add`. The changes involved only specific updates to the output format, such as error messages or status codes, without adding new logic or operations.
-
-4. **Input/Output Transition from Console to Sockets:**  
-   Transitioning the input/output from the console to sockets did not require core changes to the code. This was managed using the `IMenu` interface, which defines actions for displaying outputs to the user. This interface allowed swapping out the console-based implementation through **Dependency Injection**, making it adaptable to different input/output methods.
 
 
 ## How to run
