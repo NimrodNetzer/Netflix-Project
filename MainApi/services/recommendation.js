@@ -26,13 +26,13 @@ const fetchRecommendations = async (userId, movieId) => {
 };
 
 const addRecommendation = async (userId, movieId) => {
+    const socketClient = new SocketClient(serverIp, serverPort);
+
     try {
       await updateMongoDBMoviesList(userId, movieId);
    
-      const socketClient = new SocketClient(serverIp, serverPort);
       socketClient.connect();
       const postResponse = await socketClient.send(`POST ${userId} ${movieId}\n`);
-      socketClient.disconnect();
       if (postResponse.startsWith('201')) {
         return 'Recommendation added successfully';
       }
@@ -44,12 +44,16 @@ const addRecommendation = async (userId, movieId) => {
         }
         throw new Error(`PATCH failed: ${patchResponse}`);
       }
-      
+
       throw new Error(`Unexpected response: ${postResponse}`); 
     } catch (error) {
       console.error('Recommendation System error:', error);
       error.status = 500;
       throw error;
+    }
+    finally {
+      socketClient.disconnect(); // Ensure the socket is disconnected
+
     }
 };
 
@@ -82,14 +86,16 @@ const updateMongoDBMoviesList = async (userId, movieId) => {
         console.error(`Error adding movie to user ${userId}:`, error.message);
         throw error;
     }
+   
 };
 
 
 const deleteWatchedMovie = async (movieId) => {
+    const socketClient = new SocketClient(serverIp, serverPort);
+
     try {
-      await User.updateMany({}, { $pull: { moviesList: { movieId } } });
       const users = await User.find({});
-      const socketClient = new SocketClient(serverIp, serverPort);
+      await User.updateMany({}, { $pull: { moviesList: { movieId } } });
       socketClient.connect();
       for (const user of users) {
           try {
@@ -98,14 +104,14 @@ const deleteWatchedMovie = async (movieId) => {
               console.error(`Failed to delete recommendation for user ${user._id}:`, err.message);
           }
       }
-      socketClient.disconnect();
-
       
       return `Movie ${movieId} deleted from ${users.length} users`;
     } catch (error) {
       console.error('Delete recommendation error:', error);
       error.status = 500;
       throw error;
+    } finally{
+      socketClient.disconnect();
     }
 };
    
