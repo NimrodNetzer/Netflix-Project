@@ -102,21 +102,6 @@ docker compose run --rm test
 ```
 This command will run the tests in a disposable container, which will be removed after the tests complete.
 
-
- 
-# Project Structure
-src/: Contains the C++ recommendation engine.
-
-server/: Node.js server implementation.
-
-database/: MongoDB models and configuration.
-
-client/: Python client implementation.
-
-Dockerfile: Docker configuration for building the server.
-
-docker-compose.yml: Docker Compose configuration for managing containers.
-
 # Run Example:
 ![image](https://github.com/user-attachments/assets/d06d622b-0306-45e4-ba21-6ffa834802e4)
 
