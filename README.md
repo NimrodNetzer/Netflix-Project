@@ -72,35 +72,15 @@ This section outlines how the project design addresses changes in requirements w
 
 ## How to run
 ```bash
-cd RecommendationSystem
+cd MainApi
 ```
 
-## Build the Docker Image
+## Build and Run the Docker Image
 To build the Docker image, run the following command:
 ```bash
-docker compose build
+docker compose up --build -d
 ```
-
-## Running the Container
-
-### Run the server
-To run the server execute:
-```bash
-docker compose up server
-```
-
-### Run the client
-To connect to the server with the python client:
-```bash
-docker compose run --rm client
-```
-
-## Running Tests
-To run the tests, use the following command:
-```bash
-docker compose run --rm test
-```
-This command will run the tests in a disposable container, which will be removed after the tests complete.
+The recommendation server will run on port 8080, the nodejs server will be on port 3000 (the port can be modified in the docker-compose.yml).
 
 # Run Example:
 ![image](https://github.com/user-attachments/assets/d06d622b-0306-45e4-ba21-6ffa834802e4)
