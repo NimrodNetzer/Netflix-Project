@@ -61,4 +61,7 @@ The recommendation server will run on port 8080, the nodejs server will be on po
 # Run Example:
 ![image](https://github.com/user-attachments/assets/d06d622b-0306-45e4-ba21-6ffa834802e4)
 
+# Run the test script
+"C:\Users\orlib\AppData\Local\Programs\Python\Python313\python.exe" test.py
+
 

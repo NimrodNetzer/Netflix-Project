@@ -58,6 +58,7 @@ void ThreadPoolExecutor::workerFunction() {
 
         try {
             task->run();
+            std::cout << "Task executed" << std::endl;
         } catch (const std::exception& e) {
             std::cerr << "Exception in thread: " << e.what() << std::endl;
         }

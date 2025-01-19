@@ -75,11 +75,12 @@ def create_movies(category_ids, user_count):
     movies = []
     for i in range(100):
         category = random.choice(category_ids)  # Use a random category ID
+        age = random.randint(1, 18)
         movie = {
             "name": f"Movie {i}",
             "picture": f"https://example.com/movies/movie{i}.jpg",
             "description": f"This is the description of Movie {i}",
-            "age": random.randint(0, 18),
+            "age": age,
             "time": f"{random.randint(1, 3)}h {random.randint(0, 59)}m",
             "releaseDate": random_date(datetime(2000, 1, 1), datetime(2025, 1, 1)).isoformat(),
             "quality": random.choice(["HD", "SD", "4K"]),
