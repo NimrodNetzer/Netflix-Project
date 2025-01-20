@@ -115,7 +115,7 @@ def add_movie_to_watched(movie_id, user_id):
     headers = {"user-id": str(user_id)}
     url = RECOMMEND_URL.format(movie_id=movie_id)
     response = requests.post(url, headers=headers)
-    if response.status_code == 200:
+    if response.status_code == 201:
         print(f"Movie {movie_id} successfully added to watched list for user {user_id}.")
     else:
         print(f"Failed to add movie {movie_id} to watched list for user {user_id}: {response.text}")
