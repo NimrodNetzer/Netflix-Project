@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const Category = require('../models/category');
+const Movie = require('../models/movie'); // Import the Movie model
+
+
 
 // Create a new category
 const createCategory = async (name, promoted) => {
@@ -60,16 +63,33 @@ const updateCategory = async (id, name, promoted) => {
 const deleteCategory = async (id) => {
   const category = await getCategoryById(id);
 
-  if(!category)
-    return null;
+  if (!category) {
+    return null; // Category does not exist
+  }
+
   try {
+    // Check if any movie has this category as its only category
+    const movieWithOnlyThisCategory = await Movie.findOne({ categories: { $eq: [id] } });
+
+    if (movieWithOnlyThisCategory) {
+      const error = new Error(
+        `Cannot delete category "${category.name}" because it is the only category for the movie "${movieWithOnlyThisCategory.name}".`
+      );
+      error.status = 400; // Indicate this is a client-side error
+      throw error;
+    }
+
+    // Remove the category from all movies that reference it
+    await Movie.updateMany({ categories: id }, { $pull: { categories: id } });
+
+    // Proceed with deletion of the category
     await category.deleteOne();
     return category;
   } catch (error) {
-    throw new Error(`Error deleting category: ${error.message}`);
+    if (!error.status) error.status = 500; // Default to server error if no status is provided
+    throw error;
   }
 };
-
 // Retrieve all categories by ID (if filtering by specific IDs is required)
 const getAllCategorieById = async (id) => {
   try {

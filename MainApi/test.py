@@ -74,7 +74,8 @@ def create_categories(user_count):
 def create_movies(category_ids, user_count):
     movies = []
     for i in range(100):
-        category = random.choice(category_ids)  # Use a random category ID
+        # Assign multiple random categories
+        selected_categories = random.sample(category_ids, random.randint(1, 3))  # Select 1 to 3 categories
         age = random.randint(1, 18)
         movie = {
             "name": f"Movie {i}",
@@ -84,7 +85,7 @@ def create_movies(category_ids, user_count):
             "time": f"{random.randint(1, 3)}h {random.randint(0, 59)}m",
             "releaseDate": random_date(datetime(2000, 1, 1), datetime(2025, 1, 1)).isoformat(),
             "quality": random.choice(["HD", "SD", "4K"]),
-            "categoryId": category,
+            "categories": selected_categories,  # Assign multiple categories
             "cast": [
                 {"name": random_string(8), "role": random.choice(["Lead", "Supporting"])}
                 for _ in range(random.randint(2, 5))
@@ -115,7 +116,7 @@ def add_movie_to_watched(movie_id, user_id):
     headers = {"user-id": str(user_id)}
     url = RECOMMEND_URL.format(movie_id=movie_id)
     response = requests.post(url, headers=headers)
-    if response.status_code == 200:
+    if response.status_code == 201:
         print(f"Movie {movie_id} successfully added to watched list for user {user_id}.")
     else:
         print(f"Failed to add movie {movie_id} to watched list for user {user_id}: {response.text}")

@@ -83,9 +83,11 @@ const deleteCategory = async (req, res) => {
     res.setHeader('Location', categoryUrl);
     res.status(204).send();
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    const statusCode = error.status || 500; // Use the status from the error or default to 500
+    res.status(statusCode).json({ error: error.message });
   }
 };
+
 
 module.exports = {
   getCategories,
