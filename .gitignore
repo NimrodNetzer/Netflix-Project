@@ -93,3 +93,4 @@ fabric.properties
 ./RecommendationSystem/data/*
 
 /MainApi/node_modules/*
+**/config**

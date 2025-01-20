@@ -9,9 +9,7 @@ const searchRoutes = require('./routes/search');
 const users = require('./routes/user');
 const tokens = require('./routes/token');
 
-if (process.env.NODE_ENV !== 'prod') {
-  require('custom-env').env(process.env.NODE_ENV, './config');
-}
+require('custom-env').env(process.env.NODE_ENV, './config');
 
 mongoose.connect(process.env.CONNECTION_STRING)
   .then(() => console.log('Connected to MongoDB'))
