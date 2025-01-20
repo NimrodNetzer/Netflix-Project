@@ -1,21 +1,27 @@
 const Movie = require('../models/movie'); // Path to your Movie model
-const Category = require('../models/category'); // Path to your Movie model
+const Category = require('../models/category'); // Path to your Category model
 const User = require('../models/user'); // Path to your User model
 
 const createMovie = async (movieData) => {
   try {
-
     // Required field validation
-    const requiredFields = ['name', 'description', 'picture', 'age', 'time', 'releaseDate', 'quality', 'categoryId', 'author'];
+    const requiredFields = ['name', 'description', 'picture', 'age', 'time', 'releaseDate', 'quality', 'categories', 'author'];
     for (const field of requiredFields) {
       if (!movieData[field]) {
         throw new Error(`Missing required field: ${field}`);
       }
     }
-    const category = await Category.findById(movieData.categoryId);
-    if (!category) {
-      throw new Error(`Category with id: ${movieData.categoryId} does not exists.`)
+
+    // Validate categories
+    if (!Array.isArray(movieData.categories) || movieData.categories.length === 0) {
+      throw new Error('Invalid categories: must be a non-empty array of category IDs');
     }
+
+    const categories = await Category.find({ _id: { $in: movieData.categories } });
+    if (categories.length !== movieData.categories.length) {
+      throw new Error('One or more categories provided do not exist');
+    }
+
     // Specific field validations
     if (typeof movieData.name !== 'string' || movieData.name.trim() === '') {
       throw new Error('Invalid name: must be a non-empty string');
@@ -37,9 +43,6 @@ const createMovie = async (movieData) => {
     }
     if (!['HD', 'SD', '4K'].includes(movieData.quality)) {
       throw new Error('Invalid quality: must be one of "HD", "SD", or "4K"');
-    }
-    if (!movieData.categoryId.match(/^[a-fA-F0-9]{24}$/)) {
-      throw new Error('Invalid categoryId: must be a valid ObjectId');
     }
 
     // Optional validations
@@ -72,124 +75,126 @@ const createMovie = async (movieData) => {
 };
 
 const getMovieById = async (movieId) => {
-    try {
-      // Populate category and any other referenced fields if needed
-      const movie = await Movie.findById(movieId);
-      if (!movie) {
-        return null;
-      }
-      return movie;
-    } catch (error) {
-      console.error('Error in getMovieById service:', error);
-      throw new Error(error.message || 'Failed to fetch movie');
+  try {
+    // Populate categories and any other referenced fields if needed
+    const movie = await Movie.findById(movieId).populate('categories', 'name promoted');
+    if (!movie) {
+      return null;
     }
-  };
+    return movie;
+  } catch (error) {
+    console.error('Error in getMovieById service:', error);
+    throw new Error(error.message || 'Failed to fetch movie');
+  }
+};
 
-  const deleteMovieById = async (id) => {
-    try {
-      const movie = await Movie.findById(id);
-      if (!movie) {
-        return null;
-      }
-  
-      await movie.deleteOne();
-      return movie;
-    } catch (error) {
-      throw new Error(`Error deleting movie: ${error.message}`);
+const deleteMovieById = async (id) => {
+  try {
+    const movie = await Movie.findById(id);
+    if (!movie) {
+      return null;
     }
-  };
 
-  const replaceMovieById = async (id, movieUpdates) => {
-    try {
-      // Validate the incoming data first
-      const tempMovie = new Movie(movieUpdates);
-      await tempMovie.validate(); // This ensures the data conforms to the schema
-  
-      // Find and delete the original document
-      const existingMovie = await Movie.findById(id);
-      if (!existingMovie) {
-        throw new Error('Movie not found');
-      }
-      await existingMovie.deleteOne(); // Delete the original document
-  
-      // Create and save the new movie with the same ID
-      tempMovie._id = id; // Preserve the original ID
-      const newMovie = await tempMovie.save(); // Save the validated new document
-  
-      return newMovie;
-    } catch (error) {
-      throw new Error(error.message || 'Failed to replace movie');
+    await movie.deleteOne();
+    return movie;
+  } catch (error) {
+    throw new Error(`Error deleting movie: ${error.message}`);
+  }
+};
+
+const replaceMovieById = async (id, movieUpdates) => {
+  try {
+    // Find the existing movie
+    const existingMovie = await Movie.findById(id);
+    if (!existingMovie) {
+      throw new Error('Movie not found');
     }
-  };
-  const getMoviesByPromotedCategories = async (userId) => {
-    // 1. Fetch the user and their watched movies
-    const user = await User.findById(userId)
-      .populate('moviesList.movieId')
-      .exec();
-    
-    if (!user) {
-      throw new Error('User not found.');
-    }
-  
-    // 2. Get the last 20 watched movies (sorted by `watchedAt` descending)
-    const recentlyWatchedMovies = user.moviesList
-      .sort((a, b) => new Date(b.watchedAt) - new Date(a.watchedAt))
-      .slice(0, 20);
-  
-    // 3. Fetch all promoted categories
-    const promotedCategories = await Category.find({ promoted: true });
-    if (promotedCategories.length === 0) {
-      throw new Error('No promoted categories found.');
-    }
-  
-    // 4. Collect IDs of the watched movies
-    const watchedMovieIds = recentlyWatchedMovies.map(
-      (movieRecord) => movieRecord.movieId._id
-    );
-  
-    // 5. Fetch movies from promoted categories that are not in the watched list
-    const unWatchedPromotedMovies = await Movie.find({
-      categoryId: { $in: promotedCategories.map((cat) => cat._id) },
-      _id: { $nin: watchedMovieIds },
-    })
-      .populate('categoryId', 'name promoted')
-      .exec();
-  
-    // 6. Group promoted movies by category, picking up to 20 random for each
-    const promotedMoviesGrouped = promotedCategories.map((category) => {
-      const moviesInCategory = unWatchedPromotedMovies
-        .filter((movie) => movie.categoryId._id.toString() === category._id.toString())
-        .sort(() => 0.5 - Math.random()) // Randomize
-        .slice(0, 20);                   // Take up to 20
-  
-      return {
-        category: category.name,
-        category_id: category._id,
-        promoted: category.promoted,
-        movies: moviesInCategory,
-      };
-    });
-  
-    // 7. Randomize the watched movies array
-    const shuffledWatchedMovies = recentlyWatchedMovies
-      .sort(() => 0.5 - Math.random());
-  
-    // 8. Create a special category for watched movies
-    const watchedCategory = {
-      category: 'Watched Movies',
-      category_id: null,  // or any placeholder
-      promoted: false,
-      movies: shuffledWatchedMovies.map((entry) => entry.movieId), 
-      // If you want the full array with `watchedAt` and other details, remove `.map(...)`
+
+    // Delete the existing movie
+    await existingMovie.deleteOne();
+
+    // Use the createMovie function to create a new movie with the same ID
+    const newMovie = await createMovie({ ...movieUpdates, _id: id });
+
+    return newMovie;
+  } catch (error) {
+    console.error('Error replacing movie:', error);
+    throw new Error(error.message || 'Failed to replace movie');
+  }
+};
+
+const getMoviesByPromotedCategories = async (userId) => {
+  // 1. Fetch the user and their watched movies
+  const user = await User.findById(userId)
+    .populate('moviesList.movieId')
+    .exec();
+
+  if (!user) {
+    throw new Error('User not found.');
+  }
+
+  // 2. Get the last 20 watched movies (sorted by `watchedAt` descending)
+  const recentlyWatchedMovies = user.moviesList
+    .sort((a, b) => new Date(b.watchedAt) - new Date(a.watchedAt))
+    .slice(0, 20);
+
+  // 3. Fetch all promoted categories
+  const promotedCategories = await Category.find({ promoted: true });
+  if (promotedCategories.length === 0) {
+    throw new Error('No promoted categories found.');
+  }
+
+  // 4. Collect IDs of the watched movies
+  const watchedMovieIds = recentlyWatchedMovies.map(
+    (movieRecord) => movieRecord.movieId._id
+  );
+
+  // 5. Fetch movies from promoted categories that are not in the watched list
+  const promotedCategoryIds = promotedCategories.map((cat) => cat._id);
+  const unWatchedPromotedMovies = await Movie.find({
+    categories: { $in: promotedCategoryIds }, // Check if any promoted category is in the movie's categories
+    _id: { $nin: watchedMovieIds }, // Exclude already watched movies
+  })
+    .populate('categories', 'name promoted') // Populate category details
+    .exec();
+
+  // 6. Group promoted movies by category, picking up to 20 random for each
+  const promotedMoviesGrouped = promotedCategories.map((category) => {
+    const moviesInCategory = unWatchedPromotedMovies
+      .filter((movie) =>
+        movie.categories.some((cat) => cat._id.toString() === category._id.toString())
+      )
+      .sort(() => 0.5 - Math.random()) // Randomize
+      .slice(0, 20); // Take up to 20
+
+    return {
+      category: category.name,
+      category_id: category._id,
+      promoted: category.promoted,
+      movies: moviesInCategory,
     };
-  
-    // 9. Combine results and return
-    return [...promotedMoviesGrouped, watchedCategory];
-  };
-  
+  });
 
-  
+  // 7. Randomize the watched movies array
+  const shuffledWatchedMovies = recentlyWatchedMovies.sort(() => 0.5 - Math.random());
+
+  // 8. Create a special category for watched movies
+  const watchedCategory = {
+    category: 'Watched Movies',
+    category_id: null, // or any placeholder
+    promoted: false,
+    movies: shuffledWatchedMovies.map((entry) => entry.movieId), // If you want the full array with `watchedAt` and other details, remove `.map(...)`
+  };
+
+  // 9. Combine results and return
+  return [...promotedMoviesGrouped, watchedCategory];
+};
+
 
 module.exports = {
-  createMovie, getMovieById, deleteMovieById, replaceMovieById, getMoviesByPromotedCategories
+  createMovie,
+  getMovieById,
+  deleteMovieById,
+  replaceMovieById,
+  getMoviesByPromotedCategories,
 };

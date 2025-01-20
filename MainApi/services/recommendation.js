@@ -70,7 +70,6 @@ const updateMongoDBMoviesList = async (userId, movieId) => {
             moviesList: {
               $each: [{ movieId, watchedAt: new Date() }],
               $position: 0,   // Insert at the beginning
-              $slice: 20      // Limit the array to 20 items
             }
           }
         },
