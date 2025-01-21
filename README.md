@@ -1,67 +1,78 @@
-<div align="center">
-  <img src="https://github.com/user-attachments/assets/287abe5b-9e8d-4be0-9e79-98ce6ce3edc4" alt="image_with_exercise3" width="500">
-</div>
-<br>
+# **Recommendation System**
 
-# Recommendation System
+This project integrates a **C++ recommendation system** with a **Node.js server** and **MongoDB database**, providing functionalities for user management, authentication, dynamic database operations, and personalized movie suggestions based on viewing preferences. 
 
-This project integrates a recommendation system in C++ with a Node.js server and MongoDB database, providing functionalities for user management, authentication, dynamic database operations, and personalized movie suggestions based on viewing preferences. <br>
-The system operates with the following functionalities:
+The system operates with the following features:
 
-1. Server-Based Architecture: A robust Node.js server acts as the backbone of the system, handling all API requests and coordinating between the client and the recommendation system.
+### Key Features
+1. **Server-Based Architecture**: A robust Node.js server handles API requests and coordinates between the client and the recommendation system.
+2. **MongoDB Database**: Persistent storage for scalable and efficient data management.
+3. **Recommendation System**: Integration with the C++ recommendation engine from **Task 1 and Task 2**, fetching personalized movie recommendations.
+4. **Dynamic Updates**: Support for adding, updating, and deleting users and movies dynamically via API calls.
+5. **Authentication and Authorization**: Token-based user authentication ensures secure access to the system.
+6. **SOLID Principles**: Designed with scalability and extensibility in mind.
 
-2. MongoDB Database: Persistent storage is achieved using MongoDB, allowing scalable and efficient data management.
+---
 
-3. Connection to Recommendation System: The server communicates with the recommendation system developed in Task 1 and 2 to fetch personalized movie recommendations.
+## **Key API Endpoints**
 
-4. Dynamic Updates: Add, update, and delete users and movies dynamically through API calls.
-
-5. Authentication and Authorization: Users are authenticated through tokens for secure access to the system.
-
-The project follows SOLID principles and ensures scalability and extensibility.  <br>
-It supports a wide range of functionalities including user management, authentication, dynamic database operations, and personalized movie recommendations, making it a comprehensive platform for managing and exploring user-specific movie content.\
-<br>
-
-**The server exposes the following key endpoints:**
-### User Management
-
+### **User Management**
 - **`POST /api/users`**: Create a new user by submitting their details in JSON format.
 - **`GET /api/users/:id`**: Retrieve specific user details using their unique ID.
 
-### Movie Management
-
+### **Movie Management**
 - **`GET /api/movies`**: Retrieve a list of all movies, optionally filtered by categories or user preferences.
 - **`POST /api/movies`**: Add a new movie by submitting its details in JSON format.
-- **`GET /api/movies/:id/recommend`**: Fetch movie recommendations for a specific user based on their unique ID and viewing preferences.
+- **`GET /api/movies/:id/recommend`**: Fetch personalized movie recommendations for a specific user.
 
-### Authentication
+### **Authentication**
+- **`POST /api/tokens`**: Authenticate a user by submitting their credentials to receive an access token for secure interaction.
 
-- **`POST /api/tokens`**: Authenticate a user by submitting their credentials and receive an access token for secure API interaction.
-
-### Categories Management
-
+### **Categories Management**
 - **`GET /api/categories`**: Retrieve all available movie categories.
-- **`POST /api/categories`**: Add 
+- **`POST /api/categories`**: Add new categories dynamically.
 
+---
 
+## **How to Run**
 
+### **Setup**
+1. Navigate to the server's root directory:
+   ```bash
+   cd MainApi
+   ```
 
-## How to run
-```bash
-cd MainApi
-```
+### **Build and Run the Docker Image**
+1. To build and run the application, execute:
+   ```bash
+   docker compose up --build -d
+   ```
+   - The **recommendation server** will run on port **8080**.
+   - The **Node.js server** will run on port **3000** (modifiable in `docker-compose.yml`).
 
-## Build and Run the Docker Image
-To build the Docker image, run the following command:
-```bash
-docker compose up --build -d
-```
-The recommendation server will run on port 8080, the nodejs server will be on port 3000 (the port can be modified in the docker-compose.yml).
+---
 
-# Run Example:
-![image](https://github.com/user-attachments/assets/d06d622b-0306-45e4-ba21-6ffa834802e4)
+## **Run Examples**
 
-# Run the test script
-"C:\Users\orlib\AppData\Local\Programs\Python\Python313\python.exe" test.py
+1. **Run the Test Script**
+   Use Python to run the provided test script:
+   ```bash
+   "C:\\Users\\orlib\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" test.py
+   ```
 
+2. **Example Outputs**
+   - Retrieve user by ID:
+     ![get_user_by_id](https://github.com/user-attachments/assets/fbc72d9c-a471-4e97-82ff-9b4b67d7aeb5)
 
+   - Get movies filtered by categories:
+     ![get_movies_by_categories](https://github.com/user-attachments/assets/d5f78f21-4ac6-475c-94d0-64c4e7ba63d7)
+
+   - Retrieve all categories:
+     ![get_all_categories](https://github.com/user-attachments/assets/5abd65fb-dc47-4b6a-88c5-c9177dd2da89)
+
+3. **More Examples**
+   - Additional examples of run outputs can be found in the **`run__example`** folder.
+
+---
+
+This project provides a powerful platform for managing and exploring user-specific movie content. For additional help or troubleshooting, refer to the `run__example` folder for detailed examples and outputs. 
