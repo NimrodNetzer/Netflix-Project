@@ -37,20 +37,39 @@ The system operates with the following features:
 ## **How to Run**
 
 ### **Setup**
-1. Navigate to the server's root directory:
+
+1. **Create the `.env.prod` file**:  
+   Before running the services, you need to create a `.env.prod` file in the `config` directory within `./MainApi`.
+
+   #### **Commands to create the file**:
+   - **Linux/Mac**:
+     ```bash
+     mkdir -p ./MainApi/config
+     touch ./MainApi/config/.env.prod
+     ```
+   - **Windows** (works in both Command Prompt and PowerShell):
+     ```cmd
+     mkdir MainApi\config && type nul > MainApi\config\.env.prod
+     ```
+
+   #### **Example `config/.env.prod`**:
+   ```plaintext
+   RECOMMENDATION_PORT=4000
+   PORT=5000
+   Note: You can leave this file empty if you don't wish to change the default ports. The default ports are:
+   
+   Recommendation server: 8080
+   App: 3000
+   MongoDB: 27017
+   
+2. ### **Navigate to the server's root directory**
    ```bash
    cd MainApi
-   ```
-
-### **Build and Run the Docker Image**
-1. To build and run the application, execute:
-   ```bash
-   docker compose up --build -d
-   ```
-   - The **recommendation server** will run on port **8080**.
-   - The **Node.js server** will run on port **3000** (modifiable in `docker-compose.yml`).
-
----
+3. ### **Build and Run the Docker Containers**
+   Build and run the application using:
+   ```docker compose up --build -d```
+4. ### Optional - Run the test case:
+   ```docker compose run --rm test_case```
 
 ## **Run Examples**
 
