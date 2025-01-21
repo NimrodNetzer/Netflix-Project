@@ -73,12 +73,6 @@ The system operates with the following features:
 
 ## **Run Examples**
 
-1. **Run the Test Script**
-   Use Python to run the provided test script:
-   ```bash
-   "C:\\Users\\orlib\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" test.py
-   ```
-
 2. **Example Outputs**
    - Retrieve user by ID:
      ![get_user_by_id](https://github.com/user-attachments/assets/fbc72d9c-a471-4e97-82ff-9b4b67d7aeb5)
