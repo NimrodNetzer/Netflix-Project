@@ -70,9 +70,10 @@ The system operates with the following features:
    ```bash
    docker compose up --build -d
 4. ### Optional - Run the test case:
+   
    ```bash
    docker compose run --rm test_case
-
+#### Running this will create 100 movies, 100 users, 10 categories, and add 1000 movies to users watched movie list.
 ## **Run Examples**
 
 2. **Example Outputs**
