@@ -3,16 +3,21 @@ import random
 import string
 from datetime import datetime, timedelta
 from pymongo import MongoClient
+import os
+from urllib.parse import urljoin
 
 # MongoDB Connection
-MONGO_URI = "mongodb://localhost:27017/"  # Update with your MongoDB URI if different
-DB_NAME = "NetFlix"  # Replace with your database name
+BASE_URL = os.getenv("BASE_URL", "http://localhost:3000/api/")
 
-# Base URLs
-USER_URL = "http://localhost:3000/api/users/"
-CATEGORY_URL = "http://localhost:3000/api/categories/"
-MOVIE_URL = "http://localhost:3000/api/movies/"
-RECOMMEND_URL = "http://localhost:3000/api/movies/{movie_id}/recommend"
+# Generate other URLs based on the base URL
+USER_URL = urljoin(BASE_URL, "users/")
+CATEGORY_URL = urljoin(BASE_URL, "categories/")
+MOVIE_URL = urljoin(BASE_URL, "movies/")
+RECOMMEND_URL = urljoin(MOVIE_URL, "{movie_id}/recommend")
+
+# MongoDB Configuration
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")  # Default MongoDB URI
+DB_NAME = os.getenv("DBNAME", "NetFlix")   # Replace with your database name
 
 def clear_database():
     """Clears all collections in the MongoDB database."""
