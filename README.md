@@ -67,9 +67,11 @@ The system operates with the following features:
    cd MainApi
 3. ### **Build and Run the Docker Containers**
    Build and run the application using:
-   ```docker compose up --build -d```
+   ```bash
+   docker compose up --build -d
 4. ### Optional - Run the test case:
-   ```docker compose run --rm test_case```
+   ```bash
+   docker compose run --rm test_case
 
 ## **Run Examples**
 
