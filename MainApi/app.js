@@ -10,6 +10,7 @@ const users = require('./routes/user');
 const tokens = require('./routes/token');
 
 require('custom-env').env(process.env.NODE_ENV, './config');
+console.log(process.env.CONNECTION_STRING);
 
 mongoose.connect(process.env.CONNECTION_STRING)
   .then(() => console.log('Connected to MongoDB'))
