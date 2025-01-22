@@ -8,6 +8,7 @@ from urllib.parse import urljoin
 
 # MongoDB Connection
 BASE_URL = os.getenv("BASE_URL", "http://localhost:3000/api/")
+LOGIN_URL = urljoin(BASE_URL, "tokens/")
 
 # Generate other URLs based on the base URL
 USER_URL = urljoin(BASE_URL, "users/")
@@ -18,6 +19,15 @@ RECOMMEND_URL = urljoin(MOVIE_URL, "{movie_id}/recommend")
 # MongoDB Configuration
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")  # Default MongoDB URI
 DB_NAME = os.getenv("DBNAME", "NetFlix")   # Replace with your database name
+
+def login(email, password):
+    """Logs in a user and returns the token."""
+    response = requests.post(LOGIN_URL, json={"email": email, "password": password})
+    if response.status_code == 200:
+        return response.json().get("token")
+    else:
+        print(f"Failed to log in with email {email}: {response.text}")
+        return None
 
 def clear_database():
     """Clears all collections in the MongoDB database."""
@@ -51,20 +61,21 @@ def create_users():
         }
         response = requests.post(USER_URL, json=user)
         if response.status_code == 201:
-            users.append(1)
+            users.append(user)
         else:
             print(f"Failed to create user {i}: {response.text}")
     return users
 
 # Create Categories
-def create_categories(user_count):
+def create_categories(user_tokens):
     category_ids = []
     for i in range(10):
         category = {
             "name": f"Category {i}",
             "promoted": random.choice([True, False])
         }
-        headers = {"user-id": str(random.randint(1, user_count))}
+        token = random.choice(user_tokens)
+        headers = {"Authorization": f"Bearer {token}"}
         response = requests.post(CATEGORY_URL, json=category, headers=headers)
         if response.status_code == 201:
             # Parse the response to get the ID of the created category
@@ -76,7 +87,7 @@ def create_categories(user_count):
     return category_ids
 
 # Create Movies
-def create_movies(category_ids, user_count):
+def create_movies(category_ids, user_tokens):
     movies = []
     for i in range(100):
         # Assign multiple random categories
@@ -105,47 +116,35 @@ def create_movies(category_ids, user_count):
             },
             "author": f"Author {i}"
         }
-        headers = {"user-id": str(random.randint(1, user_count))}
+        token = random.choice(user_tokens)
+        headers = {"Authorization": f"Bearer {token}"}
         response = requests.post(MOVIE_URL, json=movie, headers=headers)
         if response.status_code == 201:
-            movies.append(1)
+            movies.append(movie)
         else:
             print(f"Failed to create movie {i}: {response.text}")
     return movies
 
-# Add Movie to Watched List
-def add_movie_to_watched(movie_id, user_id):
-    user_id = random.randint(1, 90)
-    movie_id = random.randint(1, 90)
-
-    headers = {"user-id": str(user_id)}
-    url = RECOMMEND_URL.format(movie_id=movie_id)
-    response = requests.post(url, headers=headers)
-    if response.status_code == 201:
-        print(f"Movie {movie_id} successfully added to watched list for user {user_id}.")
-    else:
-        print(f"Failed to add movie {movie_id} to watched list for user {user_id}: {response.text}")
-
 # Main Execution
 def main():
-     print("Clearing database...")
-     clear_database()  # Clears all existing data
+    print("Clearing database...")
+    clear_database()  # Clears all existing data
 
-     print("Creating users...")
-     users = create_users()
-     print(f"Created {len(users)} users.")
+    print("Creating users...")
+    users = create_users()
+    print(f"Created {len(users)} users.")
 
-     print("Creating categories...")
-     category_ids = create_categories(len(users))
-     print(f"Created {len(category_ids)} categories.")
+    print("Logging in users...")
+    user_tokens = [login(user["email"], user["password"]) for user in users if login(user["email"], user["password"])]
+    print(f"Logged in {len(user_tokens)} users.")
 
-     print("Creating movies...")
-     movies = create_movies(category_ids, len(users))
-     print(f"Created {len(movies)} movies.")
+    print("Creating categories...")
+    category_ids = create_categories(user_tokens)
+    print(f"Created {len(category_ids)} categories.")
 
-     # Example: Add first movie to the watched list of first user
-     for i in range(1, 1000):
-        add_movie_to_watched(1, 1)
+    print("Creating movies...")
+    movies = create_movies(category_ids, user_tokens)
+    print(f"Created {len(movies)} movies.")
 
 if __name__ == "__main__":
     main()
