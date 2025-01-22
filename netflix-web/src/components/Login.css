@@ -4,7 +4,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  background: url('https://assets.nflxext.com/ffe/siteui/vlv3/3cc64816-563d-4e63-a51b-6829b7993ff6/9e51a5c5-d4d1-43a1-834c-8e62b2072af5/IL-en-20230619-popsignuptwoweeks-perspective_alpha_website_medium.jpg') no-repeat center center fixed;
+  background: url('../assets/netflix-first-page-image.jpg') no-repeat center center; /* Center the background image */
   background-size: cover;
   height: 100vh;
   display: flex;
