@@ -1,3 +1,4 @@
+import ClickableLogo from './ClickableLogo';
 import './Login.css'; // Import the CSS file for styling
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -43,6 +44,7 @@ const Login = () => {
 
   return (
     <div className="login-container">
+      <ClickableLogo />
       <h2>Sign in</h2>
       <form onSubmit={handleLogin}>
         {/* Username field */}
