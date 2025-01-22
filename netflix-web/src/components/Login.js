@@ -85,7 +85,7 @@ const Login = () => {
         </button>
 
         <div className="additional-options">
-        <a onClick={() => navigate('/signup')}>New to Netflix? Sign up now</a>
+        <a onClick={() => navigate('/')}>New to Netflix? Sign up now</a>
         </div>
       </form>
     </div>

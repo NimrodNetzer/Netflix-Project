@@ -105,3 +105,21 @@ body {
 .profile-thumbnail.selected {
     border-color: green;
 }
+.error-message.centered {
+  color: red;
+  font-size: 0.9em; /* Make the text smaller */
+  text-align: center; /* Center the text */
+  margin-top: 10px; /* Add space between the error and the images */
+}
+.success-message {
+  color: green;
+  font-size: 1em; /* Adjusted font size for smaller appearance */
+  text-align: center;
+  margin-top: 20px; /* Space above the message */
+  font-weight: bold; /* Make the text stand out */
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto; /* Center horizontally */
+}
+
+
