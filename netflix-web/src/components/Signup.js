@@ -15,12 +15,13 @@ const Signup = () => {
     const [nickname, setNickname] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
 
     const handleSignup = async (event) => {
         event.preventDefault();
 
         if (!picture) {
-            alert('Please select a profile picture.');
+            setErrorMessage('Please select a profile picture.');
             return;
         }
 
@@ -36,8 +37,10 @@ const Signup = () => {
             });
 
             if (response.ok) {
-                alert('Signup successful! You can now log in.');
-                navigate('/Login');
+                setSuccessMessage('Signup successful! Redirecting to login page...');
+                setTimeout(() => {
+                    navigate('/Login');
+                }, 1500); // 1.5-second delay before redirecting
             } else {
                 const data = await response.json();
                 setErrorMessage(data.errors || 'Signup failed.');
@@ -52,7 +55,7 @@ const Signup = () => {
     return (
         <div className="signup-container">
             <h2>Sign Up</h2>
-            <form onSubmit={handleSignup}>
+            <form onSubmit={handleSignup} noValidate>
                 {/* Email Field */}
                 <div className="form-group">
                     <label htmlFor="email">Email:</label>
@@ -126,10 +129,22 @@ const Signup = () => {
                             onClick={() => setSelectedPicture('profile3')}
                         />
                     </div>
+                    {!picture && errorMessage === 'Please select a profile picture.' && (
+                        <div className="popup-error">
+                            <span>Please select a profile picture!</span>
+                        </div>
+                    )}
                 </div>
 
                 {/* Error Message */}
-                {errorMessage && <p className="error-message centered">{errorMessage}</p>}
+                {errorMessage && errorMessage !== 'Please select a profile picture.' && (
+                    <p className="error-message centered">{errorMessage}</p>
+                )}
+
+                {/* Success Message */}
+                {successMessage && (
+                    <div className="success-message centered">{successMessage}</div>
+                )}
 
                 {/* Signup Button */}
                 <button type="submit" disabled={isLoading}>
