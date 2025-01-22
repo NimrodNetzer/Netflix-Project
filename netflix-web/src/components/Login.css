@@ -1,48 +1,109 @@
+/* Login.css */
+
+/* Set a full-screen background with a Netflix-style dark overlay */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: url('https://assets.nflxext.com/ffe/siteui/vlv3/3cc64816-563d-4e63-a51b-6829b7993ff6/9e51a5c5-d4d1-43a1-834c-8e62b2072af5/IL-en-20230619-popsignuptwoweeks-perspective_alpha_website_medium.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
 .login-container {
-    max-width: 400px;
-    margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6); /* Dark overlay effect */
+  color: #fff;
+}
+
+form {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 40px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+form h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #e50914; /* Netflix red */
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #b3b3b3;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background: #333;
+  color: #fff;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #e50914;
+}
+
+.error-message {
+  color: #e50914;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  background: #e50914;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #f40612;
+}
+
+button:disabled {
+  background: #b3b3b3;
+  cursor: not-allowed;
+}
+
+/* Add responsive behavior */
+@media (max-width: 768px) {
+  form {
+    width: 90%;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  
-  .form-group {
-    margin-bottom: 15px;
+
+  form h2 {
+    font-size: 20px;
   }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  .form-group input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
+
   button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+    font-size: 14px;
   }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  .error-message {
-    color: red;
-    font-size: 0.9em;
-    margin-top: 10px;
-    text-align: left;
-  }
-  
-  
+}

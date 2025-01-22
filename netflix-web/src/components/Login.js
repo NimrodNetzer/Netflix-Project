@@ -2,7 +2,7 @@ import './Login.css'; // Import the CSS file for styling
 import React, { useState } from 'react';
 
 const Login = () => {
-  const [username, setUsername] = useState(''); // State for username
+  const [email, setEmail] = useState(''); // State for username
   const [password, setPassword] = useState(''); // State for password
   const [errorMessage, setErrorMessage] = useState(''); // State for error messages
   const [isLoading, setIsLoading] = useState(false); // State for loading indicator
@@ -12,8 +12,8 @@ const Login = () => {
     setIsLoading(true); // Start loading
 
     // Client-side validation
-    if (!username) {
-      setErrorMessage('Username is required');
+    if (!email) {
+      setErrorMessage('Email is required');
       setIsLoading(false); // Stop loading
       return;
     }
@@ -24,12 +24,12 @@ const Login = () => {
     }
 
     try {
-      const response = await fetch('http://foo.com/api/tokens', {
+      const response = await fetch('http://localhost:3000/api/tokens', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
@@ -54,13 +54,13 @@ const Login = () => {
       <form onSubmit={handleLogin}>
         {/* Username field */}
         <div className="form-group">
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="email">Email:</label>
           <input
             type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter your username"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
             required
           />
         </div>
