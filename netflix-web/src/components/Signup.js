@@ -1,6 +1,8 @@
 import './Signup.css'; // Import the CSS file for styling
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import ClickableLogo from './ClickableLogo';
+
 import profile1 from '../assets/profile1.webp'; // Import predefined images
 import profile2 from '../assets/profile2.webp';
 import profile3 from '../assets/profile3.webp';
@@ -8,7 +10,7 @@ import profile3 from '../assets/profile3.webp';
 const Signup = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const [picture, setSelectedPicture] = useState(''); // State for selected profile picture
+    const [picture, setSelectedPicture] = useState('profile2'); // State for selected profile picture
 
     const [email, setEmail] = useState(location.state?.email || ''); // Initialize email with passed state or empty string
     const [password, setPassword] = useState('');
@@ -19,11 +21,6 @@ const Signup = () => {
 
     const handleSignup = async (event) => {
         event.preventDefault();
-
-        if (!picture) {
-            setErrorMessage('Please select a profile picture.');
-            return;
-        }
 
         setIsLoading(true);
 
@@ -37,6 +34,7 @@ const Signup = () => {
             });
 
             if (response.ok) {
+                setErrorMessage('');
                 setSuccessMessage('Signup successful! Redirecting to login page...');
                 setTimeout(() => {
                     navigate('/Login');
@@ -53,9 +51,11 @@ const Signup = () => {
     };
 
     return (
+        <div className="signup">
+        <ClickableLogo></ClickableLogo>
         <div className="signup-container">
             <h2>Sign Up</h2>
-            <form onSubmit={handleSignup} noValidate>
+            <form onSubmit={handleSignup}>
                 {/* Email Field */}
                 <div className="form-group">
                     <label htmlFor="email">Email:</label>
@@ -129,22 +129,18 @@ const Signup = () => {
                             onClick={() => setSelectedPicture('profile3')}
                         />
                     </div>
-                    {!picture && errorMessage === 'Please select a profile picture.' && (
-                        <div className="popup-error">
-                            <span>Please select a profile picture!</span>
-                        </div>
-                    )}
+                   
                 </div>
 
-                {/* Error Message */}
-                {errorMessage && errorMessage !== 'Please select a profile picture.' && (
-                    <p className="error-message centered">{errorMessage}</p>
-                )}
+  
 
                 {/* Success Message */}
                 {successMessage && (
                     <div className="success-message centered">{successMessage}</div>
                 )}
+                
+                {/* Error Message */}
+                {errorMessage && <p className="error-message centered">{errorMessage}</p>}
 
                 {/* Signup Button */}
                 <button type="submit" disabled={isLoading}>
@@ -156,6 +152,7 @@ const Signup = () => {
                     <a onClick={() => navigate('/login')}>Already have an account? Sign in</a>
                 </div>
             </form>
+        </div>
         </div>
     );
 };

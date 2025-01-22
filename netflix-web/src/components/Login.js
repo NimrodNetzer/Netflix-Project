@@ -29,7 +29,6 @@ const Login = () => {
 
       if (response.ok) {
         localStorage.setItem('jwt', data.token); // Save JWT token locally
-        alert('Login successful!' + data.token);
         navigate('/home'); // Navigate to the home page
         // Redirect to the main page
       } else {
@@ -43,6 +42,7 @@ const Login = () => {
   };
 
   return (
+    <div className="login">
     <div className="login-container">
       <ClickableLogo />
       <h2>Sign in</h2>
@@ -90,6 +90,7 @@ const Login = () => {
         <a onClick={() => navigate('/')}>New to Netflix? Sign up now</a>
         </div>
       </form>
+    </div>
     </div>
   );
 };
