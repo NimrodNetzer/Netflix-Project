@@ -32,60 +32,65 @@
 }
 
 .hero-content h1 {
-    font-size: 3rem; /* Adaptable font size for larger screens */
-    margin-bottom: 10px;
+    font-size: 3.2rem; /* Adaptable font size for larger screens */
+    margin-bottom: 2px;
+    font-weight: 850;
 }
 
+
 .hero-content h2 {
-    font-size: 1.5rem; /* Adjusted for readability on all screen sizes */
+    font-size: 1.7rem; /* Adjusted for readability on all screen sizes */
     margin-bottom: 20px;
 }
 
 .input-container {
     display: flex;
-    flex-wrap: wrap; /* Allow inputs and buttons to wrap on smaller screens */
+    align-items: stretch; /* Align input and button to the same height */
+    justify-content: center; /* Center the input and button */
+    gap: 10px; /* Add spacing between input and button */
     margin-top: 20px;
-    justify-content: center;
 }
 
 .input-container input {
-    padding: 10px;
-    font-size: 16px;
+    padding: 10px; /* Match padding with button */
+    font-size: 15px;
     font-weight: 700;
     color: white;
     background: transparent;
     border: 1px solid white;
-    border-radius: 3px 0 0 3px;
-    width: 100%; /* Make input responsive */
-    max-width: 300px; /* Prevent excessive stretching on larger screens */
+    border-radius: 3px 0 0 3px; /* Rounded corners for left side */
+    width: 100%;
+    max-width: 300px; /* Prevent excessive stretching */
     text-align: left;
     outline: none;
-    margin-bottom: 10px; /* Add spacing when wrapping */
+    margin-bottom: 0; /* Remove bottom margin to align with button */
 }
+
+.input-container button {
+    padding: 10px 20px; /* Match padding with input */
+    font-size: 16px; /* Match font size with input */
+    font-weight: 700; /* Match font weight with input */
+    background-color: #e50914;
+    color: white;
+    border: none;
+    border-radius: 0 3px 3px 0; /* Rounded corners for right side */
+    cursor: pointer;
+    width: auto; /* Let the button adapt to its content */
+    text-align: center;
+    height: auto; /* Ensures it adapts to the input's height */
+}
+
 
 .input-container input::placeholder {
     color: rgba(255, 255, 255, 0.7); /* Semi-transparent placeholder text */
     font-weight: 400;
 }
 
-.input-container button {
-    padding: 10px 20px;
-    background-color: #e50914;
-    color: white;
-    border: none;
-    border-radius: 0 3px 3px 0;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: 600;
-    margin-left: 0; /* Remove unintended spacing */
-    width: auto; /* Let the button adapt to its content */
-}
-
 .logo {
     position: absolute;
-    top: 2%; /* Use percentages for responsive positioning */
-    left: 2%;
-    width: 150px;
+    top: 3%; /* Use percentages for responsive positioning */
+    left: 8%;
+    width: 210px;
     height: auto;
     z-index: 10;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
@@ -93,15 +98,15 @@
 
 .sign-in-button {
     position: absolute; /* Position it relative to the page */
-    top: 20px;          /* Distance from the top */
-    right: 20px;        /* Distance from the right */
-    padding: 5px 15px;  /* Reduced padding for a slimmer appearance */
+    top: 3%;          /* Distance from the top */
+    right: 7%;        /* Distance from the right */
+    padding: 12px 23px;  /* Reduced padding for a slimmer appearance */
     background-color: #e50914; /* Red background like Netflix */
     color: white;       /* White text */
     font-size: 12px;    /* Font size */
     font-weight: 600;   /* Bold font */
     border: none;       /* Remove default border */
-    border-radius: 3px; /* Slight rounded corners */
+    border-radius: 4px; /* Slight rounded corners */
     cursor: pointer;    /* Show pointer on hover */
     z-index: 1000;      /* Ensure it's above other elements */
     transition: background-color 0.3s ease; /* Smooth hover effect */
@@ -133,10 +138,6 @@
     .input-container button {
         width: 80%; /* Match button width with input */
         border-radius: 3px; /* Uniform rounding */
-    }
-
-    .logo {
-        width: 120px; /* Adjust logo size */
     }
 
     .sign-in-button {
