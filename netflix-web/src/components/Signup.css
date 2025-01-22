@@ -1,19 +1,37 @@
 /* Netflix-inspired Signup.css */
 
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background: url('../assets/netflix-first-page-image.jpg') no-repeat center center; /* Center the background image */
-    background-size: cover;
-    height: 100vh;
+
+  .signup{
+    position: relative; /* Required for pseudo-element positioning */
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    color: #fff;
+    justify-content: center;
+    height: 100vh; /* Full viewport height */
+    width: 100vw; /* Full viewport width */
+    background: url('../assets/netflix-first-page-image.jpg') no-repeat center center; /* Center the background image */
+    background-size: cover; /* Ensure the image covers the entire container */
+    color: white;
+    text-align: center;
+    overflow: hidden; /* Prevent overflow issues */
+
   }
+
+  .signup::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75); /* Dark overlay for readability */
+    z-index: 1;
+}
   
   .signup-container {
+    z-index: 2;
+    text-align: center;
+    padding: 0 5%; /* Add padding for better responsiveness */
     width: 100%;
     max-width: 400px;
     padding: 40px;
