@@ -1,7 +1,10 @@
 import './Login.css'; // Import the CSS file for styling
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 const Login = () => {
+  const navigate = useNavigate(); // Hook for navigation
   const [email, setEmail] = useState(''); // State for username
   const [password, setPassword] = useState(''); // State for password
   const [errorMessage, setErrorMessage] = useState(''); // State for error messages
@@ -24,7 +27,7 @@ const Login = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/api/tokens', {
+      const response = await fetch('http://localhost:4000/api/tokens', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -36,7 +39,8 @@ const Login = () => {
 
       if (response.ok) {
         localStorage.setItem('jwt', data.token); // Save JWT token locally
-        alert('Login successful!');
+        alert('Login successful!' + data.token);
+        navigate('/home'); // Navigate to the home page
         // Redirect to the main page
       } else {
         setErrorMessage('Invalid username or password');
@@ -50,7 +54,7 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <h2>Login</h2>
+      <h2>Sign in</h2>
       <form onSubmit={handleLogin}>
         {/* Username field */}
         <div className="form-group">
@@ -77,14 +81,18 @@ const Login = () => {
             required
           />
         </div>
-
+        
         {/* Error message */}
         {errorMessage && <p className="error-message">{errorMessage}</p>}
 
         {/* Login button */}
         <button type="submit" disabled={isLoading}>
-          {isLoading ? 'Loading...' : 'Login'}
+          {isLoading ? 'Loading...' : 'Sign In'}
         </button>
+
+        <div className="additional-options">
+        <a onClick={() => navigate('/signup')}>New to Netflix? Sign up now</a>
+        </div>
       </form>
     </div>
   );
