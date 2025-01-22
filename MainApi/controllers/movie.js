@@ -20,9 +20,10 @@ const createMovieController = async (req, res) => {
 
 const getMovies = async (req, res) => {
     try {
-        const movies = await getMoviesByPromotedCategories(req.headers['user-id']);
+        const movies = await getMoviesByPromotedCategories(req.userId);
         res.status(200).json({ movies });
     } catch (error) {
+
         res.status(400).json({ message: error.message || 'An error occurred while creating the movie' });
     }
 };
@@ -84,7 +85,7 @@ const updateMovie = async (req, res) => {
 const getRecommendations = async (req, res) => {
     console.log('Loading recommendations');
     const { id } = req.params;
-    const userId = req.headers['user-id'];
+    const userId = req.userId;
 
     if (!userId) {
         return res.status(400).json({ error: 'User ID is required' });
@@ -107,7 +108,7 @@ const getRecommendations = async (req, res) => {
 const addRecommendation = async (req, res) => {
     console.log('Adding recommendation');
     const { id } = req.params;
-    const userId = req.headers['user-id'];
+    const userId = req.userId;
 
     if (!userId) {
         return res.status(400).json({ error: 'User ID is required' });
