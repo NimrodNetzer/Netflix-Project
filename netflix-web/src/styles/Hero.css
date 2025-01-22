@@ -1,0 +1,43 @@
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
+    background: url('./assets/netflix-first-page-image.jpg') no-repeat center center/cover;
+    color: white;
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.hero-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.input-container {
+    display: flex;
+    margin-top: 20px;
+}
+
+input {
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 3px 0 0 3px;
+    width: 300px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #e50914;
+    color: white;
+    border: none;
+    border-radius: 0 3px 3px 0;
+    cursor: pointer;
+    font-size: 16px;
+}
