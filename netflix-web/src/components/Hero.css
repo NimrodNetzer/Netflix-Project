@@ -1,0 +1,132 @@
+.hero {
+    position: relative; /* Required for pseudo-element positioning */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: url('../assets/netflix-first-page-image.jpg') no-repeat center center/cover;
+    background-size: cover;
+    color: white;
+    text-align: center;
+    overflow: hidden; /* Ensure the pseudo-element doesn't overflow */
+}
+
+.hero-content h1 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    font-weight: 970; /* Makes the text extra bold */
+    text-align: center; /* Center-aligns the title */
+}
+
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8); /* Adjust opacity (0.5 = 50% darkness) */
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative; /* Place the content above the dark overlay */
+    z-index: 2;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.hero-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.input-container input {
+    padding: 10px;           /* Padding inside the input box */
+    font-size: 16px;         /* Size of the text inside the input */
+    font-weight: 400;        /* Boldness of the text */
+    border: none;            /* Removes the default border */
+    border-radius: 3px 0 0 3px; /* Rounds the corners */
+    width: 300px;            /* Width of the input box */
+    text-align: center;        /* Aligns text inside the box */
+}
+
+.input-container {
+    display: flex;           /* Positions the input and button side-by-side */
+    margin-top: 20px;        /* Adds space above the input container */
+    justify-content: center; /* Centers the input container horizontally */
+}
+
+.input-container input {
+    padding: 10px;           /* Adds padding inside the input box */
+    font-size: 16px;         /* Sets the size of the text inside the input */
+    font-weight: 700;        /* Makes the text inside the input bold */
+    color: white;            /* Sets the text color to white */
+    background: transparent; /* Makes the input background transparent */
+    border: 1px solid white; /* Adds a white border to the input box */
+    border-radius: 3px 0 0 3px; /* Rounds the corners on the left side */
+    width: 300px;            /* Sets the width of the input box */
+    text-align: left;        /* Aligns the text inside the input box */
+    outline: none;           /* Removes the default focus outline */
+}
+
+.input-container input::placeholder {
+    color: rgba(255, 255, 255, 0.7); /* Makes placeholder text semi-transparent */
+    font-weight: 400;                /* Adjusts the boldness of placeholder text */
+}
+
+
+
+.input-container {
+    display: flex;
+    margin-top: 20px;
+}
+
+input {
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 3px 0 0 3px;
+    width: 400px;
+}
+
+.input-container input {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    background: transparent;
+    border: 1px solid white;
+    border-radius: 3px 0 0 3px;
+    width: 300px;
+    text-align: left;
+    outline: none;
+    margin-right: 10px; /* Adds margin between the input and button */
+}
+
+.input-container button {
+    padding: 10px 20px;
+    background-color: #e50914;
+    color: white;
+    border: none;
+    border-radius: 0 3px 3px 0;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+
+
+button {
+    padding: 10px 20px;
+    background-color: #e50914;
+    color: white;
+    border: none;
+    border-radius: 0 3px 3px 0;
+    cursor: pointer;
+    font-size: 16px;
+}

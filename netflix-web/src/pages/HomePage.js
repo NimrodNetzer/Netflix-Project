@@ -1,12 +1,11 @@
 import React from 'react';
-import Header from 'components/Header';
-import Hero from '../components/Hero';
+import Header from '../components/newHeader'; // Correct relative path to Header.js
 
 function HomePage() {
   return (
     <div>
       <Header />
-      <Hero />
+      <h1>Welcome to Netflix Clone</h1>
     </div>
   );
 }
