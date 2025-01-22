@@ -14,17 +14,6 @@ const Login = () => {
     event.preventDefault(); // Prevent page refresh
     setIsLoading(true); // Start loading
 
-    // Client-side validation
-    if (!email) {
-      setErrorMessage('Email is required');
-      setIsLoading(false); // Stop loading
-      return;
-    }
-    if (password.length < 8) {
-      setErrorMessage('Password must be at least 8 characters long');
-      setIsLoading(false); // Stop loading
-      return;
-    }
 
     try {
       const response = await fetch('http://localhost:4000/api/tokens', {
@@ -65,7 +54,10 @@ const Login = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
-            required
+            required // Make the field required
+            pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" // Ensure valid email format
+            title="Password must be at least 8 characters long, contain at least one letter and one number, and use only English letters and numbers."
+
           />
         </div>
 
@@ -78,8 +70,10 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter your password"
-            required
-          />
+            required // Required field
+            pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+            title="Password must be at least 8 characters long, contain at least one letter and one number, and use only English letters and numbers."
+            />
         </div>
         
         {/* Error message */}

@@ -82,4 +82,26 @@ body {
   .additional-options a:hover {
     color: #e50914;
   }
-  
+  .profile-picture-options {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.profile-thumbnail {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.profile-thumbnail:hover {
+    border-color: blue;
+}
+
+.profile-thumbnail.selected {
+    border-color: green;
+}
