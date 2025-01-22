@@ -4,21 +4,14 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    background: url('../assets/netflix-first-page-image.jpg') no-repeat center center/cover;
-    background-size: cover;
+    height: 100vh; /* Full viewport height */
+    width: 100vw; /* Full viewport width */
+    background: url('../assets/netflix-first-page-image.jpg') no-repeat center center; /* Center the background image */
+    background-size: cover; /* Ensure the image covers the entire container */
     color: white;
     text-align: center;
-    overflow: hidden; /* Ensure the pseudo-element doesn't overflow */
+    overflow: hidden; /* Prevent overflow issues */
 }
-
-.hero-content h1 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    font-weight: 970; /* Makes the text extra bold */
-    text-align: center; /* Center-aligns the title */
-}
-
 
 .hero::before {
     content: '';
@@ -27,72 +20,32 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.75); /* Adjust opacity (0.5 = 50% darkness) */
+    background: rgba(0, 0, 0, 0.75); /* Dark overlay for readability */
     z-index: 1;
 }
 
 .hero-content {
-    position: relative; /* Place the content above the dark overlay */
+    position: relative; /* Place content above overlay */
     z-index: 2;
+    text-align: center;
+    padding: 0 5%; /* Add padding for better responsiveness */
 }
 
 .hero-content h1 {
-    font-size: 3rem;
+    font-size: 3rem; /* Adaptable font size for larger screens */
     margin-bottom: 10px;
 }
 
 .hero-content h2 {
-    font-size: 1.5rem;
+    font-size: 1.5rem; /* Adjusted for readability on all screen sizes */
     margin-bottom: 20px;
 }
 
-.input-container input {
-    padding: 10px;           /* Padding inside the input box */
-    font-size: 16px;         /* Size of the text inside the input */
-    font-weight: 400;        /* Boldness of the text */
-    border: none;            /* Removes the default border */
-    border-radius: 3px 0 0 3px; /* Rounds the corners */
-    width: 300px;            /* Width of the input box */
-    text-align: center;        /* Aligns text inside the box */
-}
-
-.input-container {
-    display: flex;           /* Positions the input and button side-by-side */
-    margin-top: 20px;        /* Adds space above the input container */
-    justify-content: center; /* Centers the input container horizontally */
-}
-
-.input-container input {
-    padding: 10px;           /* Adds padding inside the input box */
-    font-size: 16px;         /* Sets the size of the text inside the input */
-    font-weight: 700;        /* Makes the text inside the input bold */
-    color: white;            /* Sets the text color to white */
-    background: transparent; /* Makes the input background transparent */
-    border: 1px solid white; /* Adds a white border to the input box */
-    border-radius: 3px 0 0 3px; /* Rounds the corners on the left side */
-    width: 300px;            /* Sets the width of the input box */
-    text-align: left;        /* Aligns the text inside the input box */
-    outline: none;           /* Removes the default focus outline */
-}
-
-.input-container input::placeholder {
-    color: rgba(255, 255, 255, 0.7); /* Makes placeholder text semi-transparent */
-    font-weight: 400;                /* Adjusts the boldness of placeholder text */
-}
-
-
-
 .input-container {
     display: flex;
+    flex-wrap: wrap; /* Allow inputs and buttons to wrap on smaller screens */
     margin-top: 20px;
-}
-
-input {
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    border-radius: 3px 0 0 3px;
-    width: 400px;
+    justify-content: center;
 }
 
 .input-container input {
@@ -103,34 +56,17 @@ input {
     background: transparent;
     border: 1px solid white;
     border-radius: 3px 0 0 3px;
-    width: 300px;
+    width: 100%; /* Make input responsive */
+    max-width: 300px; /* Prevent excessive stretching on larger screens */
     text-align: left;
     outline: none;
-    margin-right: 10px; /* Adds margin between the input and button */
+    margin-bottom: 10px; /* Add spacing when wrapping */
 }
 
-.logo {
-    position: absolute; /* Position the logo relative to the page */
-    top: 23px;          /* Distance from the top of the page */
-    left: 120px;         /* Distance from the left of the page */
-    width: 150px;       /* Adjust the size of the logo */
-    height: auto;       /* Maintain the aspect ratio */
-    z-index: 10;        /* Ensure it appears above other elements */
-    box-shadow: 0 0 15px rgba(0, 10, 10, 100); /* Adds shadow to the logo */
-    background: transparent; /* Makes the input background transparent */
+.input-container input::placeholder {
+    color: rgba(255, 255, 255, 0.7); /* Semi-transparent placeholder text */
+    font-weight: 400;
 }
-
-
-.input-container button {
-    padding: 10px 20px;
-    background-color: #e50914;
-    color: white;
-    border: none;
-    border-radius: 0 3px 3px 0;
-    cursor: pointer;
-    font-size: 16px;
-}
-
 
 .input-container button {
     padding: 10px 20px;
@@ -140,37 +76,70 @@ input {
     border-radius: 0 3px 3px 0;
     cursor: pointer;
     font-size: 18px;
-    font-weight: 00; /* Makes the button text bold */
+    font-weight: 600;
+    margin-left: 0; /* Remove unintended spacing */
+    width: auto; /* Let the button adapt to its content */
 }
 
-
-button {
-    padding: 10px 20px;
-    background-color: #e50914;
-    color: white;
-    border: none;
-    border-radius: 0 3px 3px 0;
-    cursor: pointer;
-    font-size: 16px;
+.logo {
+    position: absolute;
+    top: 2%; /* Use percentages for responsive positioning */
+    left: 2%;
+    width: 150px;
+    height: auto;
+    z-index: 10;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
 }
 
-/* Add the sign-in button styling */
 .sign-in-button {
     position: absolute; /* Position it relative to the page */
     top: 20px;          /* Distance from the top */
-    right: 70px;        /* Distance from the right */
-    padding: 10px 20px; /* Adjust padding */
+    right: 20px;        /* Distance from the right */
+    padding: 5px 15px;  /* Reduced padding for a slimmer appearance */
     background-color: #e50914; /* Red background like Netflix */
     color: white;       /* White text */
     font-size: 12px;    /* Font size */
     font-weight: 600;   /* Bold font */
     border: none;       /* Remove default border */
     border-radius: 3px; /* Slight rounded corners */
-    cursor: pointer;   /* Show pointer on hover */
+    cursor: pointer;    /* Show pointer on hover */
     z-index: 1000;      /* Ensure it's above other elements */
     transition: background-color 0.3s ease; /* Smooth hover effect */
+    width: auto;        /* Let the button width adapt to its content */
+    min-width: 80px;    /* Set a minimum width to maintain a consistent size */
+    text-align: center; /* Center the text inside the button */
 }
 
 .sign-in-button:hover {
     background-color: #b40612; /* Darker red on hover */
+}
+
+
+/* Media Query for Smaller Screens */
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2rem; /* Adjust font size for smaller screens */
+    }
+
+    .hero-content h2 {
+        font-size: 1rem;
+    }
+
+    .input-container input {
+        width: 80%; /* Reduce width for better fit */
+        max-width: none; /* Remove max-width restriction */
+    }
+
+    .input-container button {
+        width: 80%; /* Match button width with input */
+        border-radius: 3px; /* Uniform rounding */
+    }
+
+    .logo {
+        width: 120px; /* Adjust logo size */
+    }
+
+    .sign-in-button {
+        font-size: 10px;
+    }
 }
