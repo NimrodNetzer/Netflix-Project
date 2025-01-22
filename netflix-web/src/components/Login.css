@@ -4,37 +4,23 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  background: url('../assets/netflix-first-page-image.jpg') no-repeat center center; /* Center the background image */
+  background: url('https://assets.nflxext.com/ffe/siteui/vlv3/3cc64816-563d-4e63-a51b-6829b7993ff6/9e51a5c5-d4d1-43a1-834c-8e62b2072af5/IL-en-20230619-popsignuptwoweeks-perspective_alpha_website_medium.jpg') no-repeat center center fixed;
   background-size: cover;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   color: #fff;
-  position: relative; /* Ensure the dark overlay applies */
-  overflow: hidden; /* Prevent accidental scrolling issues */
-}
-
-body::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.55); /* Darker overlay for the background */
-  z-index: 1; /* Ensure it is below the login container */
 }
 
 .login-container {
-  position: relative; /* Keep it above the dark overlay */
-  z-index: 2;
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for login form */
-  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
   padding: 40px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.75); /* Semi-transparent background */
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
 }
-
 
 form h2 {
   font-size: 24px;
