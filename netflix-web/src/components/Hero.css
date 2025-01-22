@@ -27,7 +27,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.8); /* Adjust opacity (0.5 = 50% darkness) */
+    background: rgba(0, 0, 0, 0.75); /* Adjust opacity (0.5 = 50% darkness) */
     z-index: 1;
 }
 
@@ -109,6 +109,18 @@ input {
     margin-right: 10px; /* Adds margin between the input and button */
 }
 
+.logo {
+    position: absolute; /* Position the logo relative to the page */
+    top: 23px;          /* Distance from the top of the page */
+    left: 120px;         /* Distance from the left of the page */
+    width: 150px;       /* Adjust the size of the logo */
+    height: auto;       /* Maintain the aspect ratio */
+    z-index: 10;        /* Ensure it appears above other elements */
+    box-shadow: 0 0 15px rgba(0, 10, 10, 100); /* Adds shadow to the logo */
+    background: transparent; /* Makes the input background transparent */
+}
+
+
 .input-container button {
     padding: 10px 20px;
     background-color: #e50914;
@@ -120,6 +132,17 @@ input {
 }
 
 
+.input-container button {
+    padding: 10px 20px;
+    background-color: #e50914;
+    color: white;
+    border: none;
+    border-radius: 0 3px 3px 0;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 00; /* Makes the button text bold */
+}
+
 
 button {
     padding: 10px 20px;
@@ -129,4 +152,25 @@ button {
     border-radius: 0 3px 3px 0;
     cursor: pointer;
     font-size: 16px;
+}
+
+/* Add the sign-in button styling */
+.sign-in-button {
+    position: absolute; /* Position it relative to the page */
+    top: 20px;          /* Distance from the top */
+    right: 70px;        /* Distance from the right */
+    padding: 10px 20px; /* Adjust padding */
+    background-color: #e50914; /* Red background like Netflix */
+    color: white;       /* White text */
+    font-size: 12px;    /* Font size */
+    font-weight: 600;   /* Bold font */
+    border: none;       /* Remove default border */
+    border-radius: 3px; /* Slight rounded corners */
+    cursor: pointer;   /* Show pointer on hover */
+    z-index: 1000;      /* Ensure it's above other elements */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+.sign-in-button:hover {
+    background-color: #b40612; /* Darker red on hover */
 }

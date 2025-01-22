@@ -1,12 +1,19 @@
 import React from 'react';
 import './Hero.css';
+import logo from '../assets/LOGO.jpg'; // Assuming logo is in the assets folder
 
 function Hero() {
     return (
         <div className="hero">
+            {/* Add the logo */}
+            <img src={logo} alt="Logo" className="logo" />
+
+            {/* Add Sign In button */}
+            <button className="sign-in-button">Sign In</button> {/* Correct button placement */}
+
             <div className="hero-content">
                 <h1 className="hero-title">
-                    Unlimited movies, <br /> TV shows, and more.
+                    Unlimited movies, <br /> TV shows, and more
                 </h1>
                 <h2>Watch anywhere. Cancel anytime.</h2>
                 <p>Ready to watch? Enter your email to create or restart your membership.</p>
