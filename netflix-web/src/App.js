@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './components/Login';
 import Home from './components/Home'; // New Home screen
 import Signup from './components/Signup';
+import Hero from './components/Hero';
 
 
 const PrivateRoute = ({ element: Element }) => {
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/home" element={<PrivateRoute element={Home} />} />
+        <Route path='/Hero' element={<Hero />} />
       </Routes>
     </Router>
   );
