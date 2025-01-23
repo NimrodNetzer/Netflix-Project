@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../components/newHeader'; // Correct relative path to Header.js
+import Header from '../components/newHeader';
 import TopMenu from '../components/TopMenu';
 
 function HomePage() {

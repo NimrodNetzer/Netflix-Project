@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './TopMenu.css';
+import HelperTopMenu from './HelperTopMenu';
 
 function TopMenu() {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -38,22 +39,18 @@ function TopMenu() {
       <div className="right-section">
         <div className="search-container" ref={searchRef}>
           <img
-            src="/assets/searchButton.png" /* Path to your image */
+            src="/assets/searchButton.png"
             alt="Search"
             className="search-icon"
             onClick={handleSearchClick}
           />
-          {isSearchVisible && (
-            <input
-              type="text"
-              placeholder="Search"
-              className="search-input"
-            />
-          )}
+          <input
+            type="text"
+            placeholder="Search"
+            className={`search-input ${isSearchVisible ? 'visible' : ''}`}
+          />
         </div>
-        <button className="profile-button">
-          <img src="/assets/p.png" alt="Profile" className="search-icon" />
-        </button>
+        <HelperTopMenu />
       </div>
     </nav>
   );

@@ -9,7 +9,7 @@ const Home = () => {
 
   return (
     <div>
-      <TopMenu /> // Add the TopMenu component
+      <TopMenu />
       <h1>Welcome to the Home Page!</h1>
       <button onClick={handleLogout}>Logout</button>
     </div>
