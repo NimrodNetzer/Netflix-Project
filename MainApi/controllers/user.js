@@ -10,8 +10,9 @@ const userService = require('../services/user');
  */
 const createUser = async (req, res) => {
     try {
+        console.log(req.body);
         const { email, password, nickname, picture } = req.body; // Extract user data from request
-
+        
         // Validate the presence of the email field
         if (!email) {
             return res.status(400).json({ errors: ['Invalid request: "email" field is required'] });

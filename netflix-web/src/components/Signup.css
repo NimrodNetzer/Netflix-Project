@@ -1,0 +1,143 @@
+/* Netflix-inspired Signup.css */
+
+
+  .signup{
+    position: relative; /* Required for pseudo-element positioning */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Full viewport height */
+    width: 100vw; /* Full viewport width */
+    background: url('../assets/netflix-first-page-image.jpg') no-repeat center center; /* Center the background image */
+    background-size: cover; /* Ensure the image covers the entire container */
+    color: white;
+    text-align: center;
+    overflow: hidden; /* Prevent overflow issues */
+
+  }
+
+  .signup::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75); /* Dark overlay for readability */
+    z-index: 1;
+}
+  
+  .signup-container {
+    z-index: 2;
+    text-align: center;
+    padding: 0 5%; /* Add padding for better responsiveness */
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    background-color: rgba(0, 0, 0, 0.75); /* Semi-transparent background */
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  }
+  
+  form h2 {
+    font-size: 24px;
+    color: #fff;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #b3b3b3;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    background: #333;
+    color: #fff;
+  }
+  
+  button {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    background: #e50914;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  button:hover {
+    background: #b40612;
+  }
+  
+  .additional-options {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  .additional-options a {
+    color: #fff;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .additional-options a:hover {
+    color: #e50914;
+  }
+  .profile-picture-options {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.profile-thumbnail {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 6px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.profile-thumbnail:hover {
+    border-color: red;
+}
+
+.profile-thumbnail.selected {
+    border-color: green;
+}
+.error-message.centered {
+  color: red;
+  font-size: 0.9em; /* Make the text smaller */
+  text-align: center; /* Center the text */
+  margin-top: 10px; /* Add space between the error and the images */
+}
+.success-message {
+  color: green;
+  font-size: 1em; /* Adjusted font size for smaller appearance */
+  text-align: center;
+  margin-top: 20px; /* Space above the message */
+  font-weight: bold; /* Make the text stand out */
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto; /* Center horizontally */
+}
+
+
