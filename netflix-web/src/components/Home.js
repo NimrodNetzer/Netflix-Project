@@ -1,4 +1,6 @@
 import React from 'react';
+import VideoPlayer from '../components/VideoPlayer';
+import video from '../assets/video.mp4'
 
 const Home = () => {
   const handleLogout = () => {
@@ -10,6 +12,8 @@ const Home = () => {
     <div>
       <h1>Welcome to the Home Page!</h1>
       <button onClick={handleLogout}>Logout</button>
+      <VideoPlayer videoSrc="video"/> 
+
     </div>
   );
 };
