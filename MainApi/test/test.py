@@ -7,7 +7,7 @@ import os
 from urllib.parse import urljoin
 
 # MongoDB Connection
-BASE_URL = os.getenv("BASE_URL", "http://localhost:3000/api/")
+BASE_URL = os.getenv("BASE_URL", "http://localhost:4000/api/")
 LOGIN_URL = urljoin(BASE_URL, "tokens/")
 
 # Generate other URLs based on the base URL

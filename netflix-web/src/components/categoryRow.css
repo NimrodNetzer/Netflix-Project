@@ -1,0 +1,95 @@
+.category-row {
+  margin: 20px 0;
+  color: white;
+}
+
+.category-title {
+  margin-left: 20px;
+  font-size: 1.5rem;
+}
+
+.row-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.movie-list {
+  display: flex;
+  overflow: hidden;
+  scroll-behavior: smooth;
+  animation: none; /* Reset animation */
+}
+
+@keyframes scroll-right {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.scroll-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s;
+}
+
+.scroll-button:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.scroll-button.left {
+  left: 10px;
+}
+
+.scroll-button.right {
+  right: 10px;
+}
+
+.scrollbar-container {
+  display: flex;
+  margin: 10px 20px;
+  height: 3px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.scrollbar-segment {
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.2);
+  margin-right: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.scrollbar-segment.active {
+  background-color: white;
+}
