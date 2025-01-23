@@ -68,7 +68,7 @@
 
 .input-container button {
     padding: 10px 20px; /* Match padding with input */
-    font-size: 16px; /* Match font size with input */
+    font-size: 22px; /* Match font size with input */
     font-weight: 700; /* Match font weight with input */
     background-color: #e50914;
     color: white;
@@ -79,7 +79,9 @@
     text-align: center;
     height: auto; /* Ensures it adapts to the input's height */
 }
-
+.input-container button:hover {
+    background-color: #b40612; /* Darker red on hover */
+}
 
 .input-container input::placeholder {
     color: rgba(255, 255, 255, 0.7); /* Semi-transparent placeholder text */

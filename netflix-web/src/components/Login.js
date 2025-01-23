@@ -9,7 +9,7 @@ const Login = () => {
   const [email, setEmail] = useState(''); // State for username
   const [password, setPassword] = useState(''); // State for password
   const [errorMessage, setErrorMessage] = useState(''); // State for error messages
-  const [isLoading, setIsLoading] = useState(false); // State for loading indicator
+  const [isLoading, setIsLoading] = useState(false); // State for loadingְ indicator
 
   const handleLogin = async (event) => {
     event.preventDefault(); // Prevent page refresh
