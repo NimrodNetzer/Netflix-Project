@@ -1,0 +1,156 @@
+/* Top Menu Styles */
+.top-menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #141414;
+    color: #fff;
+}
+
+.top-menu ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: flex-middle; /* Aligns the menu items to the middle */
+    margin-top: 15px; /* Adds spacing from the top */
+}
+
+.top-menu ul li {
+    margin-right: 2px;
+    margin-left: 25px;
+}
+
+.top-menu ul li a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+.right-section {
+    display: flex;
+    align-items: center; /* Keeps items vertically aligned */
+    justify-content: flex-end; /* Aligns items to the right */
+    width: auto; /* Automatically shrink based on content */
+    padding: 0 10px; /* Adjust padding for a smaller box */
+    margin-right: 10px; /* Space from the edge */
+    gap: 10px; /* Space between elements inside the right section */
+}
+
+
+.search-button,
+.profile-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 50%; /* Makes the buttons circular */
+    width: 40px; /* Set a fixed width for circular shape */
+    height: 40px; /* Set the same height as width */
+}
+
+
+
+/* Search Button */
+.search-button {
+    background-color: transparent;
+    border: none;
+    margin-right: 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+}
+
+.search-button i {
+    color: #fff; /* Search icon color */
+    font-size: 20px; /* Adjust size */
+}
+
+/* Search Input */
+.search-input {
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    display: none; /* Hidden by default */
+    transition: all 0.3s ease-in-out;
+}
+
+.search-input.visible {
+    display: block; /* Revealed when visible */
+    margin-left: 10px;
+    width: 200px; /* Adjust width as needed */
+}
+
+/* Right Section */
+.right-section {
+    display: flex;
+    align-items: center; /* Aligns buttons to the center */
+    justify-content: flex-end; /* Aligns all items to the right side */
+    height: 100%;
+}
+
+/* Search Button as an Image or Icon */
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    width: 31px; /* Adjust size as needed */
+    height: 30px;
+    cursor: pointer; /* Ensure the icon is clickable */
+    margin-right: 15px; /* Add spacing from the profile button */
+}
+
+/* Search Input Styling */
+.search-input {
+    position: absolute;
+    top: 50%;
+    left: -220px; /* Adjust the positioning relative to the search icon */
+    transform: translateY(-50%);
+    padding: 8px;
+    border: 1px solid #555;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    width: 200px;
+    display: none; /* Initially hidden */
+    transition: all 0.01s ease-in-out;
+}
+
+/* Make Input Visible When Toggled */
+.search-container .search-input {
+    display: block; /* Visible when toggled */
+}
+
+/* Profile Button */
+.profile-button img {
+    margin-right: 1px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.netflix-logo {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.logo-img {
+    height: 30px;
+    width: auto;
+    display: block;
+    position: relative;
+    top: -6px; /* Adjust this value for perfect centering */
+}
