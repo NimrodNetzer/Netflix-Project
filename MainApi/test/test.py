@@ -137,6 +137,19 @@ def create_movies(category_ids, user_tokens):
                 file.close()
     return movies
 
+# Add Movie to Watched List
+def add_movie_to_watched(user_tokens):
+    user_id = random.randint(1, 90)
+    movie_id = random.randint(1, 90)
+    token = random.choice(user_tokens)
+    headers = {"Authorization": f"Bearer {token}"}
+    url = RECOMMEND_URL.format(movie_id=movie_id)
+    response = requests.post(url, headers=headers)
+    if response.status_code == 201:
+        print(f"Movie {movie_id} successfully added to watched list for user {user_id}.")
+    else:
+        print(f"Failed to add movie {movie_id} to watched list for user {user_id}: {response.text}")
+
 # Main Execution
 def main():
     print("Clearing database...")
@@ -157,6 +170,8 @@ def main():
     print("Creating movies...")
     movies = create_movies(category_ids, user_tokens)
     print(f"Created {len(movies)} movies.")
-
+ # Example: Add first movie to the watched list of first user
+    for i in range(1, 1000):
+        add_movie_to_watched(user_tokens)
 if __name__ == "__main__":
     main()

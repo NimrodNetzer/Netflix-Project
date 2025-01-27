@@ -23,7 +23,7 @@ function MovieBox({ movie, width }) {
       <div className="movie-hover-overlay">
         <div className="movie-hover-content">
           {/* Movie Title */}
-          <div className="movie-title">{movie.name}</div>
+          <div className="movie-title2">{movie.name}</div>
           <div className="movie-buttons">
             <button className="play-button">▶ Play</button>
             <button className="info-button" onClick={handleInfoClick}>
