@@ -5,6 +5,8 @@ const User = require('../models/user'); // Path to your User model
 const createMovie = async (movieData) => {
   try {
     // Required field validation
+    console.log(movieData);
+
     const requiredFields = ['name', 'description', 'picture', 'age', 'time', 'releaseDate', 'quality', 'categories', 'author'];
     for (const field of requiredFields) {
       if (!movieData[field]) {
@@ -29,11 +31,9 @@ const createMovie = async (movieData) => {
     if (typeof movieData.description !== 'string' || movieData.description.length < 20) {
       throw new Error('Invalid description: must be at least 20 characters long');
     }
-    if (!/^https?:\/\/\S+\.\S+$/.test(movieData.picture)) {
-      throw new Error('Invalid picture URL');
-    }
+    movieData.age = parseInt(movieData.age, 10);
     if (!Number.isInteger(movieData.age) || movieData.age < 0 || movieData.age > 18) {
-      throw new Error('Invalid age: must be an integer between 0 and 18');
+    throw new Error('Invalid age: must be an integer between 0 and 18');
     }
     if (!/^\d+h \d+m$/.test(movieData.time)) {
       throw new Error('Invalid time format: must be in the format "Xh Ym"');
@@ -44,8 +44,15 @@ const createMovie = async (movieData) => {
     if (!['HD', 'SD', '4K'].includes(movieData.quality)) {
       throw new Error('Invalid quality: must be one of "HD", "SD", or "4K"');
     }
-
-    // Optional validations
+    movieData.cast = movieData.cast.map((item) => {
+      try {
+        // Replace single quotes with double quotes and parse JSON
+        return JSON.parse(item);
+      } catch (err) {
+        throw new Error(`Invalid cast item: ${item} - Error: ${err.message}`);
+      }
+    });
+    movieData.properties =  JSON.parse(properties);
     if (movieData.cast) {
       if (!Array.isArray(movieData.cast)) {
         throw new Error('Invalid cast: must be an array');

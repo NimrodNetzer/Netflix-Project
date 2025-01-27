@@ -8,6 +8,7 @@ const categoryRoutes = require('./routes/category');
 const searchRoutes = require('./routes/search');
 const users = require('./routes/user');
 const tokens = require('./routes/token');
+const path = require('path');
 
 require('custom-env').env(process.env.NODE_ENV, './config');
 
@@ -25,6 +26,7 @@ app.use(cors());
 // Use body-parser to parse URL-encoded bodies and JSON
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, './public/uploads')));
 
 // Define routes for the application
 app.use('/api/users', users); // Routes for user operations (e.g., create, update, delete users)

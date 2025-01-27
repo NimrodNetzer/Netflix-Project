@@ -48,9 +48,11 @@ const movieSchema = new mongoose.Schema({
   properties: {
     type: Map,
     of: String,
+    required:true
   },
   movieData: {
     type: Object,
+    required:false
   },
   author: {
     type: String,
