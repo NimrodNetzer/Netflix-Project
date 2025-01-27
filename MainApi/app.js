@@ -8,6 +8,7 @@ const categoryRoutes = require('./routes/category');
 const searchRoutes = require('./routes/search');
 const users = require('./routes/user');
 const tokens = require('./routes/token');
+const path = require('path');
 
 require('custom-env').env(process.env.NODE_ENV, './config');
 

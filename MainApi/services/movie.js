@@ -29,9 +29,7 @@ const createMovie = async (movieData) => {
     if (typeof movieData.description !== 'string' || movieData.description.length < 20) {
       throw new Error('Invalid description: must be at least 20 characters long');
     }
-    if (!/^https?:\/\/\S+\.\S+$/.test(movieData.picture)) {
-      throw new Error('Invalid picture URL');
-    }
+
     if (!Number.isInteger(movieData.age) || movieData.age < 0 || movieData.age > 18) {
       throw new Error('Invalid age: must be an integer between 0 and 18');
     }
@@ -46,6 +44,7 @@ const createMovie = async (movieData) => {
     }
 
     // Optional validations
+    console.log(movieData.cast);
     if (movieData.cast) {
       if (!Array.isArray(movieData.cast)) {
         throw new Error('Invalid cast: must be an array');
@@ -56,6 +55,7 @@ const createMovie = async (movieData) => {
         }
       });
     }
+    console.log(movieData.properties, "this is properties");
 
     // Check for duplicates
     const existingMovie = await Movie.findOne({ name: movieData.name, releaseDate: movieData.releaseDate });
