@@ -5,9 +5,26 @@ import './categoryRow.css';
 function CategoryRow({ category, movies }) {
   const rowRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [moviesPerView, setMoviesPerView] = useState(6); // Default value
 
-  const moviesPerView = 6; // Number of movies visible at a time
   const scrollStep = 3; // Number of movies to scroll per step
+
+  useEffect(() => {
+    const updateMoviesPerView = () => {
+      if (rowRef.current) {
+        const containerWidth = rowRef.current.offsetWidth; // Get the container's width
+        const movieBoxWidth = 300; // Width of each movie box in pixels
+        const calculatedMoviesPerView = Math.floor(containerWidth / movieBoxWidth); // Calculate how many fit
+        setMoviesPerView(calculatedMoviesPerView > 0 ? calculatedMoviesPerView : 1); // Minimum 1
+      }
+    };
+
+    // Initial calculation and on window resize
+    updateMoviesPerView();
+    window.addEventListener('resize', updateMoviesPerView);
+
+    return () => window.removeEventListener('resize', updateMoviesPerView);
+  }, []);
 
   // Extend the movies array for infinite scrolling
   const circularMovies =
@@ -17,27 +34,18 @@ function CategoryRow({ category, movies }) {
           ...movies,
           ...movies.slice(0, moviesPerView), // Add first movies at the end
         ]
-      : movies; // If fewer movies, no duplicates needed
+      : movies;
 
   const totalSegments = Math.ceil(movies.length / scrollStep); // Total scrollable steps
 
-  useEffect(() => {
-    if (movies.length > moviesPerView) {
-      // On initial load, center the scroll position to the actual movie list
-      const initialScrollPosition = moviesPerView * (rowRef.current.offsetWidth / moviesPerView);
-      rowRef.current.scrollTo({ left: initialScrollPosition, behavior: 'auto' });
-    }
-  }, [movies]);
-
   const handleScroll = (direction) => {
-    if (movies.length <= moviesPerView) return; // Disable scrolling for small lists
+    if (movies.length <= moviesPerView) return;
 
-    const scrollAmount = (rowRef.current.offsetWidth / moviesPerView) * scrollStep; // Width of 3 movies
+    const scrollAmount = (rowRef.current.offsetWidth / moviesPerView) * scrollStep; // Width of scrollable step
     let newIndex = currentIndex + direction;
 
     // Infinite scroll behavior
     if (newIndex < 0) {
-      // Jump to the end of the list
       newIndex = totalSegments - 1;
       rowRef.current.style.animation = 'scroll-left 0.6s ease-in-out';
       rowRef.current.scrollTo({
@@ -45,7 +53,6 @@ function CategoryRow({ category, movies }) {
         behavior: 'auto',
       });
     } else if (newIndex >= totalSegments) {
-      // Jump to the beginning of the list
       newIndex = 0;
       rowRef.current.style.animation = 'scroll-right 0.6s ease-in-out';
       rowRef.current.scrollTo({
@@ -53,26 +60,21 @@ function CategoryRow({ category, movies }) {
         behavior: 'auto',
       });
     } else {
-      // Normal scroll movement
       rowRef.current.style.animation =
         direction === 1 ? 'scroll-right 0.6s ease-in-out' : 'scroll-left 0.6s ease-in-out';
     }
 
     setTimeout(() => {
-      // Reset animation after scroll
-      rowRef.current.style.animation = '';
+      rowRef.current.style.animation = ''; // Reset animation after scroll
     }, 600); // Match the duration of the animation
 
     setCurrentIndex(newIndex);
-
-    // Smoothly scroll to the new position
     rowRef.current.scrollTo({
       left: scrollAmount * (newIndex + (movies.length > moviesPerView ? moviesPerView / scrollStep : 0)),
       behavior: 'smooth',
     });
   };
 
-  // Slice the displayed movies dynamically based on the current index
   const displayedMovies = circularMovies.slice(
     currentIndex + (movies.length > moviesPerView ? moviesPerView : 0),
     currentIndex + (movies.length > moviesPerView ? moviesPerView : 0) + moviesPerView
@@ -100,7 +102,10 @@ function CategoryRow({ category, movies }) {
         <div
           className="movie-list"
           ref={rowRef}
-          style={{ display: 'flex', overflowX: 'hidden' }}
+          style={{
+            display: 'flex',
+            overflowX: 'hidden',
+          }}
         >
           {displayedMovies.map((movie) => (
             <MovieBox key={movie._id} movie={movie} />

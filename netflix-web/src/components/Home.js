@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CategoryRow from './categoryRow'; // Ensure this import is correct
 import './Home.css';
-import React from 'react';
 import TopMenu from './TopMenu';
 
 function Home() {
