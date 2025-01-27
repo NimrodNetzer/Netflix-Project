@@ -5,6 +5,8 @@ const User = require('../models/user'); // Path to your User model
 const createMovie = async (movieData) => {
   try {
     // Required field validation
+    console.log(movieData);
+
     const requiredFields = ['name', 'description', 'picture', 'age', 'time', 'releaseDate', 'quality', 'categories', 'author'];
     for (const field of requiredFields) {
       if (!movieData[field]) {
@@ -31,7 +33,7 @@ const createMovie = async (movieData) => {
     }
 
     if (!Number.isInteger(movieData.age) || movieData.age < 0 || movieData.age > 18) {
-      throw new Error('Invalid age: must be an integer between 0 and 18');
+    throw new Error('Invalid age: must be an integer between 0 and 18');
     }
     if (!/^\d+h \d+m$/.test(movieData.time)) {
       throw new Error('Invalid time format: must be in the format "Xh Ym"');

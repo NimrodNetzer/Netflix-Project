@@ -26,6 +26,7 @@ app.use(cors());
 // Use body-parser to parse URL-encoded bodies and JSON
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, './public/uploads')));
 
 // Define routes for the application
 app.use('/api/users', users); // Routes for user operations (e.g., create, update, delete users)
