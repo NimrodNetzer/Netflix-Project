@@ -4,11 +4,11 @@ import './movieBox.css';
 function MovieBox({ movie, width }) {
   return (
     <div className="movie-box" style={{ width }}>
-      <img
-        src="https://i0.wp.com/picjumbo.com/wp-content/uploads/silhouette-of-young-blonde-with-short-hair-on-orange-background-free-image.jpeg?h=800&quality=80"
-        alt={movie.name}
-        className="default-image"
-      />
+       <img
+    src={"http://localhost:4000/" + movie.picture} // Correctly referencing the movie's picture URL
+    alt={movie.name}    // Providing a valid alt description
+    className="default-image"
+  />
       <div className="movie-hover-overlay">
         <div className="movie-hover-content">
           {/* Movie Title */}
