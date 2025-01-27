@@ -17,9 +17,15 @@ router.use(isAuthenticated);
 
 // Movie Routes
 router
-    .route('/')
-    .post(upload.single('image'),createMovieController)
-    .get(getMovies);
+  .route('/')
+  .post(
+    upload.fields([
+      { name: 'image', maxCount: 1 },
+      { name: 'video', maxCount: 1 }
+    ]),
+    createMovieController
+  )
+  .get(getMovies);
 
 router
     .route('/:id')
