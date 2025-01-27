@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './movieBox.css';
+import MovieDetailsModal from './movieDetailsModal'; // Import the modal component
 
 function MovieBox({ movie, width }) {
+  const [isModalOpen, setModalOpen] = useState(false); // State to handle modal visibility
+
+  const handleInfoClick = () => {
+    setModalOpen(true); // Open modal when "Info" button is clicked
+  };
+
+  const closeModal = () => {
+    setModalOpen(false); // Close modal
+  };
+
   return (
     <div className="movie-box" style={{ width }}>
        <img
@@ -15,7 +26,9 @@ function MovieBox({ movie, width }) {
           <div className="movie-title">{movie.name}</div>
           <div className="movie-buttons">
             <button className="play-button">▶ Play</button>
-            <button className="info-button">info</button>
+            <button className="info-button" onClick={handleInfoClick}>
+              Info
+            </button>
           </div>
           <div className="movie-info">
             <div className="movie-detail-box">
@@ -28,15 +41,11 @@ function MovieBox({ movie, width }) {
               <span className="movie-time">{movie.time}</span>
             </div>
           </div>
-          <div className="movie-categories">
-            {movie.categories.map((category, index) => (
-              <div key={index} className="movie-detail-box">
-                <span className="movie-category">{category.name}</span>
-              </div>
-            ))}
-          </div>
+          
         </div>
       </div>
+      {/* Include the MovieDetailsModal */}
+      <MovieDetailsModal movie={movie} isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );
 }
