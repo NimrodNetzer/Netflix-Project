@@ -1,97 +1,263 @@
-import React, { useRef, useState, useEffect } from 'react';
-import './VideoPlayer.css';
-import myVideo from '../assets/video.mp4';
-import ClickableLogo from './ClickableLogo';
+import React, { useRef, useState , useCallback, useEffect} from "react";
+import {
+  FaPlay,
+  FaPause,
+  FaUndo,
+  FaRedo,
+  FaAngleLeft,
+  FaExpand,
+  FaCompress,
+  FaCog,
+  FaVolumeUp,
+} from "react-icons/fa";
+import "./VideoPlayer.css";
 
-const VideoPlayer = ({ width = '100%', height = 'auto' }) => {
+const VideoPlayer = () => {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [showControls, setShowControls] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [showControls, setShowControls] = useState(true);
 
-  const handlePlayPause = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
+  // Instead of [timer, setTimer], we use a ref:
+  const timerRef = useRef(null);
+
+  // Only depends on setShowControls (which is stable), not on timerRef
+  const resetTimer = useCallback(() => {
+    setShowControls(true);
+
+    // Clear old timer if any
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    // Create a new timer
+    timerRef.current = setTimeout(() => {
+      setShowControls(false);
+    }, 3000);
+  }, [setShowControls]);
+
+  useEffect(() => {
+    function handleMouseMove() {
+      resetTimer();
+    }
+
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener("mousemove", handleMouseMove);
+      container.addEventListener("touchstart", handleMouseMove);
+    }
+
+    // Clear timer on unmount
+    return () => {
+      if (container) {
+        container.removeEventListener("mousemove", handleMouseMove);
+        container.removeEventListener("touchstart", handleMouseMove);
       }
-      setIsPlaying(!isPlaying);
+      // Clear the timer if still active
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [resetTimer]);
+
+  // Call it once on mount
+  useEffect(() => {
+    resetTimer();
+    // eslint-disable-next-line
+  }, []);
+
+  // Playback states
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [progress, setProgress] = useState(0); // percentage
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+
+  // Volume
+  const [volume, setVolume] = useState(1);
+
+  // Fullscreen
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Play/Pause toggle
+  const handlePlayPause = () => {
+    if (!videoRef.current) return;
+    if (isPlaying) {
+      videoRef.current.pause();
+    } else {
+      videoRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  // Skip forward/backward 10s
+  const handleSkip = (seconds) => {
+    if (!videoRef.current) return;
+    videoRef.current.currentTime += seconds;
+  };
+
+  // When metadata is loaded, get duration
+  const handleLoadedMetadata = () => {
+    if (videoRef.current) {
+      setDuration(videoRef.current.duration);
     }
   };
 
+  // On time update, calculate current progress
   const handleTimeUpdate = () => {
     if (videoRef.current) {
-      const progressPercent = 
-        (videoRef.current.currentTime / videoRef.current.duration) * 100;
-      setProgress(progressPercent);
+      const current = videoRef.current.currentTime;
+      const dur = videoRef.current.duration;
+      setCurrentTime(current);
+      setProgress((current / dur) * 100);
     }
   };
 
-  useEffect(() => {
-    const videoElement = videoRef.current;
-    videoElement.addEventListener('timeupdate', handleTimeUpdate);
+  // Seek
+  const handleSeek = (e) => {
+    if (!videoRef.current) return;
+    const manualChange = Number(e.target.value);
+    videoRef.current.currentTime = (manualChange / 100) * duration;
+    setProgress(manualChange);
+  };
 
-    return () => {
-      videoElement.removeEventListener('timeupdate', handleTimeUpdate);
-    };
-  }, []);
+  // Volume
+  const handleVolumeChange = (e) => {
+    if (!videoRef.current) return;
+    const newVolume = Number(e.target.value);
+    setVolume(newVolume);
+    videoRef.current.volume = newVolume;
+  };
 
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === ' ' || event.key === 'Spacebar') {
-        handlePlayPause();
+  // Fullscreen
+  const handleFullScreen = () => {
+    const playerContainer = containerRef.current;
+    if (!document.fullscreenElement) {
+      // Enter fullscreen
+      if (playerContainer.requestFullscreen) {
+        playerContainer.requestFullscreen();
+      } else if (playerContainer.msRequestFullscreen) {
+        playerContainer.msRequestFullscreen();
+      } else if (playerContainer.mozRequestFullScreen) {
+        playerContainer.mozRequestFullScreen();
+      } else if (playerContainer.webkitRequestFullscreen) {
+        playerContainer.webkitRequestFullscreen();
       }
-    };
+      setIsFullscreen(true);
+    } else {
+      // Exit fullscreen
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+      setIsFullscreen(false);
+    }
+  };
 
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
+  // Format time (e.g. 1:23)
+  const formatTime = (timeSec) => {
+    if (!timeSec) return "0:00";
+    const minutes = Math.floor(timeSec / 60);
+    const seconds = Math.floor(timeSec - minutes * 60);
+    return `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+  };
 
   return (
-    <div 
+    <div
       ref={containerRef}
-      className="video-player-container"
-      onMouseEnter={() => setShowControls(true)}
-      onMouseLeave={() => setShowControls(false)}
+      className={`player-container ${showControls ? "show" : "hide"}`}
     >
-      <video 
-        ref={videoRef} 
-        src={myVideo} 
-        className="video-player" 
-        style={{ width, height }} 
-        onEnded={() => setIsPlaying(false)}
+      {/* Video Element */}
+      <video
+        ref={videoRef}
+        className="video"
+        src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
+        onLoadedMetadata={handleLoadedMetadata}
+        onTimeUpdate={handleTimeUpdate}
+        onClick={handlePlayPause} // Click video to toggle play/pause
       />
-      {showControls && (
-        <>
-          <div className="video-overlay"></div>
-          <button 
-            className="play-pause-button" 
-            onClick={handlePlayPause}
-          >
-            {isPlaying ? (
-              <svg width="50" height="50" viewBox="0 0 24 24" fill="white">
-                <rect x="6" y="4" width="4" height="16" />
-                <rect x="14" y="4" width="4" height="16" />
-              </svg>
-            ) : (
-              <svg width="50" height="50" viewBox="0 0 24 24" fill="white">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            )}
+
+      {/* Top Bar */}
+      <div className="top-bar">
+        <div className="left-actions">
+          {/* Back Button */}
+          <button className="icon-btn">
+            <FaAngleLeft />
           </button>
-          <div className="progress-bar">
-            <div 
-              className="progress" 
-              style={{width: `${progress}%`}}
-            ></div>
+          {/* Title / Episode Info */}
+          <div className="episode-info">
+            <p>S1:E2 "Kryptonite"</p>
           </div>
-        </>
-      )}
+        </div>
+        <div className="right-actions">
+          <span>
+            D: {formatTime(currentTime)} / U: {formatTime(duration)}
+          </span>
+        </div>
+      </div>
+
+      {/* Center Controls (large icons) */}
+      <div className="center-controls">
+        <button onClick={() => handleSkip(-10)} className="skip-btn">
+          <FaUndo /> 10
+        </button>
+        <button className="play-btn" onClick={handlePlayPause}>
+          {isPlaying ? <FaPause /> : <FaPlay />}
+        </button>
+        <button onClick={() => handleSkip(10)} className="skip-btn">
+          10 <FaRedo />
+        </button>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="bottom-bar">
+        {/* Progress Bar */}
+        <input
+          type="range"
+          className="progress"
+          min={0}
+          max={100}
+          step={0.1}
+          value={progress}
+          onChange={handleSeek}
+        />
+        {/* Time */}
+        <div className="time-display">
+          {formatTime(currentTime)} / {formatTime(duration)}
+        </div>
+
+        {/* Bottom-left: Volume + Settings */}
+        <div className="bottom-left">
+          <button className="icon-btn">
+            <FaVolumeUp />
+          </button>
+          <button className="icon-btn">
+            <FaCog />
+          </button>
+        </div>
+
+        {/* Bottom-right: Fullscreen */}
+        <div className="bottom-right">
+          <button className="icon-btn" onClick={handleFullScreen}>
+            {isFullscreen ? <FaCompress /> : <FaExpand />}
+          </button>
+        </div>
+      </div>
+
+      {/* Volume Slider (optional) */}
+      <div className="volume-control">
+        <input
+          type="range"
+          min={0}
+          max={1}
+          step={0.01}
+          value={volume}
+          onChange={handleVolumeChange}
+        />
+      </div>
     </div>
   );
 };

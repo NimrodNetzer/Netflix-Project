@@ -1,57 +1,325 @@
-.video-player-container {
-    position: relative;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  .video-player {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-  
-  .video-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(transparent, rgba(0,0,0,0.5));
-  }
-  
-  .play-pause-button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0,0,0,0.5);
-    border: none;
-    border-radius: 50%;
-    width: 80px;
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .play-pause-button:hover {
-    background: rgba(0,0,0,0.7);
-  }
-  
-  .progress-bar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 5px;
-    background: rgba(255,255,255,0.3);
-  }
-  
-  .progress {
-    height: 100%;
-    background: red;
-    transition: width 0.1s linear;
-  }
+/* Basic container styling */
+.player-container {
+  position: relative;
+  width: 800px;
+  max-width: 100%;
+  background-color: black;
+  color: white;
+  overflow: hidden;
+}
+
+/* We'll use these classes to fade controls in/out. 
+   The controls (top-bar, center-controls, bottom-bar) 
+   start with some default: hidden or shown. */
+
+/* Here we transition the children’s opacity & visibility */
+.top-bar,
+.center-controls,
+.bottom-bar {
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* When "showControls" is true => adds "show" class => visible */
+.player-container.show .top-bar,
+.player-container.show .center-controls,
+.player-container.show .bottom-bar {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* When "showControls" is false => adds "hide" class => hidden */
+.player-container.hide .top-bar,
+.player-container.hide .center-controls,
+.player-container.hide .bottom-bar {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.netflix-container {
+  position: relative;
+  width: 800px;
+  max-width: 100%;
+  background-color: black;
+  color: white;
+  overflow: hidden;
+}
+
+/* Fullscreen mode */
+.netflix-container.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+
+/* Video */
+.video {
+  width: 100%;
+  height: auto;
+  background: black;
+  cursor: pointer; /* So user knows they can click to pause/play */
+}
+
+/* 
+   Fade controls in/out using show-controls / hide-controls classes.
+   We use opacity + visibility for a smoother transition.
+*/
+.show-controls .top-bar,
+.show-controls .center-controls,
+.show-controls .bottom-bar {
+  opacity: 1;
+  visibility: visible;
+}
+
+.hide-controls .top-bar,
+.hide-controls .center-controls,
+.hide-controls .bottom-bar {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.top-bar,
+.center-controls,
+.bottom-bar {
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Top Bar */
+.top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+  padding: 0 10px;
+}
+
+.left-actions {
+  display: flex;
+  align-items: center;
+}
+
+.episode-info {
+  margin-left: 10px;
+}
+
+.right-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Center Controls */
+.center-controls {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.skip-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.skip-btn:hover {
+  opacity: 1;
+}
+
+.play-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 3rem;
+  cursor: pointer;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+}
+
+.play-btn:hover {
+  opacity: 1;
+}
+
+/* Bottom Bar */
+.bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 10px;
+}
+
+/* Progress bar + time display */
+.progress {
+  width: 100%;
+  cursor: pointer;
+}
+
+/* ---- Make the progress slider red ---- */
+.progress::-webkit-slider-runnable-track {
+  background: red;
+  height: 4px;
+}
+.progress::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 14px;
+  width: 14px;
+  background: red;
+  border-radius: 50%;
+  margin-top: -5px;
+  cursor: pointer;
+}
+.progress:focus {
+  outline: none;
+}
+
+/* Firefox */
+.progress::-moz-range-track {
+  background: red;
+  height: 4px;
+}
+.progress::-moz-range-thumb {
+  background: red;
+  border: none;
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* IE/Edge */
+.progress::-ms-track {
+  background: red;
+  height: 4px;
+}
+.progress::-ms-thumb {
+  background: red;
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.time-display {
+  text-align: right;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Bottom-left & bottom-right icon groups */
+.bottom-left,
+.bottom-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+  font-size: 1rem;
+}
+
+.icon-btn:hover {
+  opacity: 1;
+}
+
+/* Volume Control (slider is also red) */
+.volume-control {
+  position: absolute;
+  left: 30px;
+  bottom: 80px;
+  display: flex;
+  flex-direction: column;
+
+  /*
+    We'll let it always show/hide with the main controls 
+    or you can keep separate logic if you like.
+  */
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.show-controls .volume-control {
+  opacity: 1;
+  visibility: visible;
+}
+
+.hide-controls .volume-control {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Make the volume slider red as well */
+.volume-control input[type="range"] {
+  -webkit-appearance: none;
+  width: 100px;
+  transform: rotate(-90deg);
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+  margin-top: 40px;
+}
+
+.volume-control input[type="range"]::-webkit-slider-runnable-track {
+  background: red;
+  height: 4px;
+}
+
+.volume-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 14px;
+  width: 14px;
+  background: red;
+  border-radius: 50%;
+  margin-top: -5px;
+  cursor: pointer;
+}
+
+.volume-control input[type="range"]::-moz-range-track {
+  background: red;
+  height: 4px;
+}
+
+.volume-control input[type="range"]::-moz-range-thumb {
+  background: red;
+  border: none;
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.volume-control input[type="range"]::-ms-track {
+  background: red;
+  height: 4px;
+}
+
+.volume-control input[type="range"]::-ms-thumb {
+  background: red;
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  cursor: pointer;
+}
