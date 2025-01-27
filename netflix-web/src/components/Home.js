@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import CategoryRow from './categoryRow'; // Ensure this import is correct
 import './Home.css';
+import React from 'react';
+import TopMenu from './TopMenu';
 
 function Home() {
   const [categories, setCategories] = useState([]);
@@ -33,6 +35,8 @@ function Home() {
 
   return (
     <div className="home">
+          <TopMenu />
+
       {categories.map((category) => (
         <CategoryRow
           key={category.category_id}
