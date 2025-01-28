@@ -9,36 +9,40 @@ import {
   FaCompress,
   FaCog,
   FaVolumeUp,
+  FaVolumeMute,
 } from "react-icons/fa";
 import "./VideoPlayer.css";
+import PropTypes from 'prop-types'; // Import PropTypes for type checking
 
-const VideoPlayer = () => {
+const VideoPlayer = ({
+  videoUrl ,
+  videoName ,
+  startFullscreen ,
+}) => {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const [showControls, setShowControls] = useState(true);
 
-  // Instead of [timer, setTimer], we use a ref:
+  // Timer ref for hiding controls
   const timerRef = useRef(null);
 
-  // Only depends on setShowControls (which is stable), not on timerRef
+  // Reset controls visibility timer
   const resetTimer = useCallback(() => {
     setShowControls(true);
 
-    // Clear old timer if any
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
 
-    // Create a new timer
     timerRef.current = setTimeout(() => {
       setShowControls(false);
     }, 3000);
-  }, [setShowControls]);
+  }, []);
 
   useEffect(() => {
-    function handleMouseMove() {
+    const handleMouseMove = () => {
       resetTimer();
-    }
+    };
 
     const container = containerRef.current;
     if (container) {
@@ -46,20 +50,17 @@ const VideoPlayer = () => {
       container.addEventListener("touchstart", handleMouseMove);
     }
 
-    // Clear timer on unmount
     return () => {
       if (container) {
         container.removeEventListener("mousemove", handleMouseMove);
         container.removeEventListener("touchstart", handleMouseMove);
       }
-      // Clear the timer if still active
       if (timerRef.current) {
         clearTimeout(timerRef.current);
       }
     };
   }, [resetTimer]);
 
-  // Call it once on mount
   useEffect(() => {
     resetTimer();
     // eslint-disable-next-line
@@ -73,6 +74,10 @@ const VideoPlayer = () => {
 
   // Volume
   const [volume, setVolume] = useState(1);
+  const [muted, setMuted] = useState(false);
+
+  // Show/Hide volume slider on hover
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
 
   // Fullscreen
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -109,36 +114,51 @@ const VideoPlayer = () => {
     const newProgress = (current / dur) * 100;
     setCurrentTime(current);
     setProgress(newProgress);
-  
+
     // Update the CSS variable to dynamically change color
     const progressBar = document.querySelector(".progress");
     if (progressBar) {
       progressBar.style.setProperty("--progress", `${newProgress}%`);
     }
   };
-  
+
   // Seek
   const handleSeek = (e) => {
     if (!videoRef.current) return;
     const manualChange = Number(e.target.value);
     videoRef.current.currentTime = (manualChange / 100) * duration;
     setProgress(manualChange);
-  
+
     // Set the dynamic CSS variable to update the red progress
     e.target.style.setProperty("--progress", `${manualChange}%`);
   };
-  // Volume
+
+  // Volume slider change
   const handleVolumeChange = (e) => {
     if (!videoRef.current) return;
     const newVolume = Number(e.target.value);
     setVolume(newVolume);
     videoRef.current.volume = newVolume;
+    if (newVolume === 0) {
+      setMuted(true);
+      videoRef.current.muted = true;
+    } else {
+      setMuted(false);
+      videoRef.current.muted = false;
+    }
   };
 
-  // Fullscreen
+  // Mute/Unmute toggle
+  const toggleMute = () => {
+    if (!videoRef.current) return;
+    setMuted(!muted);
+    videoRef.current.muted = !muted;
+  };
+
+  // Fullscreen toggle
   const handleFullScreen = () => {
     const playerContainer = containerRef.current;
-    if (!document.fullscreenElement) {
+    if (!isFullscreen) {
       // Enter fullscreen
       if (playerContainer.requestFullscreen) {
         playerContainer.requestFullscreen();
@@ -149,7 +169,6 @@ const VideoPlayer = () => {
       } else if (playerContainer.webkitRequestFullscreen) {
         playerContainer.webkitRequestFullscreen();
       }
-      setIsFullscreen(true);
     } else {
       // Exit fullscreen
       if (document.exitFullscreen) {
@@ -161,9 +180,33 @@ const VideoPlayer = () => {
       } else if (document.webkitExitFullscreen) {
         document.webkitExitFullscreen();
       }
-      setIsFullscreen(false);
     }
   };
+
+  // Listen to fullscreen change events to sync state
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const fullscreenElement =
+        document.fullscreenElement ||
+        document.mozFullScreenElement ||
+        document.webkitFullscreenElement ||
+        document.msFullscreenElement;
+
+      setIsFullscreen(!!fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    document.addEventListener("msfullscreenchange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener("mozfullscreenchange", handleFullscreenChange);
+      document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
+      document.removeEventListener("msfullscreenchange", handleFullscreenChange);
+    };
+  }, []);
 
   // Format time (e.g. 1:23)
   const formatTime = (timeSec) => {
@@ -173,44 +216,54 @@ const VideoPlayer = () => {
     return `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
   };
 
+  // Effect to start fullscreen if prop is true
+  useEffect(() => {
+    if (startFullscreen) {
+      handleFullScreen();
+    }
+    // eslint-disable-next-line
+  }, [startFullscreen]);
+
   return (
     <div
       ref={containerRef}
-      className={`player-container ${showControls ? "show" : "hide"}`}
+      className={`player-container ${showControls ? "show" : "hide"} ${
+        isFullscreen ? "fullscreen" : ""
+      }`}
     >
       {/* Video Element */}
       <video
         ref={videoRef}
         className="video"
-        src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
+        src={videoUrl}
         onLoadedMetadata={handleLoadedMetadata}
         onTimeUpdate={handleTimeUpdate}
         onClick={handlePlayPause} // Click video to toggle play/pause
+        muted={muted}
+        volume={volume}
       />
 
       {/* Top Bar */}
       <div className="top-bar">
         <div className="left-actions">
           {/* Back Button */}
-          <button className="icon-btn">
-            <FaAngleLeft />
-          </button>
-          {/* Title / Episode Info */}
-          <div className="episode-info">
-            <p>S1:E2 "Kryptonite"</p>
-          </div>
+          {isFullscreen && (
+            <button className="icon-btn back-btn" onClick={handleFullScreen}>
+              <FaAngleLeft />
+            </button>
+          )}
         </div>
-        <div className="right-actions">
-          <span>
-            D: {formatTime(currentTime)} / U: {formatTime(duration)}
-          </span>
+
+        {/* Title / Episode Info */}
+        <div className="episode-info">
+          <p>{videoName}</p>
         </div>
       </div>
 
       {/* Center Controls (large icons) */}
       <div className="center-controls">
         <button onClick={() => handleSkip(-10)} className="skip-btn">
-          <FaUndo /> 10
+          10 <FaUndo />
         </button>
         <button className="play-btn" onClick={handlePlayPause}>
           {isPlaying ? <FaPause /> : <FaPlay />}
@@ -237,11 +290,30 @@ const VideoPlayer = () => {
 
         {/* Time Display & Buttons */}
         <div className="bottom-controls">
-          {/* Bottom-left: Volume */}
+          {/* Bottom-left: Volume (hover to reveal slider) */}
           <div className="bottom-left">
-            <button className="icon-btn">
-              <FaVolumeUp />
-            </button>
+            <div
+              className="volume-container"
+              onMouseEnter={() => setShowVolumeSlider(true)}
+              onMouseLeave={() => setShowVolumeSlider(false)}
+            >
+              <button className="icon-btn" onClick={toggleMute}>
+                {muted || volume === 0 ? <FaVolumeMute /> : <FaVolumeUp />}
+              </button>
+              {showVolumeSlider && (
+                <div className="volume-slider">
+                  <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    value={muted ? 0 : volume}
+                    onChange={handleVolumeChange}
+                    orient="horizontal"
+                  />
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Time Display */}
@@ -257,20 +329,16 @@ const VideoPlayer = () => {
           </div>
         </div>
       </div>
-
-      {/* Volume Slider (optional) */}
-      <div className="volume-control">
-        <input
-          type="range"
-          min={0}
-          max={1}
-          step={0.01}
-          value={volume}
-          onChange={handleVolumeChange}
-        />
-      </div>
     </div>
   );
 };
 
+// Define PropTypes for type checking
+VideoPlayer.propTypes = {
+  videoUrl: PropTypes.string,
+  videoName: PropTypes.string,
+  startFullscreen: PropTypes.bool,
+};
+
+// Export the component
 export default VideoPlayer;
