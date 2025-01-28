@@ -1,3 +1,4 @@
+// VideoPlayer.jsx
 import React, { useRef, useState, useCallback, useEffect } from "react";
 import {
   FaPlay,
@@ -7,7 +8,6 @@ import {
   FaAngleLeft,
   FaExpand,
   FaCompress,
-  FaCog,
   FaVolumeUp,
   FaVolumeMute,
 } from "react-icons/fa";
@@ -15,9 +15,11 @@ import "./VideoPlayer.css";
 import PropTypes from 'prop-types'; // Import PropTypes for type checking
 
 const VideoPlayer = ({
-  videoUrl ,
-  videoName ,
-  startFullscreen ,
+  videoUrl,
+  videoName,
+  startFullscreen,
+  play, // New prop to control autoplay
+  onClose, // Destructure onClose
 }) => {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
@@ -67,7 +69,7 @@ const VideoPlayer = ({
   }, []);
 
   // Playback states
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(play); // Initialize based on 'play' prop
   const [progress, setProgress] = useState(0); // percentage
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -193,6 +195,11 @@ const VideoPlayer = ({
         document.msFullscreenElement;
 
       setIsFullscreen(!!fullscreenElement);
+
+      // If exiting fullscreen, trigger onClose
+      if (!fullscreenElement) {
+        onClose();
+      }
     };
 
     document.addEventListener("fullscreenchange", handleFullscreenChange);
@@ -206,7 +213,7 @@ const VideoPlayer = ({
       document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
       document.removeEventListener("msfullscreenchange", handleFullscreenChange);
     };
-  }, []);
+  }, [onClose]); // Add onClose to dependencies
 
   // Format time (e.g. 1:23)
   const formatTime = (timeSec) => {
@@ -223,6 +230,33 @@ const VideoPlayer = ({
     }
     // eslint-disable-next-line
   }, [startFullscreen]);
+
+  // Effect to handle the 'play' prop for autoplay
+  useEffect(() => {
+    if (play) {
+      if (videoRef.current) {
+        videoRef.current.play();
+        setIsPlaying(true);
+      }
+    } else {
+      if (videoRef.current) {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      }
+    }
+  }, [play]);
+
+  // Function to exit fullscreen and close the VideoPlayer
+  const handleExitFullscreen = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else if (document.webkitFullscreenElement) { /* Safari */
+      document.webkitExitFullscreen();
+    } else if (document.msFullscreenElement) { /* IE11 */
+      document.msExitFullscreen();
+    }
+    // onClose will be called via fullscreenchange event listener
+  };
 
   return (
     <div
@@ -248,7 +282,7 @@ const VideoPlayer = ({
         <div className="left-actions">
           {/* Back Button */}
           {isFullscreen && (
-            <button className="icon-btn back-btn" onClick={handleFullScreen}>
+            <button className="icon-btn back-btn" onClick={onClose}> {/* Changed onClick */}
               <FaAngleLeft />
             </button>
           )}
@@ -329,15 +363,28 @@ const VideoPlayer = ({
           </div>
         </div>
       </div>
+
+      {/* Close Button (Optional) */}
+      {/* Uncomment if you want an additional close button */}
+      {/* 
+      <button 
+        onClick={handleExitFullscreen} 
+        className="close-btn"
+      >
+        Close Video
+      </button> 
+      */}
     </div>
   );
 };
 
 // Define PropTypes for type checking
 VideoPlayer.propTypes = {
-  videoUrl: PropTypes.string,
-  videoName: PropTypes.string,
+  videoUrl: PropTypes.string.isRequired,
+  videoName: PropTypes.string.isRequired,
   startFullscreen: PropTypes.bool,
+  play: PropTypes.bool, // Add play to PropTypes
+  onClose: PropTypes.func.isRequired, // Ensure onClose is required
 };
 
 // Export the component
