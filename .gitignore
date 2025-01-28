@@ -95,3 +95,4 @@ fabric.properties
 /MainApi/node_modules/*
 **/config**
 
+/MainApi/public/*

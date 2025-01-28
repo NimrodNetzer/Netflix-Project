@@ -12,6 +12,10 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  video: {
+    type: String,
+    required: true
+  },
   description: {
     type: String,
     required: true,
@@ -48,9 +52,11 @@ const movieSchema = new mongoose.Schema({
   properties: {
     type: Map,
     of: String,
+    required:true
   },
   movieData: {
     type: Object,
+    required:false
   },
   author: {
     type: String,

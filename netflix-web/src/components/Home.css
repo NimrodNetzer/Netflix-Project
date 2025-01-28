@@ -1,0 +1,11 @@
+.home {
+  background-color: #141414;
+  color: white;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.home h2 {
+  font-weight: 600;
+  margin: 10px 0;
+}

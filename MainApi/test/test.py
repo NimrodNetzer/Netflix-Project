@@ -5,9 +5,10 @@ from datetime import datetime, timedelta
 from pymongo import MongoClient
 import os
 from urllib.parse import urljoin
-
+import glob
+import json
 # MongoDB Connection
-BASE_URL = os.getenv("BASE_URL", "http://localhost:3000/api/")
+BASE_URL = os.getenv("BASE_URL", "http://localhost:4000/api/")
 LOGIN_URL = urljoin(BASE_URL, "tokens/")
 
 # Generate other URLs based on the base URL
@@ -89,6 +90,9 @@ def create_categories(user_tokens):
 # Create Movies
 def create_movies(category_ids, user_tokens):
     movies = []
+    image_files = glob.glob("./images/*.png")
+    video_files = glob.glob("./videos/*.mp4")
+    print(image_files)
     for i in range(100):
         # Assign multiple random categories
         selected_categories = random.sample(category_ids, random.randint(1, 3))  # Select 1 to 3 categories
@@ -110,19 +114,27 @@ def create_movies(category_ids, user_tokens):
                 "genre": random.choice(["Action", "Drama", "Comedy", "Horror"]),
                 "language": random.choice(["English", "Spanish", "French", "German"])
             },
-            "movieData": {
-                "rating": random.uniform(1, 10),
-                "boxOffice": random.randint(1000000, 100000000)
-            },
             "author": f"Author {i}"
         }
         token = random.choice(user_tokens)
         headers = {"Authorization": f"Bearer {token}"}
-        response = requests.post(MOVIE_URL, json=movie, headers=headers)
-        if response.status_code == 201:
-            movies.append(movie)
-        else:
-            print(f"Failed to create movie {i}: {response.text}")
+        image_file = random.choice(image_files)
+        video_file = random.choice(video_files)
+
+        files = {
+            "image": open(image_file, "rb"),
+            "video": open(video_file, "rb")
+        }
+        try:
+            response = requests.post(MOVIE_URL, files=files, data={"data": json.dumps(movie)}, headers=headers)
+            if response.status_code == 201:
+                movies.append(movie)
+            else:
+                print(f"Failed to create movie {i}: {response.text}")
+        finally:
+        # Close file streams
+            for file in files.values():
+                file.close()
     return movies
 
 # Main Execution

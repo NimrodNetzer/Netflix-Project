@@ -4,13 +4,19 @@ const recommendationService = require('../services/recommendation')
 // Create a new movie
 const createMovieController = async (req, res) => {
     try {
-        const { name, description, releaseDate } = req.body;
-
+        const movieData = JSON.parse(req.body.data);
+        const image = req.files.image ? req.files.image[0].path : null;
+        const video = req.files.video ? req.files.video[0].path : null;
+        const { name, description, releaseDate } = movieData;
+        const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+        console.log(imagePath);
         if (!name || !description || !releaseDate) {
             return res.status(400).json({ message: 'Missing required fields: name, description, or releaseDate' });
         }
 
-        const movieData = req.body;
+        movieData.picture = image;
+        movieData.video = video;
+        console.log(imagePath);
         const newMovie = await createMovie(movieData);
         res.status(201).location(`/api/movies/${newMovie._id}`).send();
     } catch (error) {

@@ -8,6 +8,7 @@ const categoryRoutes = require('./routes/category');
 const searchRoutes = require('./routes/search');
 const users = require('./routes/user');
 const tokens = require('./routes/token');
+const path = require('path');
 
 require('custom-env').env(process.env.NODE_ENV, './config');
 
@@ -32,7 +33,8 @@ app.use('/api/tokens', tokens); // Routes for token operations (e.g., validate, 
 app.use('/api/movies', movieRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/movies/search', searchRoutes)
-
+const publicPath = path.join(__dirname, 'public');
+app.use('/public', express.static(publicPath));
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
