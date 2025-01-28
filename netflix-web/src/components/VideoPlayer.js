@@ -1,4 +1,4 @@
-import React, { useRef, useState , useCallback, useEffect} from "react";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import {
   FaPlay,
   FaPause,
@@ -103,22 +103,30 @@ const VideoPlayer = () => {
 
   // On time update, calculate current progress
   const handleTimeUpdate = () => {
-    if (videoRef.current) {
-      const current = videoRef.current.currentTime;
-      const dur = videoRef.current.duration;
-      setCurrentTime(current);
-      setProgress((current / dur) * 100);
+    if (!videoRef.current) return;
+    const current = videoRef.current.currentTime;
+    const dur = videoRef.current.duration;
+    const newProgress = (current / dur) * 100;
+    setCurrentTime(current);
+    setProgress(newProgress);
+  
+    // Update the CSS variable to dynamically change color
+    const progressBar = document.querySelector(".progress");
+    if (progressBar) {
+      progressBar.style.setProperty("--progress", `${newProgress}%`);
     }
   };
-
+  
   // Seek
   const handleSeek = (e) => {
     if (!videoRef.current) return;
     const manualChange = Number(e.target.value);
     videoRef.current.currentTime = (manualChange / 100) * duration;
     setProgress(manualChange);
+  
+    // Set the dynamic CSS variable to update the red progress
+    e.target.style.setProperty("--progress", `${manualChange}%`);
   };
-
   // Volume
   const handleVolumeChange = (e) => {
     if (!videoRef.current) return;
@@ -214,36 +222,39 @@ const VideoPlayer = () => {
 
       {/* Bottom Bar */}
       <div className="bottom-bar">
-        {/* Progress Bar */}
-        <input
-          type="range"
-          className="progress"
-          min={0}
-          max={100}
-          step={0.1}
-          value={progress}
-          onChange={handleSeek}
-        />
-        {/* Time */}
-        <div className="time-display">
-          {formatTime(currentTime)} / {formatTime(duration)}
+        {/* Progress Bar (Placed above the buttons) */}
+        <div className="progress-container">
+          <input
+            type="range"
+            className="progress"
+            min={0}
+            max={100}
+            step={0.1}
+            value={progress}
+            onChange={handleSeek}
+          />
         </div>
 
-        {/* Bottom-left: Volume + Settings */}
-        <div className="bottom-left">
-          <button className="icon-btn">
-            <FaVolumeUp />
-          </button>
-          <button className="icon-btn">
-            <FaCog />
-          </button>
-        </div>
+        {/* Time Display & Buttons */}
+        <div className="bottom-controls">
+          {/* Bottom-left: Volume */}
+          <div className="bottom-left">
+            <button className="icon-btn">
+              <FaVolumeUp />
+            </button>
+          </div>
 
-        {/* Bottom-right: Fullscreen */}
-        <div className="bottom-right">
-          <button className="icon-btn" onClick={handleFullScreen}>
-            {isFullscreen ? <FaCompress /> : <FaExpand />}
-          </button>
+          {/* Time Display */}
+          <div className="time-display">
+            {formatTime(currentTime)} / {formatTime(duration)}
+          </div>
+
+          {/* Bottom-right: Fullscreen */}
+          <div className="bottom-right">
+            <button className="icon-btn" onClick={handleFullScreen}>
+              {isFullscreen ? <FaCompress /> : <FaExpand />}
+            </button>
+          </div>
         </div>
       </div>
 
