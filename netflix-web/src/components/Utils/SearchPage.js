@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; // Import navigation hook
 import MovieBox from '../Home/movieBox';
 import './SearchPage.css';
+import { jwtDecode } from 'jwt-decode'; // Import jwtDecode
 
 function SearchPage() {
   const { query } = useParams(); // Extract query from URL
@@ -9,6 +10,21 @@ function SearchPage() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Check if the user is admin from the token
+  useEffect(() => {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        console.log(decodedToken);
+        setIsAdmin(decodedToken.admin === true); // Ensure 'role' matches your token structure
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    }
+  }, []);
 
   // Redirect to home if query is empty or missing
   useEffect(() => {
@@ -48,7 +64,7 @@ function SearchPage() {
       {!loading && !error && movies.length === 0 && <p className="no-results-message">No movies found.</p>}
       <div className="search-results-container">
         {movies.map((movie) => (
-          <MovieBox key={movie._id} movie={movie} />
+          <MovieBox key={movie._id} movie={movie} isAdmin={isAdmin} />
         ))}
       </div>
     </div>

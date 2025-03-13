@@ -3,8 +3,7 @@ import CategoryRow from './categoryRow';
 import './Home.css';
 import TopMenu from '../Utils/TopMenu';
 import FeaturedVideo from './FeaturedVideo'; // Import the new component
-
-function Home() {
+function Home({ isAdmin = false }) {  // Accept isAdmin prop, default to false
   const [categories, setCategories] = useState([]);
   const [featuredMovie, setFeaturedMovie] = useState(null);
 
@@ -26,9 +25,8 @@ function Home() {
         const data = await response.json();
         setCategories(data.movies);
 
-        // Set a featured movie (e.g., first movie from the first category)
-        if (data.movies.length > 0 && data.movies[0].movies.length > 0) {
-          setFeaturedMovie(data.movies[0].movies[0]);
+        if (!isAdmin && data.movies.length > 0 && data.movies[0].movies.length > 0) {
+          setFeaturedMovie(data.movies[0].movies[0]); // Only set featured movie when not admin
         }
       } catch (error) {
         console.error('Error fetching movies:', error);
@@ -36,25 +34,27 @@ function Home() {
     };
 
     fetchMovies();
-  }, []);
+  }, [isAdmin]);
 
   return (
     <div className="home">
       <TopMenu />
 
-      {/* Featured Video Component */}
-      {featuredMovie && <FeaturedVideo movie={featuredMovie} />}
+      {/* Hide Featured Video for Admin */}
+      {!isAdmin && featuredMovie && <FeaturedVideo movie={featuredMovie} />}
 
-      {/* Category Rows */}
+      {/* Pass isAdmin to CategoryRow */}
       {categories.map((category) => (
         <CategoryRow
           key={category.category_id}
           category={category.category}
           movies={category.movies}
+          isAdmin={isAdmin} // ✅ Pass isAdmin prop
         />
       ))}
     </div>
   );
 }
+
 
 export default Home;

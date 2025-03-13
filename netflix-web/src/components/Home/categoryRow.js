@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import MovieBox from './movieBox';
 import './categoryRow.css';
 
-function CategoryRow({ category, movies }) {
+function CategoryRow({ category, movies, isAdmin = false }) {
   const rowRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [moviesPerView, setMoviesPerView] = useState(6); // Default value
@@ -108,7 +108,7 @@ function CategoryRow({ category, movies }) {
           }}
         >
           {displayedMovies.map((movie) => (
-            <MovieBox key={movie._id} movie={movie} />
+            <MovieBox key={movie._id} movie={movie} isAdmin={isAdmin} />
           ))}
         </div>
         {movies.length > moviesPerView && (
