@@ -1,25 +1,30 @@
 import React, { useState } from "react";
 import MoviesAdminPage from "./moviesAdminPage";
 import CategoriesAdminPage from "./categoriesAdminPage";
-import CreateCategoryForm from "./CreateCategoryForm"; // ✅ Import modal component
+import CreateCategoryForm from "./CreateCategoryForm";
+import CreateMovieForm from "./CreateMovieForm"; // ✅ Import the movie form
 import "./Admin.css";
 
 
 function Admin() {
   const [isMoviesView, setIsMoviesView] = useState(true);
   const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
+<<<<<<< Updated upstream
 
   const handleToggle = () => {
     setIsMoviesView(!isMoviesView); // ✅ Toggle between Movies & Categories
   };
+=======
+  const [isMovieModalOpen, setMovieModalOpen] = useState(false); // ✅ State for Movie Modal
+>>>>>>> Stashed changes
 
-  const handleAddCategoryClick = () => {
-    setCategoryModalOpen(true); // ✅ Open modal
-  };
+  // Functions to open/close category modal
+  const handleAddCategoryClick = () => setCategoryModalOpen(true);
+  const closeCategoryModal = () => setCategoryModalOpen(false);
 
-  const closeCategoryModal = () => {
-    setCategoryModalOpen(false); // ✅ Close modal
-  };
+  // Functions to open/close movie modal
+  const handleAddMovieClick = () => setMovieModalOpen(true);
+  const closeMovieModal = () => setMovieModalOpen(false);
 
   return (
     <div className="admin-container">
@@ -35,7 +40,9 @@ function Admin() {
 
       {/* Action Buttons */}
       <div className="admin-actions">
-        <button className="add-button">Add Movie</button>
+        <button className="add-button" onClick={handleAddMovieClick}>
+          Add Movie
+        </button>
         <button className="add-button" onClick={handleAddCategoryClick}>
           Add Category
         </button>
@@ -46,12 +53,28 @@ function Admin() {
         {isMoviesView ? <MoviesAdminPage /> : <CategoriesAdminPage />}
       </div>
 
+<<<<<<< Updated upstream
       {/* Show Category Modal when needed */}
+=======
+      {/* ✅ Category Modal */}
+>>>>>>> Stashed changes
       {isCategoryModalOpen && (
         <div className="modal-overlay" onClick={closeCategoryModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="close-button" onClick={closeCategoryModal}>✕</button>
             <CreateCategoryForm onSubmit={closeCategoryModal} onCancel={closeCategoryModal} />
+          </div>
+        </div>
+      )}
+
+      {/* ✅ Movie Modal */}
+      {isMovieModalOpen && (
+        <div className="modal-overlay" onClick={closeMovieModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-button" onClick={closeMovieModal}>
+              ✕
+            </button>
+            <CreateMovieForm onSubmit={closeMovieModal} onCancel={closeMovieModal} />
           </div>
         </div>
       )}
