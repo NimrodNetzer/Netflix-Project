@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import VideoPlayer from '../components/VideoPlayer';
 import './movieDetailsModal.css';
 
 function MovieDetailsModal({ movie, isOpen, onClose }) {
   const [relatedMovies, setRelatedMovies] = useState([]);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   useEffect(() => {
     const fetchRelatedMovies = async () => {
@@ -23,7 +25,6 @@ function MovieDetailsModal({ movie, isOpen, onClose }) {
 
         const data = await response.json();
 
-        // Fetch details for each movie ID in recommendedMovies
         const moviesDetails = await Promise.all(
           data.recommendedMovies.map(async (id) => {
             const movieResponse = await fetch(`http://localhost:4000/api/movies/${id}`, {
@@ -51,16 +52,23 @@ function MovieDetailsModal({ movie, isOpen, onClose }) {
     fetchRelatedMovies();
   }, [isOpen, movie]);
 
+  const handlePlayVideo = () => {
+    setIsVideoOpen(true);
+  };
+
+  const handleCloseVideo = (e) => {
+    if (e && e.stopPropagation) {
+      e.stopPropagation();
+    }
+    setIsVideoOpen(false);
+  };
+
   if (!isOpen || !movie) return null;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div
-        className="modal-content"
-        onClick={(e) => e.stopPropagation()} /* Prevent click on content from closing */
-      >
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="close-button" onClick={onClose}>✕</button>
-        {/* Movie Banner Section */}
         <div className="movie-banner">
           <img 
             src={`http://localhost:4000/${movie.picture}`} 
@@ -73,7 +81,7 @@ function MovieDetailsModal({ movie, isOpen, onClose }) {
           <div className="movie-details-header">
             <h1 className="movie-title">{movie.name}</h1>
             <div className="action-buttons">
-              <button className="play-button">
+              <button className="play-button" onClick={handlePlayVideo}>
                 <span className="play-icon">▶</span> הפעל
               </button>
               <button className="circle-button">
@@ -112,6 +120,18 @@ function MovieDetailsModal({ movie, isOpen, onClose }) {
           </div>
         </div>
       </div>
+
+      {isVideoOpen && (
+        <div className="video-overlay" onClick={(e) => e.stopPropagation()}>
+          <VideoPlayer
+            videoUrl={`http://localhost:4000/${movie.video}`}
+            videoName={movie.name}
+            play={true}
+            startFullscreen={true}
+            onClose={handleCloseVideo}
+          />
+        </div>
+      )}
     </div>
   );
 }
