@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './categoryBox.css';
 
-function CategoryBox({ category, onDelete, onEdit }) {
+function CategoryBox({ category, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(category.name);
   const [editedPromoted, setEditedPromoted] = useState(category.promoted);
@@ -13,12 +13,24 @@ function CategoryBox({ category, onDelete, onEdit }) {
     setSuccessMessage('');
 
     try {
-      await onEdit(category._id, editedName, editedPromoted);
-      setSuccessMessage('Category updated successfully!');
-      setTimeout(() => {
-        setIsEditing(false);
-        setSuccessMessage('');
-      }, 2000);
+      const response = await fetch(`http://localhost:4000/api/categories/${category._id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: 'Bearer ' + localStorage.getItem('jwt'),
+        },
+        body: JSON.stringify({ name: editedName, promoted: editedPromoted }),
+      });
+
+      if (response.status === 204 || response.ok) {
+        setSuccessMessage('Category updated successfully!');
+        setTimeout(() => {
+          setIsEditing(false);
+          setSuccessMessage('');
+        }, 2000);
+      } else {
+        throw new Error('Failed to update category');
+      }
     } catch (error) {
       console.error('Error updating category:', error);
     } finally {
@@ -55,8 +67,8 @@ function CategoryBox({ category, onDelete, onEdit }) {
             </div>
           </div>
 
-          {/* Success Message */}
-          {successMessage && <div className="success-message">{successMessage}</div>}
+          {/* ✅ Success Message (ONLY for updates, inside the card) */}
+          {successMessage && <p className="success-message">{successMessage}</p>}
 
           {/* Save & Cancel Buttons */}
           <div className="edit-actions">

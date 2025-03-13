@@ -1,51 +1,57 @@
-.category-row {
+/* 🎬 Scoped Category Row */
+.category-row .category-row {
   margin: 20px 0;
   color: white;
 }
 
-.category-title {
+/* 🎬 Title */
+.category-row .category-title {
   margin-left: 20px;
   font-size: 1.5rem;
 }
 
-.row-container {
+/* 🎬 Container for Movie Row */
+.category-row .row-container {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.movie-list {
+/* 🎬 Movie List */
+.category-row .movie-list {
   display: flex;
   overflow: hidden;
   scroll-behavior: smooth;
   animation: none; /* Reset animation */
 }
 
-@keyframes scroll-right {
+/* 🎬 Scroll Animations */
+@keyframes category-scroll-right {
   0% {
-    transform: translateX(0);
+      transform: translateX(0);
   }
   50% {
-    transform: translateX(-10px);
+      transform: translateX(-10px);
   }
   100% {
-    transform: translateX(0);
+      transform: translateX(0);
   }
 }
 
-@keyframes scroll-left {
+@keyframes category-scroll-left {
   0% {
-    transform: translateX(0);
+      transform: translateX(0);
   }
   50% {
-    transform: translateX(10px);
+      transform: translateX(10px);
   }
   100% {
-    transform: translateX(0);
+      transform: translateX(0);
   }
 }
 
-.scroll-button {
+/* 🎬 Scroll Buttons */
+.category-row .scroll-button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -63,19 +69,20 @@
   transition: background-color 0.3s;
 }
 
-.scroll-button:hover {
+.category-row .scroll-button:hover {
   background-color: rgba(255, 255, 255, 0.8);
 }
 
-.scroll-button.left {
+.category-row .scroll-button.left {
   left: 10px;
 }
 
-.scroll-button.right {
+.category-row .scroll-button.right {
   right: 10px;
 }
 
-.scrollbar-container {
+/* 🎬 Scrollbar Styling */
+.category-row .scrollbar-container {
   display: flex;
   margin: 10px 20px;
   height: 3px;
@@ -83,13 +90,13 @@
   border-radius: 3px;
 }
 
-.scrollbar-segment {
+.category-row .scrollbar-segment {
   flex: 1;
   background-color: rgba(255, 255, 255, 0.2);
   margin-right: 2px;
   transition: background-color 0.3s ease;
 }
 
-.scrollbar-segment.active {
+.category-row .scrollbar-segment.active {
   background-color: white;
 }
