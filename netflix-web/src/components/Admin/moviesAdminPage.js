@@ -1,8 +1,8 @@
-// MoviesAdminPage.js
 import React from 'react';
+import Home from '../Home/Home';
 
 function MoviesAdminPage() {
-  return <div>Movies Admin Page</div>;
+  return <Home isAdmin={true} />;
 }
 
-export default MoviesAdminPage; // Ensure default export
+export default MoviesAdminPage;
