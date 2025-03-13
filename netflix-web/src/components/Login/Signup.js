@@ -1,7 +1,6 @@
 import './Signup.css'; // Import the CSS file for styling
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import ClickableLogo from '../Utils/ClickableLogo';
 
 import profile1 from '../../assets/profile1.webp'; // Import predefined images
 import profile2 from '../../assets/profile2.webp';
@@ -52,7 +51,7 @@ const Signup = () => {
 
     return (
         <div className="signup">
-        <ClickableLogo></ClickableLogo>
+    
         <div className="signup-container">
             <h2>Sign Up</h2>
             <form onSubmit={handleSignup}>
