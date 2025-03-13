@@ -7,16 +7,44 @@ function MovieBox({ movie, width, isAdmin = false }) {
   const [selectedMovie, setSelectedMovie] = useState(movie);
   const [autoPlay, setAutoPlay] = useState(false); // ✅ Track if video should auto-play
 
+  const addToRecommendations = async () => {
+    const token = localStorage.getItem('jwt');
+    if (!token) {
+      console.error("No authentication token found.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:4000/api/movies/${movie._id}/recommend`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to add movie to recommendations (status: ${response.status})`);
+      }
+
+      console.log("Movie successfully added to recommendations.");
+    } catch (error) {
+      console.error("Error adding movie to recommendations:", error);
+    }
+  };
+
   const handleInfoClick = () => {
     setSelectedMovie(movie);
     setAutoPlay(false); // ❌ No auto-play when clicking "Info"
     setModalOpen(true);
   };
 
-  const handlePlayClick = () => {
+  const handlePlayClick = async () => {
     setSelectedMovie(movie);
     setAutoPlay(true); // ✅ Set auto-play when clicking "Play"
     setModalOpen(true);
+
+    await addToRecommendations(); // ✅ Add movie to recommendations when played
   };
 
   const handleDeleteClick = async () => {

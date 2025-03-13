@@ -1,46 +1,59 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // Import navigation hook
+import { useParams, useNavigate } from 'react-router-dom';
 import MovieBox from '../Home/movieBox';
 import './SearchPage.css';
-import { jwtDecode } from 'jwt-decode'; // Import jwtDecode
+import { jwtDecode } from 'jwt-decode';
 
 function SearchPage() {
-  const { query } = useParams(); // Extract query from URL
-  const navigate = useNavigate(); // Used for redirection
+  const { query } = useParams();
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState(query || '');
   const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  // Check if the user is admin from the token
+  // ✅ Decode token to check if user is admin
   useEffect(() => {
     const token = localStorage.getItem('jwt');
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
-        console.log(decodedToken);
-        setIsAdmin(decodedToken.admin === true); // Ensure 'role' matches your token structure
+        setIsAdmin(decodedToken.admin === true);
       } catch (error) {
         console.error("Error decoding token:", error);
       }
     }
   }, []);
 
-  // Redirect to home if query is empty or missing
+  // ✅ Update search term from URL and reset movies when query changes
   useEffect(() => {
-    if (!query || query.trim() === '') {
-      navigate('/home'); // Redirect to home page
-      return;
+    if (query !== searchTerm) {
+      setSearchTerm(query || '');
+      setMovies([]); // Clear results on new search
     }
-  }, [query, navigate]);
+  }, [query]);
 
+  // ✅ Redirect safely only when user **stops typing**
   useEffect(() => {
-    const fetchMovies = async () => {
-      if (!query || query.trim() === '') return; // Prevent unnecessary API calls
+    if (searchTerm.trim() === '') {
+      const delayRedirect = setTimeout(() => {
+        navigate('/home', { replace: true });
+      }, 500); // Delay navigation to prevent glitches
 
+      return () => clearTimeout(delayRedirect);
+    }
+  }, [searchTerm, navigate]);
+
+  // ✅ Fetch movies when user **stops typing**
+  useEffect(() => {
+    if (!searchTerm.trim()) return; // Prevent empty searches
+
+    const fetchMovies = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        setLoading(true);
-        const response = await fetch(`http://localhost:4000/api/movies/search/${query}`, {
+        const response = await fetch(`http://localhost:4000/api/movies/search/${searchTerm}`, {
           headers: { authorization: 'Bearer ' + localStorage.getItem('jwt') },
         });
         if (!response.ok) throw new Error('Failed to fetch search results');
@@ -53,12 +66,14 @@ function SearchPage() {
       }
     };
 
-    fetchMovies();
-  }, [query]);
+    const delaySearch = setTimeout(fetchMovies, 300); // ✅ Wait before calling API
+
+    return () => clearTimeout(delaySearch);
+  }, [searchTerm]);
 
   return (
     <div className="search-page">
-      <h1 className="search-title">Search Results for "{query}"</h1>
+      <h1 className="search-title">Search Results for "{searchTerm}"</h1>
       {loading && <p className="loading-message">Loading...</p>}
       {error && <p className="error-message">{error}</p>}
       {!loading && !error && movies.length === 0 && <p className="no-results-message">No movies found.</p>}

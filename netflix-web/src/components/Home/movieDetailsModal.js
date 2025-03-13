@@ -52,13 +52,40 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie, autoPlay }) {
     fetchRelatedMovies();
   }, [isOpen, movie]);
 
+  const addToRecommendations = async () => {
+    const token = localStorage.getItem('jwt');
+    if (!token) {
+      console.error("No authentication token found.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:4000/api/movies/${movie._id}/recommend`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to add movie to recommendations (status: ${response.status})`);
+      }
+
+      console.log("Movie successfully added to recommendations.");
+    } catch (error) {
+      console.error("Error adding movie to recommendations:", error);
+    }
+  };
+
   const handleMovieClick = (newMovie) => {
     updateMovie(newMovie);
     setIsVideoOpen(false); // ✅ Stop video when switching movies
   };
 
-  const handlePlayVideo = () => {
+  const handlePlayVideo = async () => {
     setIsVideoOpen(true);
+    await addToRecommendations(); // ✅ Add movie to recommendations when played
   };
 
   const handleCloseVideo = (e) => {
