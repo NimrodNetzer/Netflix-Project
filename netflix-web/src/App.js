@@ -6,6 +6,7 @@ import Signup from './components/Login/Signup';
 import Hero from './components/FirstPage/Hero';
 import SearchPage from './components/Utils/SearchPage'; 
 import TopMenu from './components/Utils/TopMenu'; 
+import Admin from './components/Admin/Admin';
 
 const PrivateRoute = ({ element: Element }) => {
   const isAuthenticated = localStorage.getItem('jwt'); // Check for JWT
@@ -21,7 +22,7 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/home" element={<Home/>} />
         <Route path="/search/:query" element={<SearchPage />} />
-
+        <Route path="/admin" element={<Admin />} />
         <Route path='/' element={
           <div className='App'>
           <Hero />
