@@ -2,14 +2,29 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './TopMenu.css';
 import HelperTopMenu from './HelperTopMenu';
+import { jwtDecode } from 'jwt-decode';
 
 function TopMenu() {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
   const searchRef = useRef(null);
   const inputRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        console.log(decodedToken);
+        setIsAdmin(decodedToken.admin === true);
+      } catch (error) {
+        console.error('Invalid token:', error);
+      }
+    }
+  }, []);
 
   // Show search input and keep focus
   const handleSearchClick = () => {
@@ -70,6 +85,7 @@ function TopMenu() {
         <li><a href="/">Movies</a></li>
         <li><a href="/">New & Popular</a></li>
         <li><a href="/">My List</a></li>
+        {isAdmin && <li><a href="/admin">Admin</a></li>}
       </ul>
       <div className="right-section">
         <div className="search-container" ref={searchRef}>
