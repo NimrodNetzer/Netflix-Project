@@ -6,7 +6,7 @@
   margin: 0;
   padding: 0;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  background: url('../assets/netflix-first-page-image.jpg') no-repeat center center; /* Center the background image */
+  background: url('../../assets/netflix-first-page-image.jpg') no-repeat center center; /* Center the background image */
   background-size: cover;
   height: 100vh;
   display: flex;

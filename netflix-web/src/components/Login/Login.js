@@ -1,4 +1,4 @@
-import ClickableLogo from './ClickableLogo';
+import ClickableLogo from '../Utils/ClickableLogo';
 import './Login.css'; // Import the CSS file for styling
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';

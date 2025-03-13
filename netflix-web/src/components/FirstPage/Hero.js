@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Hero.css';
-import logo from '../assets/LOGO.jpg'; // Assuming the logo is in the assets folder
+import logo from '../../assets/LOGO.jpg'; // Assuming the logo is in the assets folder
 import { useNavigate } from 'react-router-dom';
 
 function Hero() {
