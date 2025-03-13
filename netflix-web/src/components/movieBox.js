@@ -3,23 +3,30 @@ import './movieBox.css';
 import MovieDetailsModal from './movieDetailsModal'; // Import the modal component
 
 function MovieBox({ movie, width }) {
-  const [isModalOpen, setModalOpen] = useState(false); // State to handle modal visibility
+  const [isModalOpen, setModalOpen] = useState(false); // ✅ Controls if the modal is open
+  const [selectedMovie, setSelectedMovie] = useState(movie); // ✅ Tracks the currently selected movie
 
   const handleInfoClick = () => {
-    setModalOpen(true); // Open modal when "Info" button is clicked
+    setSelectedMovie(movie); // ✅ Set the clicked movie as the selected one
+    setModalOpen(true);
+  };
+
+  // ✅ Updates the movie inside the modal when clicking a related movie
+  const updateMovie = (newMovie) => {
+    setSelectedMovie(newMovie);
   };
 
   const closeModal = () => {
-    setModalOpen(false); // Close modal
+    setModalOpen(false);
   };
 
   return (
     <div className="movie-box" style={{ width }}>
-       <img
-    src={"http://localhost:4000/" + movie.picture} // Correctly referencing the movie's picture URL
-    alt={movie.name}    // Providing a valid alt description
-    className="default-image"
-  />
+      <img
+        src={`http://localhost:4000/${movie.picture}`}
+        alt={movie.name}
+        className="default-image"
+      />
       <div className="movie-hover-overlay">
         <div className="movie-hover-content">
           {/* Movie Title */}
@@ -41,11 +48,15 @@ function MovieBox({ movie, width }) {
               <span className="movie-time">{movie.time}</span>
             </div>
           </div>
-          
         </div>
       </div>
-      {/* Include the MovieDetailsModal */}
-      <MovieDetailsModal movie={movie} isOpen={isModalOpen} onClose={closeModal} />
+      {/* ✅ Pass the updateMovie function to allow changing the movie inside the modal */}
+      <MovieDetailsModal 
+        movie={selectedMovie} 
+        isOpen={isModalOpen} 
+        onClose={closeModal} 
+        updateMovie={updateMovie} 
+      />
     </div>
   );
 }

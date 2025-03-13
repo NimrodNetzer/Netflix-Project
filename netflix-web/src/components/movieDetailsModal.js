@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import VideoPlayer from '../components/VideoPlayer';
 import './movieDetailsModal.css';
 
-function MovieDetailsModal({ movie, isOpen, onClose }) {
+function MovieDetailsModal({ movie, isOpen, onClose, updateMovie }) { // ✅ Accept updateMovie function
   const [relatedMovies, setRelatedMovies] = useState([]);
-  const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   useEffect(() => {
     const fetchRelatedMovies = async () => {
@@ -52,15 +51,9 @@ function MovieDetailsModal({ movie, isOpen, onClose }) {
     fetchRelatedMovies();
   }, [isOpen, movie]);
 
-  const handlePlayVideo = () => {
-    setIsVideoOpen(true);
-  };
-
-  const handleCloseVideo = (e) => {
-    if (e && e.stopPropagation) {
-      e.stopPropagation();
-    }
-    setIsVideoOpen(false);
+  // ✅ Instead of navigating, update the modal with the clicked movie
+  const handleMovieClick = (newMovie) => {
+    updateMovie(newMovie); // Updates the modal with the clicked movie's details
   };
 
   if (!isOpen || !movie) return null;
@@ -69,30 +62,31 @@ function MovieDetailsModal({ movie, isOpen, onClose }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="close-button" onClick={onClose}>✕</button>
-        <div className="movie-banner">
+        <div className="movie-banner" style={{ height: '420px' }}>
           <img 
             src={`http://localhost:4000/${movie.picture}`} 
             alt={movie.name} 
             className="movie-banner-image"
+            style={{ height: '100%', objectFit: 'cover' }}
           />
         </div>
 
         <div className="movie-details-container">
           <div className="movie-details-header">
-            <h1 className="movie-title">{movie.name}</h1>
+            <h1 className="movie-title" style={{ fontFamily: 'Netflix Sans, Arial, sans-serif', fontWeight: 'bold', letterSpacing: '1px' }}>
+              {movie.name}
+            </h1>
             <div className="action-buttons">
-              <button className="play-button" onClick={handlePlayVideo}>
-                <span className="play-icon">▶</span> הפעל
+              <button className="play-button">
+                <span className="play-icon">▶</span> Play
               </button>
-              <button className="circle-button">
-                <span className="icon">👍</span>
-              </button>
-              <button className="circle-button">+</button>
             </div>
           </div>
 
-          <p className="movie-description">{movie.description}</p>
-          <div className="movie-meta">
+          <p className="movie-description" style={{ fontFamily: 'Netflix Sans, Arial, sans-serif' }}>
+            {movie.description}
+          </p>
+          <div className="movie-meta" style={{ fontFamily: 'Netflix Sans, Arial, sans-serif' }}>
             <span><strong>Year:</strong> {movie.year}</span>
             <span><strong>Duration:</strong> {movie.time} minutes</span>
             <span><strong>Age Rating:</strong> {movie.age}+</span>
@@ -100,17 +94,24 @@ function MovieDetailsModal({ movie, isOpen, onClose }) {
           </div>
 
           <div className="related-movies">
-            <h2>More Like This</h2>
+            <h2 style={{ fontFamily: 'Netflix Sans, Arial, sans-serif', fontWeight: 'bold', letterSpacing: '1px' }}>More Like This</h2>
             <div className="related-movie-list">
               {relatedMovies.length > 0 ? (
                 relatedMovies.map((relatedMovie) => (
-                  <div key={relatedMovie._id} className="related-movie-item">
+                  <div 
+                    key={relatedMovie._id} 
+                    className="related-movie-item" 
+                    onClick={() => handleMovieClick(relatedMovie)} // ✅ Update modal with clicked movie
+                    style={{ cursor: 'pointer' }} 
+                  >
                     <img
                       src={`http://localhost:4000/${relatedMovie.picture}`}
                       alt={relatedMovie.name}
                       className="related-movie-poster"
                     />
-                    <p className="related-movie-title">{relatedMovie.name}</p>
+                    <p className="related-movie-title" style={{ fontFamily: 'Netflix Sans, Arial, sans-serif', fontWeight: 'bold' }}>
+                      {relatedMovie.name}
+                    </p>
                   </div>
                 ))
               ) : (
@@ -120,18 +121,6 @@ function MovieDetailsModal({ movie, isOpen, onClose }) {
           </div>
         </div>
       </div>
-
-      {isVideoOpen && (
-        <div className="video-overlay" onClick={(e) => e.stopPropagation()}>
-          <VideoPlayer
-            videoUrl={`http://localhost:4000/${movie.video}`}
-            videoName={movie.name}
-            play={true}
-            startFullscreen={true}
-            onClose={handleCloseVideo}
-          />
-        </div>
-      )}
     </div>
   );
 }
