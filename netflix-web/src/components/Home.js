@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import CategoryRow from './categoryRow'; // Ensure this import is correct
+import CategoryRow from './categoryRow';
 import './Home.css';
 import TopMenu from './TopMenu';
+import FeaturedVideo from './FeaturedVideo'; // Import the new component
 
 function Home() {
   const [categories, setCategories] = useState([]);
+  const [featuredMovie, setFeaturedMovie] = useState(null);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -22,20 +24,28 @@ function Home() {
         }
 
         const data = await response.json();
-        setCategories(data.movies); // Update state with fetched categories
+        setCategories(data.movies);
+
+        // Set a featured movie (e.g., first movie from the first category)
+        if (data.movies.length > 0 && data.movies[0].movies.length > 0) {
+          setFeaturedMovie(data.movies[0].movies[0]);
+        }
       } catch (error) {
         console.error('Error fetching movies:', error);
-        // Handle errors here (e.g., display an error message to the user)
       }
     };
 
-    fetchMovies(); // Call the fetch function inside useEffect
-  }, []); // Empty dependency array: fetch movies only on mount
+    fetchMovies();
+  }, []);
 
   return (
     <div className="home">
-          <TopMenu />
+      <TopMenu />
 
+      {/* Featured Video Component */}
+      {featuredMovie && <FeaturedVideo movie={featuredMovie} />}
+
+      {/* Category Rows */}
       {categories.map((category) => (
         <CategoryRow
           key={category.category_id}
@@ -46,4 +56,5 @@ function Home() {
     </div>
   );
 }
+
 export default Home;
