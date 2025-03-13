@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './components/Login';
-import Home from './components/Home'; // New Home screen
-import Signup from './components/Signup';
-import Hero from './components/Hero';
+import Login from './components/Login/Login';
+import Home from './components/Home/Home'; // New Home screen
+import Signup from './components/Login/Signup';
+import Hero from './components/FirstPage/Hero';
 
 
 const PrivateRoute = ({ element: Element }) => {

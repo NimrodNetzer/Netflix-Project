@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CategoryRow from './categoryRow';
 import './Home.css';
-import TopMenu from './TopMenu';
+import TopMenu from '../Utils/TopMenu';
 import FeaturedVideo from './FeaturedVideo'; // Import the new component
 
 function Home() {

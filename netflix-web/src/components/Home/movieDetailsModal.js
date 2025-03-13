@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import VideoPlayer from '../components/VideoPlayer';
+import VideoPlayer from '../Utils/VideoPlayer';
 import './movieDetailsModal.css';
 
 function MovieDetailsModal({ movie, isOpen, onClose }) {

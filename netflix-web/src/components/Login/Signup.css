@@ -9,7 +9,7 @@
     justify-content: center;
     height: 100vh; /* Full viewport height */
     width: 100vw; /* Full viewport width */
-    background: url('../assets/netflix-first-page-image.jpg') no-repeat center center; /* Center the background image */
+    background: url('../../assets/netflix-first-page-image.jpg') no-repeat center center; /* Center the background image */
     background-size: cover; /* Ensure the image covers the entire container */
     color: white;
     text-align: center;

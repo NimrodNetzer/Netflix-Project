@@ -1,11 +1,11 @@
 import './Signup.css'; // Import the CSS file for styling
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import ClickableLogo from './ClickableLogo';
+import ClickableLogo from '../Utils/ClickableLogo';
 
-import profile1 from '../assets/profile1.webp'; // Import predefined images
-import profile2 from '../assets/profile2.webp';
-import profile3 from '../assets/profile3.webp';
+import profile1 from '../../assets/profile1.webp'; // Import predefined images
+import profile2 from '../../assets/profile2.webp';
+import profile3 from '../../assets/profile3.webp';
 
 const Signup = () => {
     const location = useLocation();
