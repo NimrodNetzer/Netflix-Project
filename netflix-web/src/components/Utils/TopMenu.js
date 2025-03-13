@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import './TopMenu.css';
-import HelperTopMenu from './HelperTopMenu';
-import { jwtDecode } from 'jwt-decode';
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import "./TopMenu.css";
 
 function TopMenu() {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const searchRef = useRef(null);
   const inputRef = useRef(null);
@@ -14,102 +13,91 @@ function TopMenu() {
   const location = useLocation();
 
   useEffect(() => {
-    const token = localStorage.getItem('jwt');
+    const token = localStorage.getItem("jwt");
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
-        console.log(decodedToken);
         setIsAdmin(decodedToken.admin === true);
       } catch (error) {
-        console.error('Invalid token:', error);
+        console.error("Invalid token:", error);
       }
     }
   }, []);
 
-  // Show search input and keep focus
-  const handleSearchClick = () => {
-    setIsSearchVisible(true);
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 100);
-  };
-
   // Handle search input change and navigate
   const handleSearchChange = (event) => {
     const value = event.target.value;
-
-    if (value !== searchQuery) {
-      setSearchQuery(value);
-    }
-
-    if (value.trim() === '') {
-      navigate('/home'); // Stay in Home when search is empty
+    setSearchQuery(value);
+    if (value.trim() === "") {
+      navigate("/home");
     } else {
       navigate(`/search/${value}`, { replace: true });
     }
   };
 
-  // Close search input only when clicking outside
-  const handleClickOutside = (event) => {
-    if (searchRef.current && !searchRef.current.contains(event.target)) {
-      setIsSearchVisible(false);
-    }
-  };
-
+  // Handle clicking outside search box to close it
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setIsSearchVisible(false);
+      }
     };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // ✅ Keep search open when switching pages (even when coming back from Home)
-  useEffect(() => {
-    if (location.pathname.startsWith('/search')) {
-      setIsSearchVisible(true);
-      setSearchQuery(decodeURIComponent(location.pathname.replace('/search/', '')));
-    } else if (location.pathname === '/home') {
-      setTimeout(() => setIsSearchVisible(true), 100); // Ensures search box stays open after navigating home
-    }
-  }, [location.pathname]);
+  // Handle sign out
+  const handleSignOut = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("jwt"); // Remove token
+    navigate("/login"); // Redirect to login page
+  };
 
   return (
-    <nav className="top-menu">
-      <ul>
-        <li className="netflix-logo">
-          <a href="/">
-            <img src="../assets/LOGO.jpg" alt="Netflix Logo" className="logo-img" />
-          </a>
-        </li>
-        <li><a href="/home">Home</a></li>
-        <li><a href="/">Movies</a></li>
-        <li><a href="/">New & Popular</a></li>
-        <li><a href="/">My List</a></li>
-        {isAdmin && <li><a href="/admin">Admin</a></li>}
-      </ul>
-      <div className="right-section">
-        <div className="search-container" ref={searchRef}>
-          <img
-            src="/assets/searchButton.png"
-            alt="Search"
-            className="search-icon"
-            onClick={handleSearchClick}
-          />
-          {isSearchVisible && (
-            <input
-              type="text"
-              placeholder="Search"
-              className="search-input visible"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              ref={inputRef}
-              autoFocus
+    <div className="top-menu-wrapper">
+      <nav className="top-menu">
+        <ul>
+          <li className="netflix-logo">
+            <a href="/">
+              <img src="../assets/LOGO.jpg" alt="Netflix Logo" className="logo-img" />
+            </a>
+          </li>
+          {/* ✅ Navigate Movies to Home */}
+          <li>
+            <a href="#" onClick={(e) => { e.preventDefault(); navigate("/home"); }}>
+              Movies
+            </a>
+          </li>
+          {/* ✅ Exit Netflix Button */}
+          <li>
+            <a href="#" onClick={handleSignOut}>Exit Netflix</a>
+          </li>
+          {isAdmin && <li><a href="/admin">Admin</a></li>}
+        </ul>
+        
+        <div className="right-section">
+          <div className="search-container" ref={searchRef}>
+            <img
+              src="/assets/searchButton.png"
+              alt="Search"
+              className="search-icon"
+              onClick={() => setIsSearchVisible(true)}
             />
-          )}
+            {isSearchVisible && (
+              <input
+                type="text"
+                placeholder="Search"
+                className="search-input visible"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                ref={inputRef}
+                autoFocus
+              />
+            )}
+          </div>
         </div>
-        <HelperTopMenu />
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 }
 

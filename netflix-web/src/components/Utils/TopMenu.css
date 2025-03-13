@@ -6,19 +6,20 @@
     padding: 10px 20px;
     background-color: #141414;
     color: #fff;
-    position: fixed; /* Keep menu fixed at the top */
+    position: fixed;
     width: 100%;
-    z-index: 1000; /* Ensure it's above everything */
+    z-index: 1000;
     top: 0;
     left: 0;
 }
 
+/* Navigation Links */
 .top-menu ul {
     display: flex;
     list-style: none;
     margin: 0;
     padding: 0;
-    align-items: center; /* Proper vertical alignment */
+    align-items: center;
 }
 
 .top-menu ul li {
@@ -28,39 +29,44 @@
 .top-menu ul li a {
     text-decoration: none;
     color: inherit;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
+    font-size: 16px;
+    font-weight: bold;
+    transition: color 0.3s ease;
 }
 
+/* Same style for "Exit Netflix" */
 .top-menu ul li a:hover {
     color: #e50914;
-    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
 }
 
-/* ========== RIGHT SECTION (SEARCH + PROFILE) ========== */
-.right-section {
+/* ========== RIGHT SECTION (SEARCH ONLY) ========== */
+.top-menu .right-section {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    gap: 15px; /* Adds space between elements */
+    justify-content: flex-start;  /* Align to the left */
+    gap: 15px;
+    margin-left: 150px; /* Moves the entire right section more to the left */
 }
 
-/* ========== SEARCH BUTTON ========== */
-.search-container {
+/* Search Button */
+.top-menu .search-container {
     position: relative;
     display: flex;
     align-items: center;
+    margin-left: -80px; /* Moves search icon further left */
 }
 
-.search-icon {
+.top-menu .search-icon {
     width: 30px;
     height: 30px;
     cursor: pointer;
 }
 
-/* ========== SEARCH INPUT ========== */
-.search-input {
+
+/* Search Input */
+.top-menu .search-input {
     position: absolute;
-    right: 40px; /* Push the input box left of the search button */
+    right: 40px;
     top: 50%;
     transform: translateY(-50%);
     padding: 8px;
@@ -74,38 +80,23 @@
     transition: width 0.3s ease, opacity 0.3s ease;
 }
 
-/* When Visible */
-.search-input.visible {
+.top-menu .search-input.visible {
     width: 200px;
     opacity: 1;
 }
 
-/* Make input stay open when typing */
-.search-container .search-input:focus {
-    width: 200px;
-    opacity: 1;
-}
-
-/* ========== PROFILE BUTTON ========== */
-.profile-button img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-/* ========== NETFLIX LOGO ========== */
-.netflix-logo {
+/* Netflix Logo */
+.top-menu .netflix-logo {
     display: flex;
     align-items: center;
 }
 
-.logo-img {
+.top-menu .logo-img {
     height: 40px;
     width: auto;
 }
 
-/* ========== FIXES FOR DUPLICATE MENU ========== */
-body {
-    padding-top: 60px; /* Prevents content from hiding behind fixed TopMenu */
+/* Ensure Top Menu Does Not Affect Other Components */
+.top-menu-wrapper {
+    padding-top: 60px;
 }
