@@ -5,6 +5,7 @@ import './categoriesList.css';
 function CategoriesList() {
   const [categories, setCategories] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     fetchCategories();
@@ -34,17 +35,24 @@ function CategoriesList() {
         headers: { authorization: 'Bearer ' + localStorage.getItem('jwt') },
       });
 
-      const data = await response.json(); // Get response body
+      if (response.status === 204 || response.ok) {
+        // ✅ Show success message
+        setSuccessMessage('Category deleted successfully!');
+        setErrorMessage('');
 
-      if (!response.ok) {
+        // ✅ Refresh the category list
+        fetchCategories();
+
+        // ✅ Hide success message after 3 seconds
+        setTimeout(() => setSuccessMessage(''), 3000);
+      } else {
+        const data = await response.json();
         throw new Error(data.error || 'Failed to delete category');
       }
-
-      // ✅ Remove deleted category from state
-      setCategories((prevCategories) => prevCategories.filter((cat) => cat._id !== id));
     } catch (error) {
       console.error('Error deleting category:', error);
-      setErrorMessage(error.message); // Display error message
+      setErrorMessage(error.message);
+      setSuccessMessage('');
     }
   };
 
@@ -59,37 +67,44 @@ function CategoriesList() {
         body: JSON.stringify({ name, promoted }),
       });
 
-      const data = await response.json();
+      if (response.status === 204 || response.ok) {
+        // ✅ Show success message
+        setSuccessMessage('Category updated successfully!');
+        setErrorMessage('');
 
-      if (!response.ok) {
+        // ✅ Refresh the category list
+        fetchCategories();
+
+        // ✅ Hide success message after 3 seconds
+        setTimeout(() => setSuccessMessage(''), 3000);
+      } else {
+        const data = await response.json();
         throw new Error(data.error || 'Failed to update category');
       }
-
-      // ✅ Update category in state
-      setCategories((prevCategories) =>
-        prevCategories.map((cat) =>
-          cat._id === id ? { ...cat, name, promoted } : cat
-        )
-      );
     } catch (error) {
       console.error('Error updating category:', error);
-      setErrorMessage(error.message); // Display error message
+      setErrorMessage(error.message);
+      setSuccessMessage('');
     }
   };
 
   return (
-    <div className="categories-list">
-      {/* ✅ Show error message if an error occurs */}
+    <div className="categories-container">
+      {/* ✅ Show success message when action is successful */}
+      {successMessage && <p className="success-message">{successMessage}</p>}
+      {/* ✅ Show error message when an error occurs */}
       {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-      {categories.map((category) => (
-        <CategoryBox 
-          key={category._id} 
-          category={category} 
-          onDelete={handleDeleteCategory} 
-          onEdit={handleEditCategory} 
-        />
-      ))}
+      <div className="categories-list">
+        {categories.map((category) => (
+          <CategoryBox 
+            key={category._id} 
+            category={category} 
+            onDelete={handleDeleteCategory} 
+            onEdit={handleEditCategory} 
+          />
+        ))}
+      </div>
     </div>
   );
 }
