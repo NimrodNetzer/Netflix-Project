@@ -1,11 +1,14 @@
+// MovieBox.js
 import React, { useState } from 'react';
 import './movieBox.css';
-import MovieDetailsModal from './movieDetailsModal'; // Import the modal component
+import MovieDetailsModal from './movieDetailsModal';
+import CreateMovieForm from '../Admin/CreateMovieForm'; // Import the form component for creation/updating
 
 function MovieBox({ movie, width, isAdmin = false }) {
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(movie);
-  const [autoPlay, setAutoPlay] = useState(false); // ✅ Track if video should auto-play
+  const [autoPlay, setAutoPlay] = useState(false);
 
   const addToRecommendations = async () => {
     const token = localStorage.getItem('jwt');
@@ -35,16 +38,21 @@ function MovieBox({ movie, width, isAdmin = false }) {
 
   const handleInfoClick = () => {
     setSelectedMovie(movie);
-    setAutoPlay(false); // ❌ No auto-play when clicking "Info"
+    setAutoPlay(false);
     setModalOpen(true);
   };
 
   const handlePlayClick = async () => {
     setSelectedMovie(movie);
-    setAutoPlay(true); // ✅ Set auto-play when clicking "Play"
+    setAutoPlay(true);
     setModalOpen(true);
 
-    await addToRecommendations(); // ✅ Add movie to recommendations when played
+    await addToRecommendations();
+  };
+
+  // Open edit modal and pass movie data to form
+  const handleEditClick = () => {
+    setEditModalOpen(true);
   };
 
   const handleDeleteClick = async () => {
@@ -65,21 +73,34 @@ function MovieBox({ movie, width, isAdmin = false }) {
       }
 
       alert("Movie deleted successfully");
-      window.location.reload(); // Refresh page after deletion
+      window.location.reload();
     } catch (error) {
       console.error("Error deleting movie:", error);
       alert("Failed to delete movie");
     }
   };
 
-  const updateMovie = (newMovie) => {
-    setSelectedMovie(newMovie);
-    setAutoPlay(false); // ❌ Reset auto-play when switching movies
+  // Update the local movie state after an update
+  const updateMovie = (updatedMovie) => {
+    setSelectedMovie(updatedMovie);
+    setAutoPlay(false);
+    // Optionally, you could refresh the movie list or update parent state here
   };
 
   const closeModal = () => {
     setModalOpen(false);
-    setAutoPlay(false); // ❌ Stop auto-play when closing modal
+    setAutoPlay(false);
+  };
+
+  // Callback for closing the edit form
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+  };
+
+  // When the movie is updated via the form, close the edit modal and update state
+  const handleEditSubmit = () => {
+    closeEditModal();
+    // Optionally refresh page or update state as needed
   };
 
   return (
@@ -91,7 +112,6 @@ function MovieBox({ movie, width, isAdmin = false }) {
       />
       <div className="movie-hover-overlay">
         <div className="movie-hover-content">
-          {/* Movie Title */}
           <div className="movie-title2">{movie.name}</div>
           <div className="movie-buttons">
             {!isAdmin && (
@@ -100,7 +120,7 @@ function MovieBox({ movie, width, isAdmin = false }) {
             <button className="info-button" onClick={handleInfoClick}>Info</button>
             {isAdmin && (
               <>
-                <button className="edit-button">✏ Edit</button>
+                <button className="edit-button" onClick={handleEditClick}>✏ Edit</button>
                 <button className="delete-button" onClick={handleDeleteClick}>🗑 Delete</button>
               </>
             )}
@@ -118,14 +138,20 @@ function MovieBox({ movie, width, isAdmin = false }) {
           </div>
         </div>
       </div>
-      {/* ✅ Pass autoPlay state to modal */}
       <MovieDetailsModal 
         movie={selectedMovie} 
         isOpen={isModalOpen} 
         onClose={closeModal} 
         updateMovie={updateMovie} 
-        autoPlay={autoPlay} // ✅ Auto-start video when clicking "Play"
+        autoPlay={autoPlay}
       />
+      {isEditModalOpen && (
+        <CreateMovieForm 
+          movieData={movie} 
+          onSubmit={handleEditSubmit} 
+          onCancel={closeEditModal} 
+        />
+      )}
     </div>
   );
 }
