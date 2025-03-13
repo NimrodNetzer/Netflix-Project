@@ -56,28 +56,21 @@
   width: 100%;
 }
 
-.form-label {
+/* Increase spacing for Category Name label */
+.category-name-label {
+  margin-bottom: 15px; /* Space below the label */
+  margin-top: 20px; /* Increased spacing to elevate the label upward */
   font-size: 1rem;
   font-weight: bold;
-  margin-bottom: 5px;
   text-align: left;
   width: 100%;
 }
 
-/* Elevate the Category Name label */
-.category-name-label {
-  margin-bottom: 10px; /* Increased spacing to elevate */
-}
-
-/* Elevate the Promoted label */
-.promoted-label {
-  margin-bottom: 10px; /* Increased spacing to elevate */
-}
-
+/* Input box styling */
 .form-input {
   width: 100%;
   padding: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 25px; /* Increase bottom spacing */
   border-radius: 5px;
   border: none;
   font-size: 1rem;
@@ -86,17 +79,21 @@
   text-align: center;
 }
 
+/* Center Promoted label above toggle */
 .toggle-section {
   width: 100%;
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Keep label aligned to the left */
+  align-items: center; /* Center items */
 }
 
-/* Center the toggle switch */
-.toggle-section .toggle-switch {
-  align-self: center; /* Center the toggle switch within toggle-section */
+/* Increase spacing for Promoted label */
+.promoted-label {
+  margin-bottom: 10px; /* Space above the toggle */
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center; /* Center text */
 }
 
 /* Toggle Switch Styles */
@@ -106,6 +103,7 @@
   height: 30px;
 }
 
+/* Hide default checkbox */
 .toggle-switch input {
   opacity: 0;
   width: 0;
@@ -120,10 +118,11 @@
   right: 0;
   bottom: 0;
   background-color: #444; /* Gray background when off */
-  border-radius: 30px; /* Rounded edges like the image */
+  border-radius: 30px;
   transition: background-color 0.3s;
 }
 
+/* Toggle switch circle */
 .toggle-slider:before {
   position: absolute;
   content: '';
@@ -131,21 +130,22 @@
   width: 24px;
   left: 3px;
   bottom: 3px;
-  background-color: white; /* White circle */
+  background-color: white;
   border-radius: 50%;
   transition: transform 0.3s;
 }
 
-/* When toggle is on */
+/* When toggle is ON */
 .toggle-switch input:checked + .toggle-slider {
-  background-color: #e50914; /* Netflix red when on */
+  background-color: #e50914; /* Netflix red */
 }
 
-/* Move the circle to the right when checked */
+/* Move circle when ON */
 .toggle-switch input:checked + .toggle-slider:before {
   transform: translateX(30px);
 }
 
+/* Submit button */
 .submit-button {
   width: 100%;
   padding: 12px;
@@ -163,12 +163,13 @@
   background: #b20710;
 }
 
+/* Success Message */
 .success-message {
   width: 100%;
   padding: 10px;
   margin-bottom: 15px;
   border-radius: 5px;
-  background-color: #666; /* Gray background */
+  background-color: #666;
   color: white;
   font-size: 1rem;
   text-align: center;
