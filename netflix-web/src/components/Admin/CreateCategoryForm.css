@@ -174,13 +174,3 @@
   font-size: 1rem;
   text-align: center;
 }
-
-.category-name-label {
-  display: block; /* Ensure label is treated as a block element */
-  margin-bottom: 20px; /* Adjust space BELOW the label */
-  margin-top: 10px; /* Adjust space ABOVE the label */
-  font-size: 1rem;
-  font-weight: bold;
-  text-align: center; 
-  width: 100%;
-}

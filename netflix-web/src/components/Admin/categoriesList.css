@@ -1,4 +1,4 @@
-/* ✅ Full-Screen Dark Background */
+/* 🎬 Categories Page Styling (Scoped) */
 .categories-container {
     display: flex;
     flex-direction: column;
@@ -7,10 +7,12 @@
     background-color: #141414; /* Netflix Black */
     min-height: 100vh;
     color: white;
+    width: 100vw;
+    box-sizing: border-box;
 }
 
 /* ✅ Spacing & Alignment */
-.categories-list {
+.categories-container .categories-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: center; /* Spread categories evenly */
@@ -20,7 +22,7 @@
 }
 
 /* ✅ Category Box Styling (Netflix Look) */
-.category-box {
+.categories-container .category-box {
     background-color: #222;
     padding: 20px;
     border-radius: 8px;
@@ -38,25 +40,25 @@
 }
 
 /* ✅ Hover Effect */
-.category-box:hover {
+.categories-container .category-box:hover {
     transform: scale(1.05);
     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5);
 }
 
 /* ✅ Category Name & Promoted Label */
-.category-content {
+.categories-container .category-content {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.category-title {
+.categories-container .category-title {
     font-size: 1.6rem;
     font-weight: bold;
     margin-bottom: 8px;
 }
 
-.category-promoted {
+.categories-container .category-promoted {
     font-size: 1rem;
     color: #aaa;
     display: flex;
@@ -65,16 +67,16 @@
 }
 
 /* ✅ Buttons Section */
-.category-actions {
+.categories-container .category-actions {
     display: flex;
     justify-content: center;
     gap: 15px;
     margin-top: 12px;
 }
 
-/* ✅ Edit & Delete Buttons */
-.edit-button,
-.delete-button {
+/* ✅ Edit & Delete Buttons (Scoped) */
+.categories-container .edit-button,
+.categories-container .delete-button {
     background: rgba(255, 255, 255, 0.1);
     color: white;
     border: none;
@@ -86,29 +88,29 @@
 }
 
 /* ✅ Hover Effect for Buttons */
-.edit-button:hover,
-.delete-button:hover {
+.categories-container .edit-button:hover,
+.categories-container .delete-button:hover {
     background: rgba(255, 255, 255, 0.3);
     transform: scale(1.1);
 }
 
 /* ✅ Colors for Edit & Delete */
-.delete-button {
+.categories-container .delete-button {
     background: rgba(255, 0, 0, 0.2);
 }
-.delete-button:hover {
+.categories-container .delete-button:hover {
     background: rgba(255, 0, 0, 0.5);
 }
 
-.edit-button {
+.categories-container .edit-button {
     background: rgba(255, 255, 0, 0.2);
 }
-.edit-button:hover {
+.categories-container .edit-button:hover {
     background: rgba(255, 255, 0, 0.5);
 }
 
 /* ✅ Success & Error Messages */
-.success-message {
+.categories-container .success-message {
     color: green;
     background: rgba(0, 255, 0, 0.1);
     padding: 10px;
@@ -118,17 +120,8 @@
     font-weight: bold;
 }
 
-.error-message {
-    color: red;
-    background: rgba(255, 0, 0, 0.1);
-    padding: 10px;
-    margin: 10px 0;
-    text-align: center;
-    border-radius: 5px;
-    font-weight: bold;
-}
 /* ✅ Error message for delete action */
-.delete-error-message {
+.categories-container .delete-error-message {
     color: white;
     background: rgba(255, 0, 0, 0.8); /* Bright red */
     padding: 15px;
@@ -141,4 +134,23 @@
     justify-content: center;
     align-items: center;
     box-shadow: 0 4px 10px rgba(255, 0, 0, 0.5);
+    animation: fadeOut 5s forwards; /* ⏳ Fades out after 5 seconds */
+}
+
+/* 🎬 Animation for Auto-Hide Message */
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; display: none; }
+}
+
+/* 🎬 Responsive Adjustments */
+@media (max-width: 768px) {
+    .categories-container .categories-list {
+        flex-direction: column;
+        align-items: center;
+    }
+    .categories-container .category-box {
+        width: 90%;
+    }
 }
