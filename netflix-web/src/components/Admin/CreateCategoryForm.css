@@ -25,6 +25,14 @@
   position: relative;
 }
 
+/* Scoped h2 styles to modal-content */
+.modal-content h2 {
+  font-family: 'Netflix Sans', Arial, sans-serif;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  color: #e50914; /* Netflix red */
+}
+
 .close-button {
   position: absolute;
   top: 10px;
@@ -44,13 +52,6 @@
   color: #b3b3b3;
 }
 
-h2 {
-  font-family: 'Netflix Sans', Arial, sans-serif;
-  font-size: 1.8rem;
-  margin-bottom: 15px;
-  color: #e50914; /* Netflix red */
-}
-
 .category-form {
   width: 100%;
 }
@@ -61,6 +62,16 @@ h2 {
   margin-bottom: 5px;
   text-align: left;
   width: 100%;
+}
+
+/* Elevate the Category Name label */
+.category-name-label {
+  margin-bottom: 10px; /* Increased spacing to elevate */
+}
+
+/* Elevate the Promoted label */
+.promoted-label {
+  margin-bottom: 10px; /* Increased spacing to elevate */
 }
 
 .form-input {
@@ -78,30 +89,61 @@ h2 {
 .toggle-section {
   width: 100%;
   margin-bottom: 20px;
-}
-
-.toggle-buttons {
   display: flex;
-  justify-content: space-between;
-  width: 100%;
+  flex-direction: column;
+  align-items: flex-start; /* Keep label aligned to the left */
 }
 
-.toggle-button {
-  flex: 1;
-  padding: 10px;
-  margin: 0 5px;
-  border-radius: 5px;
-  border: none;
+/* Center the toggle switch */
+.toggle-section .toggle-switch {
+  align-self: center; /* Center the toggle switch within toggle-section */
+}
+
+/* Toggle Switch Styles */
+.toggle-switch {
+  position: relative;
+  width: 60px;
+  height: 30px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
   cursor: pointer;
-  font-size: 1rem;
-  font-weight: bold;
-  background: #444;
-  color: white;
-  transition: background 0.3s;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #444; /* Gray background when off */
+  border-radius: 30px; /* Rounded edges like the image */
+  transition: background-color 0.3s;
 }
 
-.toggle-button.active {
-  background: #e50914 !important;
+.toggle-slider:before {
+  position: absolute;
+  content: '';
+  height: 24px;
+  width: 24px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white; /* White circle */
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+/* When toggle is on */
+.toggle-switch input:checked + .toggle-slider {
+  background-color: #e50914; /* Netflix red when on */
+}
+
+/* Move the circle to the right when checked */
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(30px);
 }
 
 .submit-button {
@@ -126,7 +168,7 @@ h2 {
   padding: 10px;
   margin-bottom: 15px;
   border-radius: 5px;
-  background-color: #28a745; /* Green for success */
+  background-color: #666; /* Gray background */
   color: white;
   font-size: 1rem;
   text-align: center;

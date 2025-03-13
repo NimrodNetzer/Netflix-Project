@@ -65,7 +65,7 @@ const CreateCategoryForm = ({ onSubmit, onCancel }) => {
 
         <form onSubmit={handleSubmit} className="category-form">
           {/* Category Name Input */}
-          <label className="form-label">Category Name:</label>
+          <label className="form-label category-name-label">Category Name:</label>
           <input
             type="text"
             className="form-input"
@@ -77,22 +77,15 @@ const CreateCategoryForm = ({ onSubmit, onCancel }) => {
 
           {/* Promoted Toggle with Label */}
           <div className="toggle-section">
-            <label className="form-label">Promoted:</label>
-            <div className="toggle-buttons">
-              <button
-                type="button"
-                className={`toggle-button ${isPromoted ? 'active' : ''}`}
-                onClick={() => setIsPromoted(true)}
-              >
-                Yes
-              </button>
-              <button
-                type="button"
-                className={`toggle-button ${!isPromoted ? 'active' : ''}`}
-                onClick={() => setIsPromoted(false)}
-              >
-                No
-              </button>
+            <label className="form-label promoted-label">Promoted:</label>
+            <div className="toggle-switch">
+              <input
+                type="checkbox"
+                id="promoted-toggle"
+                checked={isPromoted}
+                onChange={() => setIsPromoted(!isPromoted)}
+              />
+              <label htmlFor="promoted-toggle" className="toggle-slider"></label>
             </div>
           </div>
 
@@ -109,4 +102,4 @@ const CreateCategoryForm = ({ onSubmit, onCancel }) => {
   );
 };
 
-export default CreateCategoryForm;  
+export default CreateCategoryForm;
