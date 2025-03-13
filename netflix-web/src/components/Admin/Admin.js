@@ -9,14 +9,11 @@ import "./Admin.css";
 function Admin() {
   const [isMoviesView, setIsMoviesView] = useState(true);
   const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
-<<<<<<< Updated upstream
-
   const handleToggle = () => {
     setIsMoviesView(!isMoviesView); // ✅ Toggle between Movies & Categories
   };
-=======
   const [isMovieModalOpen, setMovieModalOpen] = useState(false); // ✅ State for Movie Modal
->>>>>>> Stashed changes
+
 
   // Functions to open/close category modal
   const handleAddCategoryClick = () => setCategoryModalOpen(true);
@@ -52,12 +49,9 @@ function Admin() {
       <div className="admin-content">
         {isMoviesView ? <MoviesAdminPage /> : <CategoriesAdminPage />}
       </div>
-
-<<<<<<< Updated upstream
       {/* Show Category Modal when needed */}
-=======
       {/* ✅ Category Modal */}
->>>>>>> Stashed changes
+
       {isCategoryModalOpen && (
         <div className="modal-overlay" onClick={closeCategoryModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
