@@ -1,11 +1,20 @@
 .movie-box {
   position: relative;
-  height: 200px; /* Fixed height */
-  width: 300px; /* Fixed width */ 
+  height: 250px; /* Adjusted height for better proportions */
+  width: 300px; /* Fixed width for consistency */
   margin: 10px;
   overflow: hidden;
-  border-radius: 8px; /* Add rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+  background-color: #222; /* Dark background for contrast */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+
+
+.movie-box:hover .default-image {
+  filter: brightness(0.5); /* Darkens the image */
 }
 
 .default-image {
@@ -16,7 +25,7 @@
 }
 
 .movie-box:hover .default-image {
-  filter: brightness(0.5); /* Darkens the image */
+  filter: brightness(0.6); /* Darkens the image */
 }
 
 .movie-hover-overlay {
@@ -44,35 +53,36 @@
 }
 
 .movie-title2 {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   color: #fff;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); /* Add text shadow for better readability */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
 .movie-buttons {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin-bottom: 15px;
+  gap: 12px;
+  margin-bottom: 10px;
 }
 
 .play-button,
 .info-button {
-  background: gray;
+  background: rgba(255, 255, 255, 0.1);
   color: white;
-  border: none;
-  padding: 6px 12px;
-  font-size: 0.8rem;
+  border: 1px solid white;
+  padding: 8px 14px;
+  font-size: 0.9rem;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
+  transition: background-color 0.3s ease-in-out, transform 0.2s;
 }
 
 .play-button:hover,
 .info-button:hover {
-  background: #444; /* Darker shade on hover */
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
 }
 
 .movie-info {
@@ -85,16 +95,16 @@
 
 .movie-detail-box {
   display: inline-block;
-  background: rgba(50, 50, 50, 0.8); /* Semi-transparent background */
+  background: rgba(50, 50, 50, 0.8);
   padding: 4px 8px;
   border-radius: 3px;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: white;
   text-align: center;
 }
 
 .movie-detail-box span {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
 }
 
 .movie-categories {
@@ -109,12 +119,7 @@
   background: rgba(50, 50, 50, 0.8);
   padding: 4px 8px;
   border-radius: 3px;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: white;
   text-align: center;
-}
-
-/* Break into a new row if there are more than three categories */
-.movie-categories:nth-child(3n) {
-  margin-top: 5px;
 }

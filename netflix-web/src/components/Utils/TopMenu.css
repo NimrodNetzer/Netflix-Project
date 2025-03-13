@@ -1,4 +1,4 @@
-/* Top Menu Styles */
+/* ========== TOP MENU STYLES ========== */
 .top-menu {
     display: flex;
     justify-content: space-between;
@@ -6,6 +6,11 @@
     padding: 10px 20px;
     background-color: #141414;
     color: #fff;
+    position: fixed; /* Keep menu fixed at the top */
+    width: 100%;
+    z-index: 1000; /* Ensure it's above everything */
+    top: 0;
+    left: 0;
 }
 
 .top-menu ul {
@@ -13,103 +18,37 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    align-items: flex-middle; /* Aligns the menu items to the middle */
-    margin-top: 15px; /* Adds spacing from the top */
+    align-items: center; /* Proper vertical alignment */
 }
 
 .top-menu ul li {
-    margin-right: 2px;
-    margin-left: 25px;
+    margin-right: 20px;
 }
 
-/* Add hover shadow to menu items */
 .top-menu ul li a {
     text-decoration: none;
     color: inherit;
-    transition: color 0.3s ease, text-shadow 0.3s ease; /* Smooth shadow transition */
+    transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .top-menu ul li a:hover {
-    color: #e50914; /* Netflix red for hover effect */
-    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8); /* Darker shadow on hover */
+    color: #e50914;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
 }
 
-
+/* ========== RIGHT SECTION (SEARCH + PROFILE) ========== */
 .right-section {
     display: flex;
-    align-items: center; /* Keeps items vertically aligned */
-    justify-content: flex-end; /* Aligns items to the right */
-    width: auto; /* Automatically shrink based on content */
-    padding: 0 10px; /* Adjust padding for a smaller box */
-    margin-right: 10px; /* Space from the edge */
-    gap: 10px; /* Space between elements inside the right section */
-}
-
-
-.search-button,
-.profile-button {
-    display: flex;
-    justify-content: center;
     align-items: center;
-    background-color: transparent;
-    border: none;
-    padding: 5px;
-    cursor: pointer;
-    border-radius: 50%; /* Makes the buttons circular */
-    width: 40px; /* Set a fixed width for circular shape */
-    height: 40px; /* Set the same height as width */
+    justify-content: flex-end;
+    gap: 15px; /* Adds space between elements */
 }
 
-
-
-/* Search Button */
-.search-button {
-    background-color: transparent;
-    border: none;
-    margin-right: 15px;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-}
-
-.search-button i {
-    color: #fff; /* Search icon color */
-    font-size: 20px; /* Adjust size */
-}
-
-/* Search Input */
-.search-input {
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    background-color: #333;
-    color: #fff;
-    display: none; /* Hidden by default */
-    transition: all 0.3s ease-in-out;
-}
-
-.search-input.visible {
-    display: block; /* Revealed when visible */
-    margin-left: 10px;
-    width: 200px; /* Adjust width as needed */
-}
-
-/* Right Section */
-.right-section {
-    display: flex;
-    align-items: center; /* Aligns buttons to the center */
-    justify-content: flex-end; /* Aligns all items to the right side */
-    height: 100%;
-}
-
+/* ========== SEARCH BUTTON ========== */
 .search-container {
     position: relative;
     display: flex;
     align-items: center;
-    margin-left: auto; /* Remove this if present */
-    margin-right: 20px; /* Add margin to the right */
 }
 
 .search-icon {
@@ -118,54 +57,55 @@
     cursor: pointer;
 }
 
-/* Search Input */
+/* ========== SEARCH INPUT ========== */
 .search-input {
     position: absolute;
-    right: 40px; /* Align the box to the left of the search button */
+    right: 40px; /* Push the input box left of the search button */
     top: 50%;
     transform: translateY(-50%);
     padding: 8px;
     border: 1px solid #555;
     border-radius: 5px;
     background-color: #333;
-    color: #fff;
-    width: 0; /* Start with no width */
-    opacity: 0; /* Hidden initially */
-    overflow: hidden; /* Prevent text overflow */
-    transition: width 0.3s ease, opacity 0.3s ease; /* Smooth animation */
+    color: white;
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: width 0.3s ease, opacity 0.3s ease;
 }
 
 /* When Visible */
 .search-input.visible {
-    width: 200px; /* Expand width to the left */
-    opacity: 1; /* Fade in */
+    width: 200px;
+    opacity: 1;
 }
 
-
-/* Make Input Visible When Toggled */
-.search-container .search-input {
-    display: block; /* Visible when toggled */
+/* Make input stay open when typing */
+.search-container .search-input:focus {
+    width: 200px;
+    opacity: 1;
 }
 
-/* Profile Button */
+/* ========== PROFILE BUTTON ========== */
 .profile-button img {
-    margin-right: 1px;
     width: 40px;
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
 }
 
+/* ========== NETFLIX LOGO ========== */
 .netflix-logo {
     display: flex;
     align-items: center;
-    height: 100%;
 }
 
 .logo-img {
-    height: 30px;
+    height: 40px;
     width: auto;
-    display: block;
-    position: relative;
-    top: -6px; /* Adjust this value for perfect centering */
+}
+
+/* ========== FIXES FOR DUPLICATE MENU ========== */
+body {
+    padding-top: 60px; /* Prevents content from hiding behind fixed TopMenu */
 }
