@@ -4,9 +4,14 @@ import CategoriesAdminPage from "./categoriesAdminPage";
 import CreateCategoryForm from "./CreateCategoryForm"; // ✅ Import modal component
 import "./Admin.css";
 
+
 function Admin() {
   const [isMoviesView, setIsMoviesView] = useState(true);
-  const [isCategoryModalOpen, setCategoryModalOpen] = useState(false); // ✅ State for modal visibility
+  const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
+
+  const handleToggle = () => {
+    setIsMoviesView(!isMoviesView); // ✅ Toggle between Movies & Categories
+  };
 
   const handleAddCategoryClick = () => {
     setCategoryModalOpen(true); // ✅ Open modal
@@ -18,20 +23,14 @@ function Admin() {
 
   return (
     <div className="admin-container">
-      {/* Toggle between Movies & Categories */}
-      <div className="admin-toggle">
-        <button 
-          className={`toggle-button ${isMoviesView ? "active" : ""}`} 
-          onClick={() => setIsMoviesView(true)}
-        >
-          Movies
-        </button>
-        <button 
-          className={`toggle-button ${!isMoviesView ? "active" : ""}`} 
-          onClick={() => setIsMoviesView(false)}
-        >
-          Categories
-        </button>
+      {/* Toggle Switch for Movies & Categories */}
+      <div className="toggle-switch-container">
+        <span className="toggle-label">Movies</span>
+        <label className="toggle-switch">
+          <input type="checkbox" checked={!isMoviesView} onChange={handleToggle} />
+          <span className="toggle-slider"></span>
+        </label>
+        <span className="toggle-label">Categories</span>
       </div>
 
       {/* Action Buttons */}
@@ -42,18 +41,16 @@ function Admin() {
         </button>
       </div>
 
-      {/* Movies or Categories Page */}
+      {/* Display Movies or Categories based on toggle selection */}
       <div className="admin-content">
         {isMoviesView ? <MoviesAdminPage /> : <CategoriesAdminPage />}
       </div>
 
-      {/* ✅ Show Category Modal when needed */}
+      {/* Show Category Modal when needed */}
       {isCategoryModalOpen && (
         <div className="modal-overlay" onClick={closeCategoryModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-button" onClick={closeCategoryModal}>
-              ✕
-            </button>
+            <button className="close-button" onClick={closeCategoryModal}>✕</button>
             <CreateCategoryForm onSubmit={closeCategoryModal} onCancel={closeCategoryModal} />
           </div>
         </div>
