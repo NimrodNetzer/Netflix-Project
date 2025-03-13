@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import VideoPlayer from '../Utils/VideoPlayer';
+import VideoPlayer from '../Utils/VideoPlayer'; // ✅ Ensure correct path
 import './movieDetailsModal.css';
 
-function MovieDetailsModal({ movie, isOpen, onClose, updateMovie }) { // ✅ Accept updateMovie function
+function MovieDetailsModal({ movie, isOpen, onClose, updateMovie, autoPlay }) {
   const [relatedMovies, setRelatedMovies] = useState([]);
+  const [isVideoOpen, setIsVideoOpen] = useState(autoPlay || false); // ✅ Start video if autoPlay is true
 
   useEffect(() => {
     const fetchRelatedMovies = async () => {
@@ -51,10 +52,25 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie }) { // ✅ Acc
     fetchRelatedMovies();
   }, [isOpen, movie]);
 
-  // ✅ Instead of navigating, update the modal with the clicked movie
   const handleMovieClick = (newMovie) => {
-    updateMovie(newMovie); // Updates the modal with the clicked movie's details
+    updateMovie(newMovie);
+    setIsVideoOpen(false); // ✅ Stop video when switching movies
   };
+
+  const handlePlayVideo = () => {
+    setIsVideoOpen(true);
+  };
+
+  const handleCloseVideo = (e) => {
+    if (e && e.stopPropagation) {
+      e.stopPropagation();
+    }
+    setIsVideoOpen(false);
+  };
+
+  useEffect(() => {
+    setIsVideoOpen(autoPlay); // ✅ Ensure video starts if autoPlay is true
+  }, [autoPlay]);
 
   if (!isOpen || !movie) return null;
 
@@ -73,20 +89,16 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie }) { // ✅ Acc
 
         <div className="movie-details-container">
           <div className="movie-details-header">
-            <h1 className="movie-title" style={{ fontFamily: 'Netflix Sans, Arial, sans-serif', fontWeight: 'bold', letterSpacing: '1px' }}>
-              {movie.name}
-            </h1>
+            <h1 className="movie-title">{movie.name}</h1>
             <div className="action-buttons">
-              <button className="play-button">
+              <button className="play-button" onClick={handlePlayVideo}>
                 <span className="play-icon">▶</span> Play
               </button>
             </div>
           </div>
 
-          <p className="movie-description" style={{ fontFamily: 'Netflix Sans, Arial, sans-serif' }}>
-            {movie.description}
-          </p>
-          <div className="movie-meta" style={{ fontFamily: 'Netflix Sans, Arial, sans-serif' }}>
+          <p className="movie-description">{movie.description}</p>
+          <div className="movie-meta">
             <span><strong>Year:</strong> {movie.year}</span>
             <span><strong>Duration:</strong> {movie.time} minutes</span>
             <span><strong>Age Rating:</strong> {movie.age}+</span>
@@ -94,14 +106,14 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie }) { // ✅ Acc
           </div>
 
           <div className="related-movies">
-            <h2 style={{ fontFamily: 'Netflix Sans, Arial, sans-serif', fontWeight: 'bold', letterSpacing: '1px' }}>More Like This</h2>
+            <h2>More Like This</h2>
             <div className="related-movie-list">
               {relatedMovies.length > 0 ? (
                 relatedMovies.map((relatedMovie) => (
                   <div 
                     key={relatedMovie._id} 
                     className="related-movie-item" 
-                    onClick={() => handleMovieClick(relatedMovie)} // ✅ Update modal with clicked movie
+                    onClick={() => handleMovieClick(relatedMovie)} 
                     style={{ cursor: 'pointer' }} 
                   >
                     <img
@@ -109,9 +121,7 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie }) { // ✅ Acc
                       alt={relatedMovie.name}
                       className="related-movie-poster"
                     />
-                    <p className="related-movie-title" style={{ fontFamily: 'Netflix Sans, Arial, sans-serif', fontWeight: 'bold' }}>
-                      {relatedMovie.name}
-                    </p>
+                    <p className="related-movie-title">{relatedMovie.name}</p>
                   </div>
                 ))
               ) : (
@@ -121,6 +131,18 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie }) { // ✅ Acc
           </div>
         </div>
       </div>
+
+      {isVideoOpen && (
+        <div className="video-overlay" onClick={(e) => e.stopPropagation()}>
+          <VideoPlayer
+            videoUrl={`http://localhost:4000/${movie.video}`}
+            videoName={movie.name}
+            play={true}
+            startFullscreen={true}
+            onClose={handleCloseVideo}
+          />
+        </div>
+      )}
     </div>
   );
 }

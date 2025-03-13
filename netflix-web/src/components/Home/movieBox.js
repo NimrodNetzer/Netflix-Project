@@ -3,21 +3,30 @@ import './movieBox.css';
 import MovieDetailsModal from './movieDetailsModal'; // Import the modal component
 
 function MovieBox({ movie, width }) {
-  const [isModalOpen, setModalOpen] = useState(false); // ✅ Controls if the modal is open
-  const [selectedMovie, setSelectedMovie] = useState(movie); // ✅ Tracks the currently selected movie
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedMovie, setSelectedMovie] = useState(movie);
+  const [autoPlay, setAutoPlay] = useState(false); // ✅ Track if video should auto-play
 
   const handleInfoClick = () => {
-    setSelectedMovie(movie); // ✅ Set the clicked movie as the selected one
+    setSelectedMovie(movie);
+    setAutoPlay(false); // ❌ No auto-play when clicking "Info"
     setModalOpen(true);
   };
 
-  // ✅ Updates the movie inside the modal when clicking a related movie
+  const handlePlayClick = () => {
+    setSelectedMovie(movie);
+    setAutoPlay(true); // ✅ Set auto-play when clicking "Play"
+    setModalOpen(true);
+  };
+
   const updateMovie = (newMovie) => {
     setSelectedMovie(newMovie);
+    setAutoPlay(false); // ❌ Reset auto-play when switching movies
   };
 
   const closeModal = () => {
     setModalOpen(false);
+    setAutoPlay(false); // ❌ Stop auto-play when closing modal
   };
 
   return (
@@ -32,10 +41,9 @@ function MovieBox({ movie, width }) {
           {/* Movie Title */}
           <div className="movie-title2">{movie.name}</div>
           <div className="movie-buttons">
-            <button className="play-button">▶ Play</button>
-            <button className="info-button" onClick={handleInfoClick}>
-              Info
-            </button>
+            {/* ✅ "Play" button now starts video immediately */}
+            <button className="play-button" onClick={handlePlayClick}>▶ Play</button>
+            <button className="info-button" onClick={handleInfoClick}>Info</button>
           </div>
           <div className="movie-info">
             <div className="movie-detail-box">
@@ -50,12 +58,13 @@ function MovieBox({ movie, width }) {
           </div>
         </div>
       </div>
-      {/* ✅ Pass the updateMovie function to allow changing the movie inside the modal */}
+      {/* ✅ Pass autoPlay state to modal */}
       <MovieDetailsModal 
         movie={selectedMovie} 
         isOpen={isModalOpen} 
         onClose={closeModal} 
         updateMovie={updateMovie} 
+        autoPlay={autoPlay} // ✅ Auto-start video when clicking "Play"
       />
     </div>
   );
