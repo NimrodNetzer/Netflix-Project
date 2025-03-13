@@ -4,8 +4,7 @@ import './categoriesList.css';
 
 function CategoriesList() {
   const [categories, setCategories] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  const [message, setMessage] = useState({ type: '', text: '' });
 
   useEffect(() => {
     fetchCategories();
@@ -22,7 +21,7 @@ function CategoriesList() {
       setCategories(data);
     } catch (error) {
       console.error('Error fetching categories:', error);
-      setErrorMessage('Failed to load categories.');
+      setMessage({ type: 'error', text: 'Failed to load categories.' });
     }
   };
 
@@ -36,72 +35,31 @@ function CategoriesList() {
       });
 
       if (response.status === 204 || response.ok) {
-        // ✅ Show success message
-        setSuccessMessage('Category deleted successfully!');
-        setErrorMessage('');
-
-        // ✅ Refresh the category list
+        setMessage({ type: 'success', text: 'Category deleted successfully!' });
         fetchCategories();
-
-        // ✅ Hide success message after 3 seconds
-        setTimeout(() => setSuccessMessage(''), 3000);
+        setTimeout(() => setMessage({ type: '', text: '' }), 5000); // ⏳ Now disappears after 5 seconds
       } else {
         const data = await response.json();
         throw new Error(data.error || 'Failed to delete category');
       }
     } catch (error) {
       console.error('Error deleting category:', error);
-      setErrorMessage(error.message);
-      setSuccessMessage('');
-    }
-  };
-
-  const handleEditCategory = async (id, name, promoted) => {
-    try {
-      const response = await fetch(`http://localhost:4000/api/categories/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          authorization: 'Bearer ' + localStorage.getItem('jwt'),
-        },
-        body: JSON.stringify({ name, promoted }),
-      });
-
-      if (response.status === 204 || response.ok) {
-        // ✅ Show success message
-        setSuccessMessage('Category updated successfully!');
-        setErrorMessage('');
-
-        // ✅ Refresh the category list
-        fetchCategories();
-
-        // ✅ Hide success message after 3 seconds
-        setTimeout(() => setSuccessMessage(''), 3000);
-      } else {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to update category');
-      }
-    } catch (error) {
-      console.error('Error updating category:', error);
-      setErrorMessage(error.message);
-      setSuccessMessage('');
+      setMessage({ type: 'error', text: error.message });
+      setTimeout(() => setMessage({ type: '', text: '' }), 5000); // ⏳ Now disappears after 5 seconds
     }
   };
 
   return (
     <div className="categories-container">
-      {/* ✅ Show success message when action is successful */}
-      {successMessage && <p className="success-message">{successMessage}</p>}
-      {/* ✅ Show error message when an error occurs */}
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
-
+      {/* ✅ Show delete error message centered in red */}
+      {message.type === 'error' && <p className="delete-error-message">{message.text}</p>}
+      
       <div className="categories-list">
         {categories.map((category) => (
           <CategoryBox 
             key={category._id} 
             category={category} 
             onDelete={handleDeleteCategory} 
-            onEdit={handleEditCategory} 
           />
         ))}
       </div>
