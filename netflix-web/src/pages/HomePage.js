@@ -10,6 +10,7 @@ function HomePage() {
       <Header />
       <TopMenu />
       <h1>Welcome to Netflix Clone</h1>
+      <VideoPlayer videoSrc="../assets/video.mp4"/> 
     </div>
   );
 }

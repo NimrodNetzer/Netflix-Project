@@ -1,48 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import CategoryRow from './categoryRow'; // Ensure this import is correct
-import './Home.css';
-import TopMenu from './TopMenu';
+// Home.jsx
+import React, { useState } from 'react';
+import VideoPlayer from '../components/VideoPlayer';
 
-function Home() {
-  const [categories, setCategories] = useState([]);
+const Home = () => {
+  const videoUrl = "https://media.w3.org/2010/05/sintel/trailer_hd.mp4";
+  const videoName = "My Awesome Video";
+  const [isVideoOpen, setIsVideoOpen] = useState(false); // State to control VideoPlayer visibility
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await fetch('http://localhost:4000/api/movies', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'authorization': 'Bearer ' + localStorage.getItem('jwt')
-          },
-        });
+  const handleLogout = () => {
+    localStorage.removeItem('jwt'); // Remove the token
+    window.location.href = '/'; // Redirect to login
+  };
 
-        if (!response.ok) {
-          throw new Error(`Network response was not ok (status: ${response.status})`);
-        }
+  const handleOpenVideo = () => {
+    setIsVideoOpen(true);
+  };
 
-        const data = await response.json();
-        setCategories(data.movies); // Update state with fetched categories
-      } catch (error) {
-        console.error('Error fetching movies:', error);
-        // Handle errors here (e.g., display an error message to the user)
-      }
-    };
-
-    fetchMovies(); // Call the fetch function inside useEffect
-  }, []); // Empty dependency array: fetch movies only on mount
+  const handleCloseVideo = () => {
+    setIsVideoOpen(false);
+  };
 
   return (
-    <div className="home">
-          <TopMenu />
-
-      {categories.map((category) => (
-        <CategoryRow
-          key={category.category_id}
-          category={category.category}
-          movies={category.movies}
+    <div>
+      <h1>Welcome to the Home Page!</h1>
+      <button onClick={handleLogout}>Logout</button>
+      <button onClick={handleOpenVideo}>Play Fullscreen</button> {/* Button to open VideoPlayer */}
+      
+      {isVideoOpen && (
+        <VideoPlayer
+          videoUrl={videoUrl}
+          videoName={videoName}
+          play={true}
+          startFullscreen={true}
+          onClose={handleCloseVideo} // Pass a prop to handle closing
         />
-      ))}
+      )}
     </div>
   );
 }
