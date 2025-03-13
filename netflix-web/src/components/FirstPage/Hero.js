@@ -1,23 +1,22 @@
 import React, { useState } from 'react';
 import './Hero.css';
-import logo from '../../assets/LOGO.jpg'; // Assuming the logo is in the assets folder
 import { useNavigate } from 'react-router-dom';
 
 function Hero() {
     const navigate = useNavigate();
-    const [email, setEmail] = useState(''); // State to store the email input
+    const [email, setEmail] = useState('');
 
     const handleGetStarted = (e) => {
-        e.preventDefault(); // Prevent page refresh if validation passes
-        navigate('/signup', { state: { email } }); // Pass email to Signup page
+        e.preventDefault();
+        navigate('/signup', { state: { email } });
     };
 
     return (
         <div className="hero">
-            {/* Add the logo */}
-            <img src={logo} alt="Logo" className="logo" />
+            {/* Remove the logo */}
+            {/* <img src={logo} alt="Logo" className="hero-logo" /> */}
 
-            {/* Add Sign In button */}
+            {/* Sign In button */}
             <button onClick={() => navigate('/login')} className="sign-in-button">
                 Sign In
             </button>
@@ -35,9 +34,8 @@ function Hero() {
                         placeholder="Email address"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        required // Make the field required
-                        pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" // Ensure valid email format
-                        
+                        required
+                        pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                     />
                     <button type="submit">
                         Get Started &gt;
