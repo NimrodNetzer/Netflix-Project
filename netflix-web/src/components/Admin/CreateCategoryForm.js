@@ -65,7 +65,7 @@ const CreateCategoryForm = ({ onSubmit, onCancel }) => {
 
         <form onSubmit={handleSubmit} className="category-form">
           {/* Category Name Input */}
-          <label className="form-label category-name-label">Category Name:</label>
+          <label className="form-label">Category Name:</label>
           <input
             type="text"
             className="form-input"
