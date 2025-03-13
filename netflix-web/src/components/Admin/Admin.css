@@ -1,4 +1,4 @@
-/* 🎬 Admin Page Styles (Scoped) */
+/* 🎬 Admin Page Styles (Movies & Categories) */
 .admin-container {
   display: flex;
   flex-direction: column;
@@ -11,7 +11,7 @@
 }
 
 /* 🎚 Toggle Switch Wrapper */
-.admin-container .toggle-switch-container {
+.toggle-switch-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,20 +22,20 @@
 }
 
 /* 🎚 Toggle Switch */
-.admin-container .toggle-switch {
+.toggle-switch {
   position: relative;
   width: 60px;
   height: 30px;
 }
 
-.admin-container .toggle-switch input {
+.toggle-switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
 /* Toggle Background */
-.admin-container .toggle-slider {
+.toggle-slider {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -48,7 +48,7 @@
 }
 
 /* Toggle Circle */
-.admin-container .toggle-slider:before {
+.toggle-slider:before {
   position: absolute;
   content: "";
   height: 24px;
@@ -61,17 +61,17 @@
 }
 
 /* When toggle is ON (Categories Selected) */
-.admin-container .toggle-switch input:checked + .toggle-slider {
+.toggle-switch input:checked + .toggle-slider {
   background-color: #e50914; /* Netflix Red */
 }
 
 /* Move circle to the right when ON */
-.admin-container .toggle-switch input:checked + .toggle-slider:before {
+.toggle-switch input:checked + .toggle-slider:before {
   transform: translateX(30px);
 }
 
 /* Labels for Movies and Categories */
-.admin-container .toggle-label {
+.toggle-label {
   font-size: 16px;
   font-weight: bold;
   color: white;
@@ -79,7 +79,7 @@
 }
 
 /* 🎬 Action Buttons */
-.admin-container .admin-actions {
+.admin-actions {
   display: flex;
   justify-content: center;
   gap: 10px;
@@ -90,7 +90,7 @@
 }
 
 /* Make buttons evenly spaced and same size */
-.admin-container .add-button {
+.add-button {
   padding: 15px 30px;
   border: none;
   background-color: #e50914;
@@ -108,12 +108,12 @@
   justify-content: center;
 }
 
-.admin-container .add-button:hover {
+.add-button:hover {
   background-color: #b20710;
 }
 
 /* 🎬 Admin Content (Movies or Categories section) */
-.admin-container .admin-content {
+.admin-content {
   width: 100%;
   max-width: 1400px;
   background: #181818;
@@ -129,8 +129,8 @@
 }
 
 /* 🎬 Movies & Categories Containers */
-.admin-container .movies-container,
-.admin-container .categories-container {
+.movies-container,
+.categories-container {
   width: 100%;
   max-width: 1200px;
   display: flex;
@@ -143,8 +143,8 @@
 }
 
 /* 🎬 Movie & Category Boxes */
-.admin-container .movie-box,
-.admin-container .category-box {
+.movie-box,
+.category-box {
   background: #222;
   padding: 20px;
   border-radius: 8px;
@@ -160,16 +160,16 @@
   justify-content: space-between;
 }
 
-/* 🎬 Button Container inside Category & Movie */
-.admin-container .movie-buttons,
-.admin-container .category-buttons {
+/* Button Container inside Category & Movie */
+.movie-buttons,
+.category-buttons {
   display: flex;
   gap: 10px;
   margin-top: 10px;
 }
 
 /* 🎬 Edit Button */
-.admin-container .edit-button {
+.edit-button {
   background-color: #6c757d;
   color: white;
   border: none;
@@ -179,7 +179,7 @@
 }
 
 /* 🎬 Delete Button */
-.admin-container .delete-button {
+.delete-button {
   background-color: #b20710;
   color: white;
   border: none;
@@ -188,18 +188,18 @@
   cursor: pointer;
 }
 
-.admin-container .delete-button:hover {
+.delete-button:hover {
   background-color: #7f0409;
 }
 
 /* Ensure All Items Are Aligned Properly */
-.admin-container .movie-box h3,
-.admin-container .category-box h3 {
+.movie-box h3,
+.category-box h3 {
   margin-bottom: 10px;
 }
 
-.admin-container .movie-box span,
-.admin-container .category-box span {
+.movie-box span,
+.category-box span {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -207,52 +207,13 @@
   color: #bbb;
 }
 
-/* 🎬 Modal Styling */
-.admin-container .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.admin-container .modal-content {
-  background-color: #181818;
-  padding: 30px;
-  border-radius: 10px;
-  width: 400px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-  color: white;
-  text-align: center;
-}
-
-.admin-container .close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.admin-container .close-button:hover {
-  color: #b3b3b3;
-}
-
 /* 🎬 Responsive Adjustments */
 @media (max-width: 768px) {
-  .admin-container .movies-container,
-  .admin-container .categories-container {
+  .movies-container,
+  .categories-container {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
-  .admin-container .admin-content {
+  .admin-content {
     width: 100%;
   }
 }
