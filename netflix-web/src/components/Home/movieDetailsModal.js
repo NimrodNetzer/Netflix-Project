@@ -87,7 +87,6 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie, autoPlay }) {
     setIsVideoOpen(true);
     await addToRecommendations(); // ✅ Add movie to recommendations when played
   };
-
   const handleCloseVideo = (e) => {
     if (e && e.stopPropagation) {
       e.stopPropagation();
@@ -126,10 +125,10 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie, autoPlay }) {
 
           <p className="movie-description">{movie.description}</p>
           <div className="movie-meta">
-            <span><strong>Year:</strong> {movie.year}</span>
+            <span><strong>Year:</strong> {new Date(movie.releaseDate).getFullYear()}</span>
             <span><strong>Duration:</strong> {movie.time} minutes</span>
             <span><strong>Age Rating:</strong> {movie.age}+</span>
-            <span><strong>Language:</strong> {movie.language}</span>
+            <span><strong>Language:</strong> {movie.properties.language}</span>
           </div>
 
           <div className="related-movies">

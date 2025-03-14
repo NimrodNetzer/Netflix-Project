@@ -3,14 +3,14 @@ import CategoryRow from './categoryRow';
 import './Home.css';
 import TopMenu from '../Utils/TopMenu';
 import FeaturedVideo from './FeaturedVideo'; // Import the new component
+const API_URL = process.env.REACT_APP_API_URL;
 function Home({ isAdmin = false }) {  // Accept isAdmin prop, default to false
   const [categories, setCategories] = useState([]);
   const [featuredMovie, setFeaturedMovie] = useState(null);
-
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetch('http://localhost:4000/api/movies', {
+        const response = await fetch(`${API_URL}/api/movies`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
