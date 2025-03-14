@@ -61,7 +61,7 @@ def create_users():
         "email": "admin@example.com",
         "password": "admin123",
         "nickname": "AdminUser",
-        "picture": "https://example.com/pictures/admin.jpg",
+        "picture": "default",
     }
 
     response = requests.post(USER_URL, json=admin_user)
