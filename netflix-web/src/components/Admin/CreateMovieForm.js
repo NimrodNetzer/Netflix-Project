@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './CreateMovieForm.css';
+const API_URL = process.env.REACT_APP_API_URL;
 
 const CreateMovieForm = ({ onSubmit, onCancel, movieData }) => {
   const isUpdate = Boolean(movieData);
@@ -288,6 +289,7 @@ const CreateMovieForm = ({ onSubmit, onCancel, movieData }) => {
                 <option value="English">English</option>
                 <option value="Spanish">Spanish</option>
                 <option value="French">French</option>
+                <option value="Hebrew">Hebrew</option>
               </select>
             </div>
          

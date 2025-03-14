@@ -2,11 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import "./TopMenu.css";
-
-// Import default avatar
 import defaultAvatar from "../../assets/profile2.webp";
 
-function TopMenu() {
+function TopMenu({ darkMode, setDarkMode }) {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
@@ -41,10 +39,9 @@ function TopMenu() {
 
   const handleSearchClick = () => {
     setIsSearchVisible(true);
-    setTimeout(() => inputRef.current?.focus(), 100); // Ensure input gains focus
+    setTimeout(() => inputRef.current?.focus(), 100);
   };
 
-  // Closes search bar when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -62,30 +59,26 @@ function TopMenu() {
     navigate("/login");
   };
 
-  // Function to check if the current route matches a given path
+  const handleToggleDarkMode = (event) => {
+    event.stopPropagation();
+    setDarkMode((prevMode) => {
+      const newMode = !prevMode;
+      localStorage.setItem("theme", newMode ? "dark" : "light");
+      return newMode;
+    });
+  };
+
   const isActive = (path) => location.pathname === path;
   const isLoginPage = ["/login", "/register", "/"].includes(location.pathname);
-  const isLoggedIn = !!localStorage.getItem("jwt"); // Check if user is logged in
+  const isLoggedIn = !!localStorage.getItem("jwt");
   const avatarImage = user?.picture || defaultAvatar;
-
-  // Function to navigate only if logged in
-  const handleNavigateToHome = (e) => {
-    e.preventDefault();
-    if (isLoggedIn) {
-      navigate("/home");
-    } else {
-      alert("You must be logged in to access Movies.");
-      navigate("/login");
-    }
-  };
 
   return (
     <div className="top-menu-wrapper">
       <nav className="top-menu">
         <ul>
-          {/* Netflix Logo Clickable - Redirects to Home if logged in */}
           <li className="netflix-logo">
-            <a href="#" onClick={handleNavigateToHome}>
+            <a href="#" onClick={(e) => { e.preventDefault(); isLoggedIn ? navigate("/home") : navigate("/login"); }}>
               <img src="../assets/LOGO.jpg" alt="Netflix Logo" className="logo-img" />
             </a>
           </li>
@@ -93,7 +86,7 @@ function TopMenu() {
           {!isLoginPage && (
             <>
               <li className={isActive("/home") ? "active" : ""}>
-                <a href="#" onClick={handleNavigateToHome}>Movies</a>
+                <a href="#" onClick={(e) => { e.preventDefault(); navigate("/home"); }}>Movies</a>
               </li>
               <li><a href="#" onClick={handleSignOut}>Exit Netflix</a></li>
               {isAdmin && <li className={isActive("/admin") ? "active" : ""}><a href="/admin">Admin</a></li>}
@@ -101,10 +94,8 @@ function TopMenu() {
           )}
         </ul>
 
-        {/* Right Section: Search & Avatar */}
-        {!isLoginPage && (
-          <div className="right-section">
-            {/* Search Box */}
+        <div className="right-section">
+          {isLoggedIn && (
             <div className="search-container" ref={searchRef}>
               <img src="/assets/searchButton.png" alt="Search" className="search-icon" onClick={handleSearchClick} />
               {isSearchVisible && (
@@ -119,13 +110,23 @@ function TopMenu() {
                 />
               )}
             </div>
+          )}
 
-            {/* User Avatar */}
+          <div className="dark-mode-toggle">
+            <span className="toggle-label">☀</span>
+            <label className="switch">
+              <input type="checkbox" checked={darkMode} onChange={handleToggleDarkMode} />
+              <span className="slider"></span>
+            </label>
+            <span className="toggle-label">🌙</span>
+          </div>
+
+          {isLoggedIn && (
             <div className="user-avatar-container">
               <img src={avatarImage} alt="User Avatar" className="user-avatar" />
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </nav>
     </div>
   );

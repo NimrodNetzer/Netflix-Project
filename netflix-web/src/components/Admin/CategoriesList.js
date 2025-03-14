@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CategoryBox from './categoryBox';
 import './categoriesList.css';
+const API_URL = process.env.REACT_APP_API_URL;
 
 function CategoriesList() {
   const [categories, setCategories] = useState([]);
@@ -12,7 +13,7 @@ function CategoriesList() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('http://localhost:4000/api/categories', {
+      const response = await fetch(`${API_URL}/api/categories`, {
         headers: { authorization: 'Bearer ' + localStorage.getItem('jwt') },
       });
 
@@ -29,7 +30,7 @@ function CategoriesList() {
     if (!window.confirm('Are you sure you want to delete this category?')) return;
 
     try {
-      const response = await fetch(`http://localhost:4000/api/categories/${id}`, {
+      const response = await fetch(`${API_URL}/api/categories/${id}`, {
         method: 'DELETE',
         headers: { authorization: 'Bearer ' + localStorage.getItem('jwt') },
       });

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './categoryBox.css';
+const API_URL = process.env.REACT_APP_API_URL;
 
 function CategoryBox({ category, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -13,7 +14,7 @@ function CategoryBox({ category, onDelete }) {
     setSuccessMessage('');
 
     try {
-      const response = await fetch(`http://localhost:4000/api/categories/${category._id}`, {
+      const response = await fetch(`${API_URL}/api/categories/${category._id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

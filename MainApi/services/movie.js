@@ -104,24 +104,28 @@ const deleteMovieById = async (id) => {
 
 const replaceMovieById = async (id, movieUpdates) => {
   try {
-    // Find the existing movie
-    const existingMovie = await Movie.findById(id);
-    if (!existingMovie) {
+    // Use findByIdAndUpdate with overwrite to replace the document entirely
+    const updatedMovie = await Movie.findByIdAndUpdate(
+      id,
+      { ...movieUpdates },
+      {
+        new: true,        // return the updated document
+        runValidators: true, // run schema validations on update
+        overwrite: true   // replace the document completely
+      }
+    );
+
+    if (!updatedMovie) {
       throw new Error('Movie not found');
     }
 
-    // Delete the existing movie
-    await existingMovie.deleteOne();
-
-    // Use the createMovie function to create a new movie with the same ID
-    const newMovie = await createMovie({ ...movieUpdates, _id: id });
-
-    return newMovie;
+    return updatedMovie;
   } catch (error) {
     console.error('Error replacing movie:', error);
     throw new Error(error.message || 'Failed to replace movie');
   }
 };
+
 
 const getMoviesByPromotedCategories = async (userId) => {
   // 1. Fetch the user and their watched movies
