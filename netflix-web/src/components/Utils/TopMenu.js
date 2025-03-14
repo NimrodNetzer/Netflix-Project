@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import "./TopMenu.css";
 
 // Import default avatar
-import defaultAvatar from "../../assets/profile1.webp";
+import defaultAvatar from "../../assets/profile2.webp";
 
 function TopMenu() {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
