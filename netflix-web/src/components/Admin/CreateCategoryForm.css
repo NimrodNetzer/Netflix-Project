@@ -196,3 +196,27 @@
   text-align: center; 
   width: 100%;
 }
+
+.createmovie-cast-member input:not(:last-child) {
+  margin-right: 10px;
+}
+
+.createmovie-modal-content h2 {
+  text-align: left;
+  color: red;
+  margin-bottom: 20px;
+}
+
+.createmovie-submit-button {
+  background: red;         /* Red background for create/update button */
+  color: #fff;             /* White text */
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.createmovie-submit-button:hover {
+  background: darkred;     /* Darker red on hover */
+}

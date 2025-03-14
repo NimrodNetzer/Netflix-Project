@@ -287,6 +287,7 @@ const CreateMovieForm = ({ onSubmit, onCancel, movieData }) => {
                 <option value="English">English</option>
                 <option value="Spanish">Spanish</option>
                 <option value="French">French</option>
+                <option value="Hebrew">Hebrew</option>
               </select>
             </div>
          
