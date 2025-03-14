@@ -38,8 +38,6 @@ function Home({ isAdmin = false }) {  // Accept isAdmin prop, default to false
 
   return (
     <div className="home">
-      <TopMenu />
-
       {/* Hide Featured Video for Admin */}
       {!isAdmin && featuredMovie && <FeaturedVideo movie={featuredMovie} />}
 
