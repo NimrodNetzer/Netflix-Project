@@ -1,182 +1,163 @@
-/* Modal overlay and content styling */
-.modal-overlay {
+.createmovie-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4); /* Matches category modal overlay */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 }
 
-.modal-content {
-  background: #1e1e1e;
-  border-radius: 8px;
+.createmovie-modal-content {
+  background: #181818; /* Dark background like category modal */
+  color: white; /* White text */
   padding: 20px;
-  width: 90%;
-  max-width: 800px; /* Adjust width for better two-column layout */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  width: 80%;
+  max-width: 800px;
   position: relative;
+  max-height: 90vh;       /* Limits modal height */
+  overflow-y: auto;       /* Allows vertical scrolling */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6); /* Similar box shadow */
 }
 
-/* Close button styling */
-.close-button {
+.createmovie-close-button {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: transparent;
+  background: none;
   border: none;
-  font-size: 1.5rem;
-  color: #fff;
+  font-size: 20px;
   cursor: pointer;
+  color: white; /* White close button */
 }
 
-/* Form layout: Two-column grid */
-.movie-form {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Two equal columns */
-  gap: 20px; /* Space between columns */
-}
-
-/* Full-width fields (e.g., description, categories, cast list) */
-.full-width {
-  grid-column: span 2;
-}
-
-/* Two-column row groups */
-.row-group {
+.createmovie-form {
   display: flex;
-  gap: 20px;
+  flex-direction: column;
 }
 
-/* Each input inside a row-group takes equal space */
-.row-group .form-group {
+.createmovie-row-group,
+.createmovie-row-group-wider {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.createmovie-form-group {
   flex: 1;
+  margin-right: 10px;
 }
 
-/* Label styling */
-.form-label {
-  font-size: 1rem;
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: #fff;
+.createmovie-form-group:last-child {
+  margin-right: 0;
 }
 
-/* Input and textarea styling */
-.form-input {
-  padding: 12px;
-  border-radius: 5px;
-  border: none;
-  font-size: 1rem;
-  background: #333;
-  color: #fff;
-  text-align: center;
+.createmovie-full-width {
   width: 100%;
-  margin-bottom: 5px;
 }
 
-/* Time input container */
-.time-input-container {
+.createmovie-form-label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.createmovie-form-input {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  background: #282828;  /* Dark input background */
+  color: white;         /* White text for inputs */
+  margin-bottom: 25px;
+}
+
+.createmovie-time-input-container {
   display: flex;
   align-items: center;
-  gap: 5px;
 }
 
-/* Time input specific styling */
-.time-input {
-  width: 60px;
+.createmovie-time-input {
+  width: 50px;
+  padding: 8px;
+  border: 1px solid #3b3b3b;
+  border-radius: 4px;
+  margin-right: 5px;
+  background: #282828;
+  color: white;
+}
+
+.createmovie-scroll-wrapper {
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   padding: 10px;
-  border-radius: 5px;
+}
+
+.createmovie-categories-container1 {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.createmovie-categories-container1 label {
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+
+.createmovie-cast-member {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.createmovie-remove-cast-button {
+  background: none;
   border: none;
-  background: #333;
-  color: #fff;
-  text-align: center;
-}
-
-/* Select dropdown styling */
-select {
-  background: #333;
-  color: #fff;
-}
-
-/* Wrapper to control height and scrolling */
-.scroll-wrapper {
-  max-height: 150px; /* This now limits height */
-  overflow-y: auto; /* Enables vertical scrolling when needed */
-  border: 1px solid #555; /* Optional: Add a border for better visibility */
-  padding: 5px;
-}
-/* Categories container - Ensure row-by-row filling */
-.categories-container1 {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 columns per row */
-  gap: 10px;
-}
-.categories-container1 label {
-  background: #444;
-  padding: 4px 8px;
-  border-radius: 5px;
-  color: #fff;
+  font-size: 20px;
   cursor: pointer;
-  font-size: 0.85rem;
-  text-align: center;
+  margin-left: 10px;
+  color: white;
 }
 
-
-/* Ensure that small screens adjust properly */
-@media (max-width: 600px) {
-  .categories-container1 label {
-      flex: 1 1 calc(50% - 10px); /* 2 per row on smaller screens */
-  }
-}
-
-/* Cast action buttons */
-.add-cast-button,
-.remove-cast-button {
-  background: #e50914;
+.createmovie-add-cast-button {
+  background: #007bff;
+  color: #fff;
   border: none;
   padding: 8px 12px;
-  border-radius: 5px;
-  color: #fff;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background 0.3s;
+  margin-top: 10px;
 }
 
-.add-cast-button:hover,
-.remove-cast-button:hover {
-  background: #b20710;
+.createmovie-add-cast-button:hover {
+  background: #0056b3;
 }
 
-/* Submit button */
-.submit-button {
-  grid-column: span 2; /* Make the button full width */
-  padding: 12px;
-  border-radius: 5px;
-  border: none;
-  background: #e50914;
-  color: #fff;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.submit-button:hover {
-  background: #b20710;
-}
-
-/* Success message */
-.success-message {
-  grid-column: span 2;
+.createmovie-success-message {
+  background: #d4edda;
+  color: #155724;
   padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 5px;
-  background-color: #666;
-  color: #fff;
-  font-size: 1rem;
+  border: 1px solid #c3e6cb;
+  border-radius: 4px;
+  margin-top: 10px;
   text-align: center;
 }
 
+.createmovie-submit-button {
+  background: #28a745;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.createmovie-submit-button:hover {
+  background: #218838;
+}

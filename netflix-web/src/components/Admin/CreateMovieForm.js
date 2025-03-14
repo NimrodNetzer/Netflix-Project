@@ -1,4 +1,3 @@
-// CreateMovieForm.js
 import React, { useState, useEffect } from 'react';
 import './CreateMovieForm.css';
 
@@ -177,165 +176,211 @@ const CreateMovieForm = ({ onSubmit, onCancel, movieData }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <button className="close-button" onClick={onCancel}>✕</button>
+    <div className="createmovie-modal-overlay">
+      <div className="createmovie-modal-content">
+        <button className="createmovie-close-button" onClick={onCancel}>✕</button>
         <h2>{isUpdate ? "Update Movie" : "Create Movie"}</h2>
-        <form onSubmit={handleSubmit} className="movie-form">
+        <form onSubmit={handleSubmit} className="createmovie-form">
+          {/* Movie Name, Age Rating & Author - Same Row */}
+          <div className="createmovie-row-group createmovie-row-group-wider">
+            <div className="createmovie-form-group createmovie-wide">
+              <label className="createmovie-form-label">Movie Name:</label>
+              <input
+                type="text"
+                className="createmovie-form-input"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+            <div className="createmovie-form-group">
+              <label className="createmovie-form-label">Age Rating:</label>
+              <input
+                type="number"
+                className="createmovie-form-input"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                required
+              />
+            </div>
+            <div className="createmovie-form-group createmovie-wide">
+              <label className="createmovie-form-label">Author:</label>
+              <input
+                type="text"
+                className="createmovie-form-input"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+                required
+              />
+            </div>
+          </div>
 
-{/* Movie Name & Age Rating - Same Row */}
-{/* Movie Name, Age Rating & Author - Same Row */}
-<div className="row-group row-group-wider">
-  <div className="form-group wide">
-    <label className="form-label">Movie Name:</label>
-    <input
-      type="text"
-      className="form-input"
-      value={name}
-      onChange={(e) => setName(e.target.value)}
-      required
-    />
-  </div>
-  <div className="form-group">
-    <label className="form-label">Age Rating:</label>
-    <input
-      type="number"
-      className="form-input"
-      value={age}
-      onChange={(e) => setAge(e.target.value)}
-      required
-    />
-  </div>
-  <div className="form-group wide">
-    <label className="form-label">Author:</label>
-    <input
-      type="text"
-      className="form-input"
-      value={author}
-      onChange={(e) => setAuthor(e.target.value)}
-      required
-    />
-  </div>
-</div>
+          {/* Description - Full Row */}
+          <div className="createmovie-form-group createmovie-full-width">
+            <label className="createmovie-form-label">Description:</label>
+            <textarea
+              className="createmovie-form-input"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            />
+          </div>
 
+          {/* Duration & Release Date - Same Row */}
+          <div className="createmovie-row-group">
+            <div className="createmovie-form-group">
+              <label className="createmovie-form-label">Duration:</label>
+              <div className="createmovie-time-input-container">
+                <input
+                  type="text"
+                  className="createmovie-time-input"
+                  placeholder="Hours"
+                  value={hours}
+                  onChange={handleHoursChange}
+                  maxLength="1"
+                />
+                <span>h</span>
+                <input
+                  type="text"
+                  className="createmovie-time-input"
+                  placeholder="Minutes"
+                  value={minutes}
+                  onChange={handleMinutesChange}
+                  maxLength="2"
+                />
+                <span>m</span>
+              </div>
+            </div>
+            <div className="createmovie-form-group">
+              <label className="createmovie-form-label">Release Date:</label>
+              <input
+                type="date"
+                className="createmovie-form-input"
+                value={releaseDate}
+                onChange={(e) => setReleaseDate(e.target.value)}
+                required
+              />
+            </div>
+            <div className="createmovie-form-group">
+              <label className="createmovie-form-label">Quality:</label>
+              <select
+                className="createmovie-form-input"
+                value={quality}
+                onChange={(e) => setQuality(e.target.value)}
+                required
+              >
+                <option value="">Select Quality</option>
+                <option value="HD">HD</option>
+                <option value="SD">SD</option>
+                <option value="4K">4K</option>
+              </select>
+            </div>
+            <div className="createmovie-form-group">
+              <label className="createmovie-form-label">Language:</label>
+              <select
+                className="createmovie-form-input"
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                required
+              >
+                <option value="">Select Language</option>
+                <option value="English">English</option>
+                <option value="Spanish">Spanish</option>
+                <option value="French">French</option>
+              </select>
+            </div>
+         
+          </div>
 
-{/* Description - Full Row */}
-<div className="form-group full-width">
-  <label className="form-label">Description:</label>
-  <textarea className="form-input" value={description} onChange={(e) => setDescription(e.target.value)} required />
-</div>
+          {/* Categories - Full Row */}
+          <div className="createmovie-form-group createmovie-full-width">
+            <label className="createmovie-form-label">Categories:</label>
+            <div className="createmovie-scroll-wrapper">
+              <div className="createmovie-categories-container1">
+                {categories.map(category => (
+                  <label key={category._id}>
+                    <input
+                      type="checkbox"
+                      checked={selectedCategories.includes(category._id)}
+                      onChange={() => handleCategorySelection(category._id)}
+                    />
+                    {category.name}
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
 
-{/* Duration & Release Date - Same Row */}
-<div className="row-group">
-  <div className="form-group">
-    <label className="form-label">Duration:</label>
-    <div className="time-input-container">
-      <input type="text" className="time-input" placeholder="Hours" value={hours} onChange={handleHoursChange} maxLength="1" />
-      <span>h</span>
-      <input type="text" className="time-input" placeholder="Minutes" value={minutes} onChange={handleMinutesChange} maxLength="2" />
-      <span>m</span>
-    </div>
-  </div>
-  <div className="form-group">
-    <label className="form-label">Release Date:</label>
-    <input type="date" className="form-input" value={releaseDate} onChange={(e) => setReleaseDate(e.target.value)} required />
-  </div>
-</div>
+          {/* Cast Section - Full Row */}
+          <div className="createmovie-form-group createmovie-full-width">
+            <label className="createmovie-form-label">Cast:</label>
+            {cast.map((member, index) => (
+              <div key={index} className="createmovie-cast-member">
+                <input
+                  type="text"
+                  className="createmovie-form-input"
+                  placeholder="Actor Name"
+                  value={member.name}
+                  onChange={(e) => handleCastChange(index, 'name', e.target.value)}
+                  required
+                />
+                <input
+                  type="text"
+                  className="createmovie-form-input"
+                  placeholder="Role"
+                  value={member.role}
+                  onChange={(e) => handleCastChange(index, 'role', e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  className="createmovie-remove-cast-button"
+                  onClick={() => removeCastMember(index)}
+                >
+                  🗑
+                </button>
+              </div>
+            ))}
+            <button type="button" className="createmovie-add-cast-button" onClick={addCastMember}>
+              + Add Cast Member
+            </button>
+          </div>
 
-{/* Quality & Language - Same Row */}
-<div className="row-group">
-  <div className="form-group">
-    <label className="form-label">Quality:</label>
-    <select className="form-input" value={quality} onChange={(e) => setQuality(e.target.value)} required>
-      <option value="">Select Quality</option>
-      <option value="HD">HD</option>
-      <option value="SD">SD</option>
-      <option value="4K">4K</option>
-    </select>
-  </div>
-  <div className="form-group">
-    <label className="form-label">Language:</label>
-    <select className="form-input" value={language} onChange={(e) => setLanguage(e.target.value)} required>
-      <option value="">Select Language</option>
-      <option value="English">English</option>
-      <option value="Spanish">Spanish</option>
-      <option value="French">French</option>
-    </select>
-  </div>
-</div>
+          {/* Picture Upload - Full Row */}
+          <div className="createmovie-form-group createmovie-full-width">
+            <label className="createmovie-form-label">Picture:</label>
+            <input
+              type="file"
+              className="createmovie-form-input"
+              accept="image/*"
+              onChange={(e) => setPicture(e.target.files[0])}
+            />
+          </div>
 
-{/* Categories - Full Row */}
-<div className="form-group full-width">
-  <label className="form-label">Categories:</label>
-  <div className="scroll-wrapper">
-    <div className="categories-container1">
-      {categories.map(category => (
-        <label key={category._id}>
-          <input type="checkbox" checked={selectedCategories.includes(category._id)} onChange={() => handleCategorySelection(category._id)} />
-          {category.name}
-        </label>
-      ))}
-    </div>
-  </div>
-</div>
+          {/* Video Upload - Full Row */}
+          <div className="createmovie-form-group createmovie-full-width">
+            <label className="createmovie-form-label">Video:</label>
+            <input
+              type="file"
+              className="createmovie-form-input"
+              accept="video/*"
+              onChange={(e) => setVideo(e.target.files[0])}
+            />
+          </div>
 
+          {/* Success Message */}
+          {successMessage && (
+            <div className="createmovie-success-message createmovie-full-width">
+              {successMessage}
+            </div>
+          )}
 
-{/* Cast Section - Full Row */}
-<div className="form-group full-width">
-  <label className="form-label">Cast:</label>
-  {cast.map((member, index) => (
-    <div key={index} className="cast-member">
-      <input
-        type="text"
-        className="form-input"
-        placeholder="Actor Name"
-        value={member.name}
-        onChange={(e) => handleCastChange(index, 'name', e.target.value)}
-        required
-      />
-      <input
-        type="text"
-        className="form-input"
-        placeholder="Role"
-        value={member.role}
-        onChange={(e) => handleCastChange(index, 'role', e.target.value)}
-        required
-      />
-      <button
-        type="button"
-        className="remove-cast-button"
-        onClick={() => removeCastMember(index)}
-      >
-        🗑
-      </button>
-    </div>
-  ))}
-  <button type="button" className="add-cast-button" onClick={addCastMember}>
-    + Add Cast Member
-  </button>
-</div>
-
-{/* Picture Upload - Full Row */}
-<div className="form-group full-width">
-  <label className="form-label">Picture:</label>
-  <input type="file" className="form-input" accept="image/*" onChange={(e) => setPicture(e.target.files[0])} />
-</div>
-
-{/* Video Upload - Full Row */}
-<div className="form-group full-width">
-  <label className="form-label">Video:</label>
-  <input type="file" className="form-input" accept="video/*" onChange={(e) => setVideo(e.target.files[0])} />
-</div>
-
-{/* Success Message */}
-{successMessage && <div className="success-message full-width">{successMessage}</div>}
-
-{/* Submit Button */}
-<button type="submit" className="submit-button">{loading ? (isUpdate ? 'Updating...' : 'Creating...') : (isUpdate ? 'Update' : 'Create')}</button>
-
-</form>
-
-</div>
+          {/* Submit Button */}
+          <button type="submit" className="createmovie-submit-button">
+            {loading ? (isUpdate ? 'Updating...' : 'Creating...') : (isUpdate ? 'Update' : 'Create')}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
