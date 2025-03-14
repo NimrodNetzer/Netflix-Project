@@ -62,22 +62,38 @@ function TopMenu() {
     navigate("/login");
   };
 
+  // Function to check if the current route matches a given path
   const isActive = (path) => location.pathname === path;
   const isLoginPage = ["/login", "/register", "/"].includes(location.pathname);
+  const isLoggedIn = !!localStorage.getItem("jwt"); // Check if user is logged in
   const avatarImage = user?.picture || defaultAvatar;
+
+  // Function to navigate only if logged in
+  const handleNavigateToHome = (e) => {
+    e.preventDefault();
+    if (isLoggedIn) {
+      navigate("/home");
+    } else {
+      alert("You must be logged in to access Movies.");
+      navigate("/login");
+    }
+  };
 
   return (
     <div className="top-menu-wrapper">
       <nav className="top-menu">
         <ul>
+          {/* Netflix Logo Clickable - Redirects to Home if logged in */}
           <li className="netflix-logo">
-            <a href="/"><img src="../assets/LOGO.jpg" alt="Netflix Logo" className="logo-img" /></a>
+            <a href="#" onClick={handleNavigateToHome}>
+              <img src="../assets/LOGO.jpg" alt="Netflix Logo" className="logo-img" />
+            </a>
           </li>
 
           {!isLoginPage && (
             <>
               <li className={isActive("/home") ? "active" : ""}>
-                <a href="#" onClick={(e) => { e.preventDefault(); navigate("/home"); }}>Movies</a>
+                <a href="#" onClick={handleNavigateToHome}>Movies</a>
               </li>
               <li><a href="#" onClick={handleSignOut}>Exit Netflix</a></li>
               {isAdmin && <li className={isActive("/admin") ? "active" : ""}><a href="/admin">Admin</a></li>}
