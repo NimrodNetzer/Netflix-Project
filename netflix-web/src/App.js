@@ -21,10 +21,10 @@ const App = () => {
   }, [darkMode]);
 
   return (
+    <Router>
+      <TopMenu darkMode={darkMode} setDarkMode={setDarkMode} />
     <div className={darkMode ? "dark-mode" : "light-mode"}>
-      <Router>
         {/* ✅ Ensure TopMenu is always rendered */}
-        <TopMenu darkMode={darkMode} setDarkMode={setDarkMode} />
         <Routes>
           <Route path="/" element={<Hero />} />
           <Route path="/login" element={<Login />} />
@@ -33,8 +33,8 @@ const App = () => {
           <Route path="/search/:query" element={<SearchPage />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>
-      </Router>
     </div>
+    </Router>
   );
 };
 
