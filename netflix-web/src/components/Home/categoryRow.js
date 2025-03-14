@@ -25,7 +25,7 @@ function CategoryRow({ category, movies, isAdmin = false }) {
 
   // 🔹 Ensure movies are available before rendering
   if (!movies || movies.length === 0) {
-    return <h2 className="category-title">No movies available in {category}</h2>;
+    return;
   }
 
   // 🔹 Fix Infinite Scroll Issues
