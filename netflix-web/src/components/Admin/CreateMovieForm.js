@@ -24,13 +24,14 @@ const CreateMovieForm = ({ onSubmit, onCancel, movieData }) => {
   const [author, setAuthor] = useState(movieData?.author || '');
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const API_URL = process.env.REACT_APP_API_URL;
 
   // Fetch available categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const token = localStorage.getItem('jwt');
-        const response = await fetch('http://localhost:4000/api/categories', {
+        const response = await fetch(`${API_URL}/api/categories`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -139,7 +140,7 @@ const CreateMovieForm = ({ onSubmit, onCancel, movieData }) => {
       let response;
       if (isUpdate) {
         // Send PUT request to update the movie
-        response = await fetch(`http://localhost:4000/api/movies/${movieData._id}`, {
+        response = await fetch(`${API_URL}/api/movies/${movieData._id}`, {
           method: "PUT",
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -148,7 +149,7 @@ const CreateMovieForm = ({ onSubmit, onCancel, movieData }) => {
         });
       } else {
         // Send POST request to create a new movie
-        response = await fetch("http://localhost:4000/api/movies", {
+        response = await fetch(`${API_URL}/api/movies`, {
           method: "POST",
           headers: {
             'Authorization': `Bearer ${token}`,

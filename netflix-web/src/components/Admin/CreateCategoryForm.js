@@ -6,6 +6,7 @@ const CreateCategoryForm = ({ onSubmit, onCancel }) => {
   const [isPromoted, setIsPromoted] = useState(false);
   const [loading, setLoading] = useState(false); // Track loading state
   const [successMessage, setSuccessMessage] = useState(''); // Track success message
+  const API_URL = process.env.REACT_APP_API_URL;
 
   // Prevent page scroll when modal is open
   useEffect(() => {
@@ -27,7 +28,7 @@ const CreateCategoryForm = ({ onSubmit, onCancel }) => {
     setSuccessMessage(''); // Clear previous success message
 
     try {
-      const response = await fetch('http://localhost:4000/api/categories', {
+      const response = await fetch(`${API_URL}/api/categories`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

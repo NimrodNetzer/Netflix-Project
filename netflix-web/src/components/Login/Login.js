@@ -2,6 +2,8 @@ import './Login.css'; // Import the CSS file for styling
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const Login = () => {
   const navigate = useNavigate(); // Hook for navigation
   const [email, setEmail] = useState(''); // State for username
@@ -14,7 +16,7 @@ const Login = () => {
     setIsLoading(true); // Start loading
 
     try {
-      const response = await fetch('http://localhost:4000/api/tokens', {
+      const response = await fetch(`${API_URL}/api/tokens`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

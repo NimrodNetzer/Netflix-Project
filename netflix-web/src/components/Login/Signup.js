@@ -13,6 +13,8 @@ const avatarMap = {
     profile3: profile3
 };
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const Signup = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -33,7 +35,7 @@ const Signup = () => {
 
             console.log("Saving avatar:", userAvatar); // Debugging
 
-            const response = await fetch('http://localhost:4000/api/users', {
+            const response = await fetch(`${API_URL}/api/users`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password, nickname, picture: userAvatar }),

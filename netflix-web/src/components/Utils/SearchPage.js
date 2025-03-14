@@ -4,6 +4,8 @@ import MovieBox from '../Home/movieBox';
 import './SearchPage.css';
 import { jwtDecode } from 'jwt-decode';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function SearchPage() {
   const { query } = useParams();
   const navigate = useNavigate();
@@ -53,7 +55,7 @@ function SearchPage() {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`http://localhost:4000/api/movies/search/${searchTerm}`, {
+        const response = await fetch(`${API_URL}/api/movies/search/${searchTerm}`, {
           headers: { authorization: 'Bearer ' + localStorage.getItem('jwt') },
         });
         if (!response.ok) throw new Error('Failed to fetch search results');

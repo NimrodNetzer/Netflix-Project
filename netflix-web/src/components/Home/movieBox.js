@@ -10,6 +10,8 @@ function MovieBox({ movie, width, isAdmin = false }) {
   const [selectedMovie, setSelectedMovie] = useState(movie);
   const [autoPlay, setAutoPlay] = useState(false);
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   const addToRecommendations = async () => {
     const token = localStorage.getItem('jwt');
     if (!token) {
@@ -18,7 +20,7 @@ function MovieBox({ movie, width, isAdmin = false }) {
     }
 
     try {
-      const response = await fetch(`http://localhost:4000/api/movies/${movie._id}/recommend`, {
+      const response = await fetch(`${API_URL}/api/movies/${movie._id}/recommend`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +62,7 @@ function MovieBox({ movie, width, isAdmin = false }) {
     if (!confirmDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:4000/api/movies/${movie._id}`, {
+      const response = await fetch(`${API_URL}/api/movies/${movie._id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -106,7 +108,7 @@ function MovieBox({ movie, width, isAdmin = false }) {
   return (
     <div className="movie-box" style={{ width }}>
       <img
-        src={`http://localhost:4000/${movie.picture}`}
+        src={`${API_URL}/${movie.picture}`}
         alt={movie.name}
         className="default-image"
       />

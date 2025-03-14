@@ -6,12 +6,14 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie, autoPlay }) {
   const [relatedMovies, setRelatedMovies] = useState([]);
   const [isVideoOpen, setIsVideoOpen] = useState(autoPlay || false); // ✅ Start video if autoPlay is true
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     const fetchRelatedMovies = async () => {
       if (!isOpen || !movie?._id) return;
 
       try {
-        const response = await fetch(`http://localhost:4000/api/movies/${movie._id}/recommend`, {
+        const response = await fetch(`${API_URL}/api/movies/${movie._id}/recommend`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -27,7 +29,7 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie, autoPlay }) {
 
         const moviesDetails = await Promise.all(
           data.recommendedMovies.map(async (id) => {
-            const movieResponse = await fetch(`http://localhost:4000/api/movies/${id}`, {
+            const movieResponse = await fetch(`${API_URL}/api/movies/${id}`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
@@ -60,7 +62,7 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie, autoPlay }) {
     }
 
     try {
-      const response = await fetch(`http://localhost:4000/api/movies/${movie._id}/recommend`, {
+      const response = await fetch(`${API_URL}:/api/movies/${movie._id}/recommend`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -107,7 +109,7 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie, autoPlay }) {
         <button className="close-button" onClick={onClose}>✕</button>
         <div className="movie-banner" style={{ height: '420px' }}>
           <img 
-            src={`http://localhost:4000/${movie.picture}`} 
+            src={`${API_URL}/${movie.picture}`} 
             alt={movie.name} 
             className="movie-banner-image"
             style={{ height: '100%', objectFit: 'cover' }}
@@ -144,7 +146,7 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie, autoPlay }) {
                     style={{ cursor: 'pointer' }} 
                   >
                     <img
-                      src={`http://localhost:4000/${relatedMovie.picture}`}
+                      src={`${API_URL}/${relatedMovie.picture}`}
                       alt={relatedMovie.name}
                       className="related-movie-poster"
                     />
@@ -162,7 +164,7 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie, autoPlay }) {
       {isVideoOpen && (
         <div className="video-overlay" onClick={(e) => e.stopPropagation()}>
           <VideoPlayer
-            videoUrl={`http://localhost:4000/${movie.video}`}
+            videoUrl={`${API_URL}/${movie.video}`}
             videoName={movie.name}
             play={true}
             startFullscreen={true}
