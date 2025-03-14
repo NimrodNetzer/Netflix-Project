@@ -24,7 +24,6 @@ function TopMenu() {
     }
   }, []);
 
-  // Handle search input change and navigate
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchQuery(value);
@@ -35,7 +34,9 @@ function TopMenu() {
     }
   };
 
-  // Handle clicking outside search box to close it
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const avatarImage = storedUser ? storedUser.picture : "/assets/default-avatar.png";
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -46,12 +47,17 @@ function TopMenu() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Handle sign out
   const handleSignOut = (e) => {
     e.preventDefault();
-    localStorage.removeItem("jwt"); // Remove token
-    navigate("/login"); // Redirect to login page
+    localStorage.removeItem("jwt");
+    navigate("/login");
   };
+
+  // Function to check if the current route matches a given path
+  const isActive = (path) => location.pathname === path;
+
+  // Hide menu items on login-related pages
+  const isLoginPage = ["/login", "/register", "/"].includes(location.pathname);
 
   return (
     <div className="top-menu-wrapper">
@@ -62,40 +68,51 @@ function TopMenu() {
               <img src="../assets/LOGO.jpg" alt="Netflix Logo" className="logo-img" />
             </a>
           </li>
-          {/* ✅ Navigate Movies to Home */}
-          <li>
-            <a href="#" onClick={(e) => { e.preventDefault(); navigate("/home"); }}>
-              Movies
-            </a>
-          </li>
-          {/* ✅ Exit Netflix Button */}
-          <li>
-            <a href="#" onClick={handleSignOut}>Exit Netflix</a>
-          </li>
-          {isAdmin && <li><a href="/admin">Admin</a></li>}
+
+          {/* Show these links only if not on a login-related page */}
+          {!isLoginPage && (
+            <>
+              <li className={isActive("/home") ? "active" : ""}>
+                <a href="#" onClick={(e) => { e.preventDefault(); navigate("/home"); }}>
+                  Movies
+                </a>
+              </li>
+              <li>
+                <a href="#" onClick={handleSignOut}>Exit Netflix</a>
+              </li>
+              {isAdmin && (
+                <li className={isActive("/admin") ? "active" : ""}>
+                  <a href="/admin">Admin</a>
+                </li>
+              )}
+            </>
+          )}
         </ul>
         
-        <div className="right-section">
-          <div className="search-container" ref={searchRef}>
-            <img
-              src="/assets/searchButton.png"
-              alt="Search"
-              className="search-icon"
-              onClick={() => setIsSearchVisible(true)}
-            />
-            {isSearchVisible && (
-              <input
-                type="text"
-                placeholder="Search"
-                className="search-input visible"
-                value={searchQuery}
-                onChange={handleSearchChange}
-                ref={inputRef}
-                autoFocus
+        {/* Show search only if not on login pages */}
+        {!isLoginPage && (
+          <div className="right-section">
+            <div className="search-container" ref={searchRef}>
+              <img
+                src="/assets/searchButton.png"
+                alt="Search"
+                className="search-icon"
+                onClick={() => setIsSearchVisible(true)}
               />
-            )}
+              {isSearchVisible && (
+                <input
+                  type="text"
+                  placeholder="Search"
+                  className="search-input visible"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  ref={inputRef}
+                  autoFocus
+                />
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </nav>
     </div>
   );

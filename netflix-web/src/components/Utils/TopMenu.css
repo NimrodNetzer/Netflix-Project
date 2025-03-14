@@ -8,9 +8,16 @@
     color: #fff;
     position: fixed;
     width: 100%;
-    z-index: 1000;
+    z-index: 9999;  /* Increase z-index to ensure it's above everything */
     top: 0;
     left: 0;
+    height: 60px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Ensures that page content does not overlap with the fixed Top Menu */
+body {
+    padding-top: 70px; /* Adjusted to match the height of .top-menu */
 }
 
 /* Navigation Links */
@@ -43,9 +50,9 @@
 .top-menu .right-section {
     display: flex;
     align-items: center;
-    justify-content: flex-start;  /* Align to the left */
+    justify-content: flex-start;
     gap: 15px;
-    margin-left: 150px; /* Moves the entire right section more to the left */
+    margin-left: 100px;
 }
 
 /* Search Button */
@@ -53,15 +60,15 @@
     position: relative;
     display: flex;
     align-items: center;
-    margin-left: -80px; /* Moves search icon further left */
+    margin-left: -80px;
 }
 
+/* Search Icon */
 .top-menu .search-icon {
     width: 30px;
     height: 30px;
     cursor: pointer;
 }
-
 
 /* Search Input */
 .top-menu .search-input {
@@ -96,7 +103,14 @@
     width: auto;
 }
 
-/* Ensure Top Menu Does Not Affect Other Components */
+/* Ensures Top Menu Does Not Affect Other Components */
 .top-menu-wrapper {
-    padding-top: 60px;
+    position: relative;
 }
+
+/* Ensure that other buttons (like Sign In) stay below the top menu */
+button {
+    position: relative;
+    z-index: 1; /* This makes sure other buttons do not cover the menu */
+}
+
