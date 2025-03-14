@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './CreateCategoryForm.css'; // Ensure correct CSS import
+const API_URL = process.env.REACT_APP_API_URL;
 
 const CreateCategoryForm = ({ onSubmit, onCancel }) => {
   const [categoryName, setCategoryName] = useState('');
@@ -27,7 +28,7 @@ const CreateCategoryForm = ({ onSubmit, onCancel }) => {
     setSuccessMessage(''); // Clear previous success message
 
     try {
-      const response = await fetch('http://localhost:4000/api/categories', {
+      const response = await fetch(`${API_URL}/api/categories`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import CategoriesList from './CategoriesList';
 import './categoriesAdminPage.css';
+const API_URL = process.env.REACT_APP_API_URL;
 
 function CategoriesAdminPage() {
   const [editCategory, setEditCategory] = useState(null);
@@ -17,7 +18,7 @@ function CategoriesAdminPage() {
     if (!editCategoryName.trim()) return;
 
     try {
-      await fetch(`http://localhost:4000/api/categories/${editCategory._id}`, {
+      await fetch(`${API_URL}/api/categories/${editCategory._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

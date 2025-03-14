@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './CreateMovieForm.css';
+const API_URL = process.env.REACT_APP_API_URL;
 
 const CreateMovieForm = ({ onSubmit, onCancel, movieData }) => {
   const isUpdate = Boolean(movieData);
@@ -30,7 +31,7 @@ const CreateMovieForm = ({ onSubmit, onCancel, movieData }) => {
     const fetchCategories = async () => {
       try {
         const token = localStorage.getItem('jwt');
-        const response = await fetch('http://localhost:4000/api/categories', {
+        const response = await fetch(`${API_URL}/api/categories`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -139,7 +140,7 @@ const CreateMovieForm = ({ onSubmit, onCancel, movieData }) => {
       let response;
       if (isUpdate) {
         // Send PUT request to update the movie
-        response = await fetch(`http://localhost:4000/api/movies/${movieData._id}`, {
+        response = await fetch(`${API_URL}/api/movies/${movieData._id}`, {
           method: "PUT",
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -148,7 +149,7 @@ const CreateMovieForm = ({ onSubmit, onCancel, movieData }) => {
         });
       } else {
         // Send POST request to create a new movie
-        response = await fetch("http://localhost:4000/api/movies", {
+        response = await fetch(`${API_URL}/api/movies`, {
           method: "POST",
           headers: {
             'Authorization': `Bearer ${token}`,

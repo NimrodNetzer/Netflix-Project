@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './FeaturedVideo.css';
 import MovieDetailsModal from './movieDetailsModal'; // Import the modal component
+const API_URL = process.env.REACT_APP_API_URL;
 
 function FeaturedVideo({ movie }) {
   const [isModalOpen, setModalOpen] = useState(false); // Modal state
@@ -20,7 +21,7 @@ function FeaturedVideo({ movie }) {
   return (
     <div className="featured-video">
       <video
-        src={`http://localhost:4000/${movie.video}`}
+        src={`${API_URL}/${movie.video}`}
         type="video/mp4"
         autoPlay
         muted
