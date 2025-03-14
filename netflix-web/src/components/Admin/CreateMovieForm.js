@@ -182,173 +182,160 @@ const CreateMovieForm = ({ onSubmit, onCancel, movieData }) => {
         <button className="close-button" onClick={onCancel}>✕</button>
         <h2>{isUpdate ? "Update Movie" : "Create Movie"}</h2>
         <form onSubmit={handleSubmit} className="movie-form">
-          <label className="form-label">Movie Name:</label>
-          <input
-            type="text"
-            className="form-input"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
 
-          <label className="form-label">Description:</label>
-          <textarea
-            className="form-input"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
+{/* Movie Name & Age Rating - Same Row */}
+{/* Movie Name, Age Rating & Author - Same Row */}
+<div className="row-group row-group-wider">
+  <div className="form-group wide">
+    <label className="form-label">Movie Name:</label>
+    <input
+      type="text"
+      className="form-input"
+      value={name}
+      onChange={(e) => setName(e.target.value)}
+      required
+    />
+  </div>
+  <div className="form-group">
+    <label className="form-label">Age Rating:</label>
+    <input
+      type="number"
+      className="form-input"
+      value={age}
+      onChange={(e) => setAge(e.target.value)}
+      required
+    />
+  </div>
+  <div className="form-group wide">
+    <label className="form-label">Author:</label>
+    <input
+      type="text"
+      className="form-input"
+      value={author}
+      onChange={(e) => setAuthor(e.target.value)}
+      required
+    />
+  </div>
+</div>
 
-          <label className="form-label">Age Rating:</label>
-          <input
-            type="number"
-            className="form-input"
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
-            required
-          />
 
-          <label className="form-label">Duration:</label>
-          <div className="time-input-container">
-            <input
-              type="text"
-              className="time-input"
-              placeholder="Hours"
-              value={hours}
-              onChange={handleHoursChange}
-              maxLength="1"
-            />
-            <span>h</span>
-            <input
-              type="text"
-              className="time-input"
-              placeholder="Minutes"
-              value={minutes}
-              onChange={handleMinutesChange}
-              maxLength="2"
-            />
-            <span>m</span>
-          </div>
+{/* Description - Full Row */}
+<div className="form-group full-width">
+  <label className="form-label">Description:</label>
+  <textarea className="form-input" value={description} onChange={(e) => setDescription(e.target.value)} required />
+</div>
 
-          <label className="form-label">Release Date:</label>
-          <input
-            type="date"
-            className="form-input"
-            value={releaseDate}
-            onChange={(e) => setReleaseDate(e.target.value)}
-            required
-          />
+{/* Duration & Release Date - Same Row */}
+<div className="row-group">
+  <div className="form-group">
+    <label className="form-label">Duration:</label>
+    <div className="time-input-container">
+      <input type="text" className="time-input" placeholder="Hours" value={hours} onChange={handleHoursChange} maxLength="1" />
+      <span>h</span>
+      <input type="text" className="time-input" placeholder="Minutes" value={minutes} onChange={handleMinutesChange} maxLength="2" />
+      <span>m</span>
+    </div>
+  </div>
+  <div className="form-group">
+    <label className="form-label">Release Date:</label>
+    <input type="date" className="form-input" value={releaseDate} onChange={(e) => setReleaseDate(e.target.value)} required />
+  </div>
+</div>
 
-          <label className="form-label">Quality:</label>
-          <select
-            className="form-input"
-            value={quality}
-            onChange={(e) => setQuality(e.target.value)}
-            required
-          >
-            <option value="">Select Quality</option>
-            <option value="HD">HD</option>
-            <option value="SD">SD</option>
-            <option value="4K">4K</option>
-          </select>
+{/* Quality & Language - Same Row */}
+<div className="row-group">
+  <div className="form-group">
+    <label className="form-label">Quality:</label>
+    <select className="form-input" value={quality} onChange={(e) => setQuality(e.target.value)} required>
+      <option value="">Select Quality</option>
+      <option value="HD">HD</option>
+      <option value="SD">SD</option>
+      <option value="4K">4K</option>
+    </select>
+  </div>
+  <div className="form-group">
+    <label className="form-label">Language:</label>
+    <select className="form-input" value={language} onChange={(e) => setLanguage(e.target.value)} required>
+      <option value="">Select Language</option>
+      <option value="English">English</option>
+      <option value="Spanish">Spanish</option>
+      <option value="French">French</option>
+    </select>
+  </div>
+</div>
 
-          <label className="form-label">Genre:</label>
-          <select
-            className="form-input"
-            value={genre}
-            onChange={(e) => setGenre(e.target.value)}
-            required
-          >
-            <option value="">Select Genre</option>
-            <option value="Action">Action</option>
-            <option value="Drama">Drama</option>
-            <option value="Comedy">Comedy</option>
-            <option value="Horror">Horror</option>
-          </select>
+{/* Categories - Full Row */}
+<div className="form-group full-width">
+  <label className="form-label">Categories:</label>
+  <div className="scroll-wrapper">
+    <div className="categories-container1">
+      {categories.map(category => (
+        <label key={category._id}>
+          <input type="checkbox" checked={selectedCategories.includes(category._id)} onChange={() => handleCategorySelection(category._id)} />
+          {category.name}
+        </label>
+      ))}
+    </div>
+  </div>
+</div>
 
-          <label className="form-label">Language:</label>
-          <select
-            className="form-input"
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-            required
-          >
-            <option value="">Select Language</option>
-            <option value="English">English</option>
-            <option value="Spanish">Spanish</option>
-            <option value="French">French</option>
-            <option value="German">German</option>
-          </select>
 
-          <label className="form-label">Categories:</label>
-          <div className="categories-container">
-            {categories.map(category => (
-              <label key={category._id}>
-                <input
-                  type="checkbox"
-                  checked={selectedCategories.includes(category._id)}
-                  onChange={() => handleCategorySelection(category._id)}
-                />
-                {category.name}
-              </label>
-            ))}
-          </div>
+{/* Cast Section - Full Row */}
+<div className="form-group full-width">
+  <label className="form-label">Cast:</label>
+  {cast.map((member, index) => (
+    <div key={index} className="cast-member">
+      <input
+        type="text"
+        className="form-input"
+        placeholder="Actor Name"
+        value={member.name}
+        onChange={(e) => handleCastChange(index, 'name', e.target.value)}
+        required
+      />
+      <input
+        type="text"
+        className="form-input"
+        placeholder="Role"
+        value={member.role}
+        onChange={(e) => handleCastChange(index, 'role', e.target.value)}
+        required
+      />
+      <button
+        type="button"
+        className="remove-cast-button"
+        onClick={() => removeCastMember(index)}
+      >
+        🗑
+      </button>
+    </div>
+  ))}
+  <button type="button" className="add-cast-button" onClick={addCastMember}>
+    + Add Cast Member
+  </button>
+</div>
 
-          <label className="form-label">Cast:</label>
-          {cast.map((member, index) => (
-            <div key={index} className="cast-member">
-              <input
-                type="text"
-                className="form-input"
-                placeholder="Actor Name"
-                value={member.name}
-                onChange={(e) => handleCastChange(index, 'name', e.target.value)}
-                required
-              />
-              <input
-                type="text"
-                className="form-input"
-                placeholder="Role"
-                value={member.role}
-                onChange={(e) => handleCastChange(index, 'role', e.target.value)}
-                required
-              />
-              <button
-                type="button"
-                className="remove-cast-button"
-                onClick={() => removeCastMember(index)}
-              >
-                🗑
-              </button>
-            </div>
-          ))}
-          <button type="button" className="add-cast-button" onClick={addCastMember}>
-            + Add Cast Member
-          </button>
+{/* Picture Upload - Full Row */}
+<div className="form-group full-width">
+  <label className="form-label">Picture:</label>
+  <input type="file" className="form-input" accept="image/*" onChange={(e) => setPicture(e.target.files[0])} />
+</div>
 
-          <label className="form-label">Picture:</label>
-          <input
-            type="file"
-            className="form-input"
-            accept="image/*"
-            onChange={(e) => setPicture(e.target.files[0])}
-          />
+{/* Video Upload - Full Row */}
+<div className="form-group full-width">
+  <label className="form-label">Video:</label>
+  <input type="file" className="form-input" accept="video/*" onChange={(e) => setVideo(e.target.files[0])} />
+</div>
 
-          <label className="form-label">Video:</label>
-          <input
-            type="file"
-            className="form-input"
-            accept="video/*"
-            onChange={(e) => setVideo(e.target.files[0])}
-          />
+{/* Success Message */}
+{successMessage && <div className="success-message full-width">{successMessage}</div>}
 
-          {successMessage && <div className="success-message">{successMessage}</div>}
+{/* Submit Button */}
+<button type="submit" className="submit-button">{loading ? (isUpdate ? 'Updating...' : 'Creating...') : (isUpdate ? 'Update' : 'Create')}</button>
 
-          <button type="submit" className="submit-button" disabled={loading}>
-            {loading ? (isUpdate ? 'Updating...' : 'Creating...') : (isUpdate ? 'Update' : 'Create')}
-          </button>
-        </form>
-      </div>
+</form>
+
+</div>
     </div>
   );
 };
