@@ -1,14 +1,9 @@
-/* Global Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box; /* Ensures consistent sizing */
+
+/* 🌞 Light Mode (Inverted Colors, but excludes images) */
+.light-mode {
+  filter: invert(1) hue-rotate(180deg);
 }
 
-/* Apply global font */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #000; /* Netflix-like background */
-  color: white; /* Default text color */
-  overflow-x: hidden; /* Prevent horizontal scroll */
+.light-mode img {
+  filter: invert(1) hue-rotate(180deg); /* Prevent image inversion */
 }
