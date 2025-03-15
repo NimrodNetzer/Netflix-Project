@@ -44,7 +44,6 @@ const createMovie = async (movieData) => {
     }
 
     // Optional validations
-    console.log(movieData.cast);
     if (movieData.cast) {
       if (!Array.isArray(movieData.cast)) {
         throw new Error('Invalid cast: must be an array');
@@ -55,7 +54,6 @@ const createMovie = async (movieData) => {
         }
       });
     }
-    console.log(movieData.properties, "this is properties");
 
     // Check for duplicates
     const existingMovie = await Movie.findOne({ name: movieData.name, releaseDate: movieData.releaseDate });

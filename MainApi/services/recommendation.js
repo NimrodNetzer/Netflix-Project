@@ -11,10 +11,8 @@ const fetchRecommendations = async (userId, movieId) => {
     const socketClient = new SocketClient(serverIp, serverPort);
     socketClient.connect();
     const request = `GET ${userId} ${movieId}\n`;
-    console.log(`Sending request to Recommendation System: ${request}`);
     const response = await socketClient.send(request);
     socketClient.disconnect();
-    console.log(`Received response from Recommendation System: ${response}`);
 
     if (response.startsWith('404')) {
         const error = new Error('User or Movie not found');
@@ -79,7 +77,6 @@ const updateMongoDBMoviesList = async (userId, movieId) => {
             throw new Error(`User with ID ${userId} not found`);
         }
 
-        console.log(`Movie ${movieId} successfully added to user ${userId}'s moviesList.`);
         return result;
     } catch (error) {
         console.error(`Error adding movie to user ${userId}:`, error.message);

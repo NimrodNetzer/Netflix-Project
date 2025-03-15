@@ -10,7 +10,6 @@ const isAuthenticated = async (req, res, next) => {
             req.admin = data.admin;
             return next()
         } catch (err) {
-            console.log(err);
             return res.status(401).send("Invalid Token");
         }
     }

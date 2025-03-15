@@ -9,14 +9,12 @@ const createMovieController = async (req, res) => {
         const video = req.files.video ? req.files.video[0].path : null;
         const { name, description, releaseDate } = movieData;
         const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
-        console.log(imagePath);
         if (!name || !description || !releaseDate) {
             return res.status(400).json({ message: 'Missing required fields: name, description, or releaseDate' });
         }
 
         movieData.picture = image;
         movieData.video = video;
-        console.log(imagePath);
         const newMovie = await createMovie(movieData);
         res.status(201).location(`/api/movies/${newMovie._id}`).send();
     } catch (error) {
@@ -61,7 +59,6 @@ const deleteMovie = async (req, res) => {
         }
 
         const message = await recommendationService.deleteWatchedMovie(id);
-        console.log(message);
 
         res.status(204).send();
     } catch (error) {
@@ -105,7 +102,6 @@ const updateMovie = async (req, res) => {
 
 // Fetch recommended movies
 const getRecommendations = async (req, res) => {
-    console.log('Loading recommendations');
     const { id } = req.params;
     const userId = req.userId;
 
@@ -128,7 +124,6 @@ const getRecommendations = async (req, res) => {
 // Add a recommendation
 
 const addRecommendation = async (req, res) => {
-    console.log('Adding recommendation');
     const { id } = req.params;
     const userId = req.userId;
 
