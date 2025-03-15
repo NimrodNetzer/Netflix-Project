@@ -13,12 +13,12 @@ function TopMenu({ darkMode, setDarkMode }) {
   const inputRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const isLoggedIn = !!localStorage.getItem("jwt");
 
+  // 🔥 Re-run this effect whenever JWT changes (ensures admin status updates instantly)
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) {
-      setUser(storedUser);
-    }
+    if (storedUser) setUser(storedUser);
 
     const token = localStorage.getItem("jwt");
     if (token) {
@@ -27,21 +27,30 @@ function TopMenu({ darkMode, setDarkMode }) {
         setIsAdmin(decodedToken.admin === true);
       } catch (error) {
         console.error("Invalid token:", error);
+        setIsAdmin(false);
       }
+    } else {
+      setIsAdmin(false);
     }
-  }, []);
+  }, [localStorage.getItem("jwt")]); // 🔥 Runs when JWT changes
 
+  // Handle search input change
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchQuery(value);
     navigate(value.trim() ? `/search/${value}` : "/home");
   };
 
+  // Show search input field on search icon click
   const handleSearchClick = () => {
-    setIsSearchVisible(true);
-    setTimeout(() => inputRef.current?.focus(), 100);
+    if (!isLoggedIn) return;
+    setIsSearchVisible((prev) => !prev);
+    if (!isSearchVisible) {
+      setTimeout(() => inputRef.current?.focus(), 100);
+    }
   };
 
+  // Close search input if clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -52,13 +61,20 @@ function TopMenu({ darkMode, setDarkMode }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Handle user logout
   const handleSignOut = (e) => {
     e.preventDefault();
     localStorage.removeItem("jwt");
     localStorage.removeItem("user");
+    setUser(null);
+    setIsAdmin(false);
+    setIsSearchVisible(false);
+    setSearchQuery("");
     navigate("/login");
+    window.location.reload(); // 🔥 Ensures menu updates instantly
   };
 
+  // Toggle dark mode and store preference
   const handleToggleDarkMode = (event) => {
     event.stopPropagation();
     setDarkMode((prevMode) => {
@@ -70,7 +86,6 @@ function TopMenu({ darkMode, setDarkMode }) {
 
   const isActive = (path) => location.pathname === path;
   const isLoginPage = ["/login", "/register", "/"].includes(location.pathname);
-  const isLoggedIn = !!localStorage.getItem("jwt");
   const avatarImage = user?.picture || defaultAvatar;
 
   return (
@@ -89,15 +104,22 @@ function TopMenu({ darkMode, setDarkMode }) {
                 <a href="#" onClick={(e) => { e.preventDefault(); navigate("/home"); }}>Movies</a>
               </li>
               <li><a href="#" onClick={handleSignOut}>Exit Netflix</a></li>
+              {/* 🔥 Admin menu updates instantly after login/logout */}
               {isAdmin && <li className={isActive("/admin") ? "active" : ""}><a href="/admin">Admin</a></li>}
             </>
           )}
         </ul>
 
         <div className="right-section">
+          {/* Search bar should always exist if logged in */}
           {isLoggedIn && (
             <div className="search-container" ref={searchRef}>
-              <img src="/assets/searchButton.png" alt="Search" className="search-icon" onClick={handleSearchClick} />
+              <img 
+                src="/assets/searchButton.png" 
+                alt="Search" 
+                className="search-icon" 
+                onClick={handleSearchClick} 
+              />
               {isSearchVisible && (
                 <input 
                   type="text" 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './categoryBox.css';
 const API_URL = process.env.REACT_APP_API_URL;
 
-function CategoryBox({ category, onDelete }) {
+function CategoryBox({ category, onDelete, onEditCategory }) { // ✅ Receive onEditCategory function
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(category.name);
   const [editedPromoted, setEditedPromoted] = useState(category.promoted);
@@ -28,7 +28,8 @@ function CategoryBox({ category, onDelete }) {
         setTimeout(() => {
           setIsEditing(false);
           setSuccessMessage('');
-        }, 2000);
+          onEditCategory(); // ✅ Refresh the categories list after editing
+        }, 1000);
       } else {
         throw new Error('Failed to update category');
       }
@@ -68,7 +69,7 @@ function CategoryBox({ category, onDelete }) {
             </div>
           </div>
 
-          {/* ✅ Success Message (ONLY for updates, inside the card) */}
+          {/* ✅ Success Message */}
           {successMessage && <p className="success-message">{successMessage}</p>}
 
           {/* Save & Cancel Buttons */}

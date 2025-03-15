@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CategoriesList from './CategoriesList';
 import './categoriesAdminPage.css';
 const API_URL = process.env.REACT_APP_API_URL;
 
-function CategoriesAdminPage() {
+function CategoriesAdminPage({ refreshTrigger }) { // ✅ Receive refresh trigger prop
   const [editCategory, setEditCategory] = useState(null);
   const [editCategoryName, setEditCategoryName] = useState('');
   const [editCategoryPromoted, setEditCategoryPromoted] = useState(false);
+  const [refresh, setRefresh] = useState(false); // ✅ Local refresh trigger
+
+  useEffect(() => {
+    setRefresh(prev => !prev); // ✅ When refreshTrigger changes, force re-render
+  }, [refreshTrigger]);
 
   const handleEditCategory = (category) => {
     setEditCategory(category);
@@ -16,7 +21,7 @@ function CategoriesAdminPage() {
 
   const handleUpdateCategory = async () => {
     if (!editCategoryName.trim()) return;
-
+  
     try {
       await fetch(`${API_URL}/api/categories/${editCategory._id}`, {
         method: 'PUT',
@@ -29,17 +34,19 @@ function CategoriesAdminPage() {
           promoted: editCategoryPromoted,
         }),
       });
-
+  
       setEditCategory(null);
+      window.location.reload(); // 🔥 Refresh the page after editing
     } catch (error) {
       console.error('Error updating category:', error);
     }
   };
-
+  
   return (
     <div className="admin-page">
       <h1>Categories Management</h1>
-      <CategoriesList onEditCategory={handleEditCategory} />
+      {/* ✅ Pass refresh state to CategoriesList */}
+      <CategoriesList key={refresh} onEditCategory={handleEditCategory} />
 
       {editCategory && (
         <div className="edit-category-form">

@@ -38,7 +38,7 @@ function CategoriesList() {
       if (response.status === 204 || response.ok) {
         setMessage({ type: 'success', text: 'Category deleted successfully!' });
         fetchCategories();
-        setTimeout(() => setMessage({ type: '', text: '' }), 5000); // ⏳ Now disappears after 5 seconds
+        setTimeout(() => setMessage({ type: '', text: '' }), 5000);
       } else {
         const data = await response.json();
         throw new Error(data.error || 'Failed to delete category');
@@ -46,21 +46,26 @@ function CategoriesList() {
     } catch (error) {
       console.error('Error deleting category:', error);
       setMessage({ type: 'error', text: error.message });
-      setTimeout(() => setMessage({ type: '', text: '' }), 5000); // ⏳ Now disappears after 5 seconds
+      setTimeout(() => setMessage({ type: '', text: '' }), 5000);
     }
+  };
+
+  // ✅ New function: Refresh categories after edit
+  const handleEditCategory = () => {
+    fetchCategories(); // Refresh the list after an edit
   };
 
   return (
     <div className="categories-container">
-      {/* ✅ Show delete error message centered in red */}
       {message.type === 'error' && <p className="delete-error-message">{message.text}</p>}
-      
+
       <div className="categories-list">
         {categories.map((category) => (
           <CategoryBox 
             key={category._id} 
             category={category} 
             onDelete={handleDeleteCategory} 
+            onEditCategory={handleEditCategory} // ✅ Pass edit function
           />
         ))}
       </div>
