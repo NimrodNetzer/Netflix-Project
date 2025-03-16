@@ -1,4 +1,24 @@
 package com.example.netflix_android.ViewModel;
 
-public class RecommendationViewModel {
+import android.content.Context;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
+import com.example.netflix_android.Entities.Movie;
+import com.example.netflix_android.Repository.RecommendationRepository;
+import java.util.List;
+
+public class RecommendationViewModel extends ViewModel {
+    private final RecommendationRepository recommendationRepository;
+
+    public RecommendationViewModel(RecommendationRepository repository) {
+        this.recommendationRepository = repository;
+    }
+
+    public LiveData<List<Movie>> getRecommendedMovies(String userId) {
+        return recommendationRepository.getRecommendedMovies(userId);
+    }
+
+    public LiveData<Boolean> addRecommendation(String movieId) {
+        return recommendationRepository.addRecommendation(movieId);
+    }
 }

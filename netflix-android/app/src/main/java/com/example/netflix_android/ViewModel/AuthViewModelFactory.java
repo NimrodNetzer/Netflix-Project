@@ -8,7 +8,7 @@ public class AuthViewModelFactory implements ViewModelProvider.Factory {
     private final Context context;
 
     public AuthViewModelFactory(Context context) {
-        this.context = context.getApplicationContext(); // Avoid memory leaks
+        this.context = context.getApplicationContext(); // Prevent memory leaks
     }
 
     @Override

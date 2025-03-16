@@ -21,17 +21,24 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Initialize ViewModel with Factory
         authViewModel = new ViewModelProvider(this, new AuthViewModelFactory(this))
                 .get(AuthViewModel.class);
 
-        // Find Views
         emailEditText = findViewById(R.id.email);
         passwordEditText = findViewById(R.id.password);
         loginButton = findViewById(R.id.login_button);
 
-        // Login Button Click
+        // Check if user is already logged in
+        //checkExistingLogin();
+
         loginButton.setOnClickListener(view -> login());
+    }
+
+    private void checkExistingLogin() {
+        String token = authViewModel.getToken();
+        if (token != null) {
+            navigateToMainActivity();
+        }
     }
 
     private void login() {
@@ -43,15 +50,18 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // Call API through ViewModel
         authViewModel.login(email, password).observe(this, success -> {
             if (success) {
                 Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish(); // Prevent back navigation
+                navigateToMainActivity();
             } else {
                 Toast.makeText(this, "Login Failed. Check your credentials!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void navigateToMainActivity() {
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        finish(); // Prevent back navigation
     }
 }
