@@ -3,12 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#000000"
-    android:padding="8dp">
+    android:background="#000000">
 
+    <!-- ✅ Include the Top Menu (Header) -->
+    <include layout="@layout/netflix_top_menu" />
+
+    <!-- ✅ RecyclerView for Categories -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categories_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        android:padding="10dp" />
 </LinearLayout>

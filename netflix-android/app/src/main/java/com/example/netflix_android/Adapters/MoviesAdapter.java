@@ -1,7 +1,7 @@
 package com.example.netflix_android.Adapters;
+
 import android.content.Intent;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,17 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.netflix_android.Entities.Movie;
+import com.example.netflix_android.Entities.SearchResult;
 import com.example.netflix_android.R;
 import com.example.netflix_android.Utils.Constants;
 import com.example.netflix_android.View.MovieDetailActivity;
-
 import java.util.List;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
-    private Context context;
-    private List<Movie> movieList;
+    private final Context context;
+    private final List<?> movieList;  // Supports both Movie and SearchResult types
 
-    public MoviesAdapter(Context context, List<Movie> movieList) {
+    public MoviesAdapter(Context context, List<?> movieList) {
         this.context = context;
         this.movieList = movieList;
     }
@@ -35,36 +35,54 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
-        Movie movie = movieList.get(position);
+        Object item = movieList.get(position);
+
+        // Declare final variables for lambda scope
+        final String title;
+        final String imageUrl;
+        final String movieId;
+        final String details;
+        final String description;
+
+        if (item instanceof Movie) {
+            Movie movie = (Movie) item;
+            title = movie.getName();
+            imageUrl = Constants.BASE_URL + movie.getPicture().replace("\\", "/");
+            movieId = movie.getId();
+            details = "2025  |  " + movie.getAge() + "+  |  " + movie.getTime();
+            description = movie.getDescription();
+        } else if (item instanceof SearchResult) {
+            SearchResult searchResult = (SearchResult) item;
+            title = searchResult.getName();
+            imageUrl = Constants.BASE_URL + searchResult.getPicture().replace("\\", "/");
+            movieId = searchResult.getId();
+            details = "2025  |  " + searchResult.getAge() + "+  |  " + searchResult.getTime();
+            description = searchResult.getDescription();
+        } else {
+            return; // Prevent unexpected errors
+        }
 
         // Set movie title
-        holder.movieTitle.setText(movie.getName());
+        holder.movieTitle.setText(title);
 
-        // Construct the full image URL
-        String baseUrl = Constants.BASE_URL;  // Change to your actual domain
-        String imageUrl = baseUrl + movie.getPicture().replace("\\", "/");
-
-        // Load movie poster
+        // Load movie poster using Glide
         Glide.with(context)
                 .load(imageUrl)
                 .placeholder(android.R.drawable.ic_menu_gallery) // Default placeholder
-                .error(android.R.drawable.stat_notify_error) // Default error icon
+                .error(android.R.drawable.stat_notify_error) // Error icon
                 .into(holder.moviePoster);
 
         // Handle Click Event - Open Movie Details
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, MovieDetailActivity.class);
-            intent.putExtra("movie_id", movie.getId()); // Ensure movieId is passed
-            intent.putExtra("movie_title", movie.getName());
+            intent.putExtra("movie_id", movieId);
+            intent.putExtra("movie_title", title);
             intent.putExtra("movie_image", imageUrl);
-            intent.putExtra("movie_details", "2025  |  " + movie.getAge() + "+  |  " + movie.getTime());
-            intent.putExtra("movie_description", movie.getDescription());
+            intent.putExtra("movie_details", details);
+            intent.putExtra("movie_description", description);
             context.startActivity(intent);
         });
     }
-
-
-
 
     @Override
     public int getItemCount() {
