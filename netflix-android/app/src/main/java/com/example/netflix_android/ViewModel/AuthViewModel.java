@@ -15,7 +15,9 @@ public class AuthViewModel extends ViewModel {
     public LiveData<Boolean> login(String email, String password) {
         return userRepository.login(email, password);
     }
-
+    public LiveData<Boolean> signup(String email, String password, String nickname, String picture) {
+        return userRepository.signup(email, password, nickname, picture);
+    }
     public String getToken() {
         return userRepository.getToken();
     }

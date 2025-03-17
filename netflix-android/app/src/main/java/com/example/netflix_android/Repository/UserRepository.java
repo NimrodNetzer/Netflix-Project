@@ -54,6 +54,33 @@ public class UserRepository {
         return success;
     }
 
+    public LiveData<Boolean> signup(String email, String password, String nickname, String picture) {
+        MutableLiveData<Boolean> success = new MutableLiveData<>();
+        User newUser = new User(email, password, nickname, picture, null);
+
+        Log.d("SignupDebug", "Attempting signup with email: " + email);
+
+        authApi.signup(newUser).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Log.d("SignupDebug", "Signup successful");
+                    success.postValue(true);
+                } else {
+                    Log.e("SignupDebug", "Signup failed: " + response.code() + " - " + response.message());
+                    success.postValue(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("SignupDebug", "Signup request failed", t);
+                success.postValue(false);
+            }
+        });
+        return success;
+    }
+
     public void logout() {
         sessionManager.clearSession(); // Clear stored token
     }

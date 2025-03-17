@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,6 +16,7 @@ public class LoginActivity extends AppCompatActivity {
     private AuthViewModel authViewModel;
     private EditText emailEditText, passwordEditText;
     private Button loginButton;
+    private TextView signupLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +29,16 @@ public class LoginActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.email);
         passwordEditText = findViewById(R.id.password);
         loginButton = findViewById(R.id.login_button);
+        signupLink = findViewById(R.id.signup_link);
 
         // Check if user is already logged in
         //checkExistingLogin();
 
         loginButton.setOnClickListener(view -> login());
+        signupLink.setOnClickListener(view -> {
+            Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void checkExistingLogin() {
