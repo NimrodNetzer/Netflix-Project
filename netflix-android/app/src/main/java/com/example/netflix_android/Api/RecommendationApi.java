@@ -10,7 +10,7 @@ public interface RecommendationApi {
 
     // Fetch recommended movies for a user
     @GET("/api/movies/{id}/recommend")
-    Call<Recommendation> getRecommendations(@Path("id") String userId);
+    Call<Recommendation> getRecommendations(@Path("id") String movieId);
 
     // Add a watched movie for recommendation
     @POST("/api/movies/{id}/recommend")
