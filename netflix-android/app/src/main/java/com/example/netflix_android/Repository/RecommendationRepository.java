@@ -26,12 +26,12 @@ public class RecommendationRepository {
     }
 
     // ✅ Fetch full movie details for recommended movies
-    public LiveData<List<Movie>> getRecommendedMovies(String userId) {
+    public LiveData<List<Movie>> getRecommendedMovies(String movieId) {
         MutableLiveData<List<Movie>> recommendedMoviesLiveData = new MutableLiveData<>();
 
-        Log.d(TAG, "Fetching recommended movie IDs for user: " + userId);
+        Log.d(TAG, "Fetching recommended movie IDs for user: " );
 
-        recommendationApi.getRecommendations(userId).enqueue(new Callback<Recommendation>() {
+        recommendationApi.getRecommendations(movieId).enqueue(new Callback<Recommendation>() {
             @Override
             public void onResponse(Call<Recommendation> call, Response<Recommendation> response) {
                 if (response.isSuccessful() && response.body() != null) {

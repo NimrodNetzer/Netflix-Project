@@ -16,6 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".View.MovieDetailActivity"/>
 
         <activity android:name=".View.LoginActivity" android:exported="true"/>
         <activity android:name=".View.SignupActivity" android:exported="true"/>

@@ -14,8 +14,8 @@ public class RecommendationViewModel extends ViewModel {
         this.recommendationRepository = repository;
     }
 
-    public LiveData<List<Movie>> getRecommendedMovies(String userId) {
-        return recommendationRepository.getRecommendedMovies(userId);
+    public LiveData<List<Movie>> getRecommendedMovies(String movieId) {
+        return recommendationRepository.getRecommendedMovies(movieId);
     }
 
     public LiveData<Boolean> addRecommendation(String movieId) {
