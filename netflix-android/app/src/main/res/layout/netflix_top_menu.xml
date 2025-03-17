@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#121212"
+    android:padding="10dp">
+
+    <!-- ✅ Netflix Logo (Clickable) -->
+    <ImageView
+        android:id="@+id/netflix_logo"
+        android:layout_width="137dp"
+        android:layout_height="49dp"
+        android:layout_alignParentStart="true"
+        android:contentDescription="Netflix Logo"
+        android:src="@drawable/netflix"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <!-- ✅ Search Icon (Top Right) -->
+    <ImageView
+        android:id="@+id/icon_search"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="Search Icon"
+        android:src="@android:drawable/ic_menu_search"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <!-- ✅ Settings Icon (Left of Search) -->
+    <ImageView
+        android:id="@+id/icon_settings"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_toStartOf="@id/icon_search"
+        android:contentDescription="Settings Icon"
+        android:src="@android:drawable/ic_menu_preferences"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <!-- ✅ Exit Button (Left of Settings) -->
+    <Button
+        android:id="@+id/button_exit"
+        android:layout_width="67dp"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/icon_settings"
+        android:backgroundTint="#E50914"
+        android:text="Exit"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp" />
+
+</RelativeLayout>
