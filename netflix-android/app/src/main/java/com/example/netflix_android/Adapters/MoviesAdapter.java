@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.netflix_android.Entities.Movie;
 import com.example.netflix_android.R;
+import com.example.netflix_android.Utils.Constants;
+
 import java.util.List;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
@@ -38,7 +40,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         holder.movieTitle.setText(movie.getName());
 
         // Define your API base URL
-        String baseUrl = "http://10.0.2.2:4000/";  // Change this to your actual domain
+        String baseUrl = Constants.BASE_URL;  // Change this to your actual domain
 
         // Construct the full image URL
         String imageUrl = baseUrl + movie.getPicture().replace("\\", "/"); // Ensure correct URL format

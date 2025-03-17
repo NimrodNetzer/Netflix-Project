@@ -3,6 +3,8 @@ package com.example.netflix_android.Network;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.netflix_android.R;
+import com.example.netflix_android.Utils.Constants;
 import com.example.netflix_android.Utils.SessionManager;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -31,7 +33,7 @@ public class RetrofitClient {
 
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.1.71:4000/")
+                    .baseUrl(Constants.BASE_URL)
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
