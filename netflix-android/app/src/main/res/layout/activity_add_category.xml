@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#000000"
+    android:padding="20dp">
+
+    <!-- ✅ Netflix Top Menu -->
+    <include layout="@layout/netflix_top_menu" />
+
+    <!-- ✅ Page Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Category"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:layout_gravity="center"
+        android:paddingTop="20dp"/>
+
+    <!-- ✅ Category Name Input (Fixed) -->
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:backgroundTint="#FFFFFF"
+        android:padding="12dp"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
+
+    <!-- ✅ Promoted / Not Promoted Button -->
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Not Promoted"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#444444"
+        android:layout_marginTop="20dp"/>
+
+    <!-- ✅ Buttons Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="40dp">
+
+        <!-- ✅ Cancel Button -->
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#444444"/>
+
+        <!-- ✅ Submit Button -->
+        <Button
+            android:id="@+id/button_submit_category"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Add Category"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#E50914"
+            android:layout_marginStart="20dp"/>
+    </LinearLayout>
+
+</LinearLayout>

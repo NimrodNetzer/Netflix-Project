@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#000000"
+    android:padding="16dp">
+
+    <!-- ✅ Netflix Top Menu -->
+    <include layout="@layout/netflix_top_menu" />
+
+    <!-- ✅ Toggle Switch (Without Extra Titles) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="30dp">
+
+        <!-- ✅ Toggle Switch -->
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggle_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            app:selectionRequired="true">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/toggle_movies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Movies"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#E50914"
+                app:cornerRadius="8dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/toggle_categories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Categories"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#333333"
+                app:cornerRadius="8dp"/>
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    </LinearLayout>
+
+    <!-- ✅ Row for Add Buttons (Both Always Clickable) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="30dp">
+
+        <!-- ✅ Add Movie Button -->
+        <Button
+            android:id="@+id/button_add_movie"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Add Movie"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#E50914"/>
+
+        <!-- ✅ Add Category Button -->
+        <Button
+            android:id="@+id/button_add_category"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Add Category"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#E50914"
+            android:layout_marginStart="20dp"/>
+    </LinearLayout>
+
+</LinearLayout>
