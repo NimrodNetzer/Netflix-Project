@@ -12,43 +12,84 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.netflix_android.Adapters.CategoryAdapter;
 import com.example.netflix_android.Entities.Movie;
 import com.example.netflix_android.R;
+import com.example.netflix_android.Utils.Constants;
 import com.example.netflix_android.ViewModel.MoviesViewModel;
 import com.example.netflix_android.ViewModel.MoviesViewModelFactory;
 import java.util.List;
 import java.util.Map;
-
+import android.net.Uri;
+import android.widget.TextView;
+import android.widget.VideoView;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     private RecyclerView categoriesRecyclerView;
     private CategoryAdapter categoryAdapter;
     private MoviesViewModel moviesViewModel;
+    private VideoView featuredVideo; // Featured Video View
+    private TextView featuredVideoDescription; // Description TextView
 
-    // ✅ Top menu items
+    // Top menu items...
     private ImageView searchIcon, settingsIcon, netflixLogo;
     private Button exitButton;
-
+    private Movie featuredMovie;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main); // Ensure activity_main.xml includes the top menu!
+        setContentView(R.layout.activity_main); // Ensure this layout now contains the featured video
 
         Log.d(TAG, "🚀 App Started - Fetching Movies...");
 
-        // ✅ Set up top menu
+        // Set up top menu
         setupTopMenu();
 
-        // ✅ Set up RecyclerView for categories
+        // Initialize featured video view
+        featuredVideo = findViewById(R.id.featured_video);
+        featuredVideoDescription = findViewById(R.id.featured_video_description);
+        // Set up RecyclerView for categories
         categoriesRecyclerView = findViewById(R.id.categories_recycler_view);
         categoriesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // ✅ Initialize ViewModel for movies
+        // Initialize ViewModel for movies
         moviesViewModel = new ViewModelProvider(this, new MoviesViewModelFactory(this)).get(MoviesViewModel.class);
 
-        // ✅ Fetch movies and display them
+        // Fetch movies and display them
         moviesViewModel.getMovies().observe(this, moviesResultsList -> {
             if (moviesResultsList != null && !moviesResultsList.isEmpty()) {
                 Map<String, List<Movie>> categorizedMovies = moviesViewModel.getMoviesGroupedByCategory(moviesResultsList);
+
+                // Set up the featured video using the first movie from the first available category
+                for (List<Movie> movieList : categorizedMovies.values()) {
+                    if (!movieList.isEmpty()) {
+                        featuredMovie = movieList.get(0);
+                        break;
+                    }
+                }
+                if (featuredMovie != null) {
+                    // Assume getVideoUrl() returns the URL for the video
+                    String videoUrl = featuredMovie.getVideo();
+                    featuredVideo.setVideoURI(Uri.parse("https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"));
+
+                    // Start auto-play once the video is ready
+                    featuredVideo.setOnPreparedListener(mp -> {
+                        mp.setLooping(true); // Optional: loop the video
+                        featuredVideo.start();
+                    });
+
+                    // When clicked, open the MovieDetailActivity like a movie box
+                    featuredVideo.setOnClickListener(v -> {
+                        Intent intent = new Intent(MainActivity.this, MovieDetailActivity.class);
+                        intent.putExtra("movie_id", featuredMovie.getId());
+                        intent.putExtra("movie_title", featuredMovie.getName());
+                        intent.putExtra("movie_image", Constants.BASE_URL + featuredMovie.getPicture().replace("\\", "/"));
+                        intent.putExtra("movie_details", "2025  |  " + featuredMovie.getAge() + "+  |  " + featuredMovie.getTime());
+                        intent.putExtra("movie_description", featuredMovie.getDescription());
+                        startActivity(intent);
+                    });
+                    featuredVideoDescription.setText(featuredMovie.getDescription());
+                }
+
+                // Set up categories adapter for the RecyclerView
                 categoryAdapter = new CategoryAdapter(this, categorizedMovies);
                 categoriesRecyclerView.setAdapter(categoryAdapter);
             } else {
