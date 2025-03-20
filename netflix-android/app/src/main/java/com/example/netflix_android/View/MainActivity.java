@@ -1,11 +1,13 @@
 package com.example.netflix_android.View;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.VideoView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,26 +21,25 @@ import com.example.netflix_android.ViewModel.MoviesViewModel;
 import com.example.netflix_android.ViewModel.MoviesViewModelFactory;
 import java.util.List;
 import java.util.Map;
-import android.net.Uri;
-import android.widget.TextView;
-import android.widget.VideoView;
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     private RecyclerView categoriesRecyclerView;
     private CategoryAdapter categoryAdapter;
     private MoviesViewModel moviesViewModel;
-    private VideoView featuredVideo; // Featured Video View
-    private TextView featuredVideoDescription; // Description TextView
+    private VideoView featuredVideo;
+    private TextView featuredVideoDescription;
 
     // Top menu items...
-    private ImageView searchIcon, settingsIcon, netflixLogo;
-    private Button exitButton;
+    private ImageView searchIcon, netflixLogo;
+    private Button exitButton, adminButton;
     private Movie featuredMovie;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main); // Ensure this layout now contains the featured video
+        setContentView(R.layout.activity_main);
 
         Log.d(TAG, "🚀 App Started - Fetching Movies...");
 
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialize featured video view
         featuredVideo = findViewById(R.id.featured_video);
         featuredVideoDescription = findViewById(R.id.featured_video_description);
+
         // Set up RecyclerView for categories
         categoriesRecyclerView = findViewById(R.id.categories_recycler_view);
         categoriesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -67,18 +69,27 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     }
                 }
+
                 if (featuredMovie != null) {
-                    // Assume getVideoUrl() returns the URL for the video
-                    String videoUrl = featuredMovie.getVideo();
+                    String videoUrl = featuredMovie.getVideo();  // ✅ Fetch video URL
+
+                    // ✅ Debugging: Ensure `videoUrl` is retrieved
+                    if (videoUrl == null || videoUrl.isEmpty()) {
+                        Log.e(TAG, "❌ No video URL found for movie: " + featuredMovie.getName());
+                    } else {
+                        Log.d(TAG, "🎬 Video URL retrieved: " + videoUrl);
+                    }
+
+                    // ✅ Set a sample video for autoplay
                     featuredVideo.setVideoURI(Uri.parse("https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"));
 
                     // Start auto-play once the video is ready
                     featuredVideo.setOnPreparedListener(mp -> {
-                        mp.setLooping(true); // Optional: loop the video
+                        mp.setLooping(true);
                         featuredVideo.start();
                     });
 
-                    // When clicked, open the MovieDetailActivity like a movie box
+                    // ✅ Pass the correct video URL to `MovieDetailActivity`
                     featuredVideo.setOnClickListener(v -> {
                         Intent intent = new Intent(MainActivity.this, MovieDetailActivity.class);
                         intent.putExtra("movie_id", featuredMovie.getId());
@@ -86,9 +97,14 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("movie_image", Constants.BASE_URL + featuredMovie.getPicture().replace("\\", "/"));
                         intent.putExtra("movie_details", "2025  |  " + featuredMovie.getAge() + "+  |  " + featuredMovie.getTime());
                         intent.putExtra("movie_description", featuredMovie.getDescription());
+                        intent.putExtra("video_url", videoUrl);  // ✅ Ensure `video_url` is sent
+
                         startActivity(intent);
                     });
+
                     featuredVideoDescription.setText(featuredMovie.getDescription());
+                } else {
+                    Log.e(TAG, "⚠️ No featured movie found!");
                 }
 
                 // Set up categories adapter for the RecyclerView
@@ -102,11 +118,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupTopMenu() {
         try {
-            // ✅ Get references to UI elements
             searchIcon = findViewById(R.id.icon_search);
             netflixLogo = findViewById(R.id.netflix_logo);
             exitButton = findViewById(R.id.button_exit);
-            Button adminButton = findViewById(R.id.button_admin); // Admin Button
+            adminButton = findViewById(R.id.button_admin); // Admin Button
+
+            if (searchIcon == null || netflixLogo == null || exitButton == null || adminButton == null) {
+                Log.e(TAG, "❌ One or more top menu items are missing in activity_main.xml");
+                return;
+            }
 
             // ✅ Check if admin and show button accordingly
             SessionManager sessionManager = new SessionManager(this);
@@ -132,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
             // ✅ Handle Search Icon Click
             searchIcon.setOnClickListener(v -> {
                 Log.d(TAG, "🔍 Search icon clicked");
-                Intent intent = new Intent(MainActivity.this, com.example.netflix_android.View.SearchActivity.class);
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
                 startActivity(intent);
             });
 
@@ -149,6 +169,4 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "❌ Error setting up top menu", e);
         }
     }
-
-
 }

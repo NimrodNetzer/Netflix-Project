@@ -9,7 +9,7 @@ import com.example.netflix_android.Entities.User;
 import com.example.netflix_android.Entities.Category;
 import com.example.netflix_android.Entities.Movie;
 
-@Database(entities = {User.class, Category.class, Movie.class}, version = 3, exportSchema = false)
+@Database(entities = {User.class, Category.class, Movie.class}, version = 4, exportSchema = false)
 @TypeConverters(Converters.class) // Register TypeConverters
 public abstract class AppDatabase extends RoomDatabase {
 

@@ -43,6 +43,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         final String movieId;
         final String details;
         final String description;
+        final String video;
 
         if (item instanceof Movie) {
             Movie movie = (Movie) item;
@@ -51,6 +52,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             movieId = movie.getId();
             details = "2025  |  " + movie.getAge() + "+  |  " + movie.getTime();
             description = movie.getDescription();
+            video = Constants.BASE_URL + movie.getVideo().replace("\\", "/");;
         } else if (item instanceof SearchResult) {
             SearchResult searchResult = (SearchResult) item;
             title = searchResult.getName();
@@ -58,6 +60,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             movieId = searchResult.getId();
             details = "2025  |  " + searchResult.getAge() + "+  |  " + searchResult.getTime();
             description = searchResult.getDescription();
+            video = Constants.BASE_URL + searchResult.getVideo().replace("\\", "/");
         } else {
             return; // Prevent unexpected errors
         }
@@ -80,6 +83,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             intent.putExtra("movie_image", imageUrl);
             intent.putExtra("movie_details", details);
             intent.putExtra("movie_description", description);
+            intent.putExtra("video_url", video);
             context.startActivity(intent);
         });
     }

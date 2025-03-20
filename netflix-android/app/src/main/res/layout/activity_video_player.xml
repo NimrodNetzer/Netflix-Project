@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <!-- ✅ ExoPlayer Video View (Ensuring Full-Screen Video) -->
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/player_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:use_controller="false"
+        app:resize_mode="fill" />
+
+    <!-- 🔙 Back Button (Top-Left Corner) -->
+    <ImageView
+        android:id="@+id/btn_back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_back"
+        android:contentDescription="Back"
+        android:layout_margin="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="visible"/>
+
+    <!-- ✅ UI Container for Buttons (Centered) -->
+    <LinearLayout
+        android:id="@+id/controls_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.5">
+
+        <!-- 🔁 Rewind Button (Increased Margin) -->
+        <ImageView
+            android:id="@+id/btn_rewind"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:contentDescription="Rewind 10 seconds"
+            android:padding="8dp"
+            android:layout_marginEnd="48dp"
+            android:src="@drawable/ic_rewind" />
+
+        <!-- ⏯ Play/Pause Button -->
+        <ImageView
+            android:id="@+id/btn_play_pause"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_pause"
+            android:contentDescription="Play/Pause"
+            android:padding="8dp" />
+
+        <!-- ⏩ Forward Button (Increased Margin) -->
+        <ImageView
+            android:id="@+id/btn_forward"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/ic_forward"
+            android:contentDescription="Forward 10 seconds"
+            android:padding="8dp"
+            android:layout_marginStart="48dp"/>
+    </LinearLayout>
+
+    <!-- ✅ Netflix-Style Seek Bar at Bottom -->
+    <SeekBar
+        android:id="@+id/seek_bar"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:progressTint="@color/red"
+        android:thumb="@drawable/custom_thumb"
+        android:background="@color/dark_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:max="100"
+        android:progress="20"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
