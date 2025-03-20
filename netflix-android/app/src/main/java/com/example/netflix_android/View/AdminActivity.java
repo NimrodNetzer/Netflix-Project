@@ -74,7 +74,8 @@ public class AdminActivity extends AppCompatActivity {
         // ✅ Handle Add Category Button
         addCategoryButton.setOnClickListener(v -> {
             Log.d(TAG, "📂 Add Category Clicked");
-            // TODO: Implement add category functionality
+            Intent intent = new Intent(AdminActivity.this, AddCategoryActivity.class);
+            startActivity(intent);
         });
 
         // ✅ Handle Toggle Selection
