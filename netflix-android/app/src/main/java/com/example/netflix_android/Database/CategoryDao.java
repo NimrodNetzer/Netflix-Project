@@ -12,7 +12,6 @@ import com.example.netflix_android.Entities.Category;
 public interface CategoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<Category> categories);
-
     @Query("SELECT * FROM categories")
     LiveData<List<Category>> getAllCategories();
 

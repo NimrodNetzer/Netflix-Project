@@ -19,4 +19,8 @@ public class CategoryViewModel extends ViewModel {
     public LiveData<List<Category>> getCategories() {
         return categories;
     }
+
+    public void addCategory(Category category) {
+        categoryRepository.addCategory(category);
+    }
 }

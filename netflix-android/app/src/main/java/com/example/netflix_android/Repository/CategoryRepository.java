@@ -8,6 +8,8 @@ import com.example.netflix_android.Database.AppDatabase;
 import com.example.netflix_android.Database.CategoryDao;
 import com.example.netflix_android.Entities.Category;
 import com.example.netflix_android.Network.RetrofitClient;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -46,6 +48,23 @@ public class CategoryRepository {
             @Override
             public void onFailure(Call<List<Category>> call, Throwable t) {
                 Log.e("CategoryRepository", "Failed to fetch categories", t);
+            }
+        });
+    }
+
+    public void addCategory(Category category) {
+        categoryApi.createCategory(category).enqueue(new Callback<Category>() {
+            @Override
+            public void onResponse(Call<Category> call, Response<Category> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Category> categoryList = Collections.singletonList(response.body()); // ✅ Convert to list
+                    executorService.execute(() -> categoryDao.insertAll(categoryList));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Category> call, Throwable t) {
+                Log.e("CategoryRepository", "Failed to add category", t);
             }
         });
     }
