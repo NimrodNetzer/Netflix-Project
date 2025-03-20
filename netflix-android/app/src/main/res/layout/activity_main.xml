@@ -6,7 +6,14 @@
     android:background="#000000">
 
     <!-- Top Menu -->
-    <include layout="@layout/netflix_top_menu" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="40dp" /> <!-- Adjust height for desired spacing -->
+
+    <include
+        layout="@layout/netflix_top_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
