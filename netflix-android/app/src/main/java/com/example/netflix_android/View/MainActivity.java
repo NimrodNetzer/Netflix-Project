@@ -122,7 +122,15 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, com.example.netflix_android.View.SearchActivity.class);
                 startActivity(intent);
             });
+            settingsIcon.setOnClickListener(v -> {
+                Log.d(TAG, "⚙️ Settings icon clicked - Opening Update Mode with Temporary Data");
 
+                Intent intent = new Intent(MainActivity.this, AddCategoryActivity.class);
+                intent.putExtra("category_id", "67dbc9e301f8a1a99068232d"); // ✅ Temporary ID
+                intent.putExtra("category_name", "Temporary Category"); // ✅ Temporary Name
+                intent.putExtra("category_promoted", true); // ✅ Temporary Promoted Status
+                startActivity(intent);
+            });
 
 
             // ✅ Handle Exit Button - Go Back to WelcomeActivity

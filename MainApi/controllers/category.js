@@ -48,12 +48,13 @@ const getCategory = async (req, res) => {
 
 const updateCategory = async (req, res) => {
   try {
-    const allowedFields = ['name', 'promoted'];
+    const allowedFields = ['id','_id','name', 'promoted'];
 
     const bodyKeys = Object.keys(req.body);
     const hasInvalidField = bodyKeys.some((key) => !allowedFields.includes(key));
 
     if (hasInvalidField) {
+      console.log('Invalid field');
       return res.status(400).json({
         error: 'Only "name" and "promoted" fields are allowed.',
       });

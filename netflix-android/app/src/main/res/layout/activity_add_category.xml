@@ -11,6 +11,7 @@
 
     <!-- ✅ Page Title -->
     <TextView
+        android:id="@+id/category_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Category"
@@ -22,6 +23,7 @@
 
     <!-- ✅ Category Name Input (Fixed) -->
     <EditText
+        android:id="@+id/category_name_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -32,6 +34,7 @@
 
     <!-- ✅ Promoted / Not Promoted Button -->
     <Button
+        android:id="@+id/button_promoted"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Not Promoted"
@@ -66,5 +69,14 @@
             android:backgroundTint="#E50914"
             android:layout_marginStart="20dp"/>
     </LinearLayout>
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/button_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_delete"
+        android:tint="@android:color/white"
+        android:backgroundTint="#D32F2F"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="20dp"
+        android:visibility="gone"/>
 </LinearLayout>

@@ -5,12 +5,10 @@ import androidx.lifecycle.ViewModel;
 import com.example.netflix_android.Entities.Category;
 import com.example.netflix_android.Repository.CategoryRepository;
 import java.util.List;
-
 public class CategoryViewModel extends ViewModel {
     private final CategoryRepository categoryRepository;
     private final LiveData<List<Category>> categories;
 
-    // Constructor expects a repository instead of context
     public CategoryViewModel(CategoryRepository repository) {
         this.categoryRepository = repository;
         this.categories = repository.getCategories();
@@ -22,5 +20,13 @@ public class CategoryViewModel extends ViewModel {
 
     public void addCategory(Category category) {
         categoryRepository.addCategory(category);
+    }
+
+    public void updateCategory(Category category) {
+        categoryRepository.updateCategory(category);
+    }
+
+    public void deleteCategory(String categoryId) {
+        categoryRepository.deleteCategory(categoryId);
     }
 }
