@@ -10,7 +10,7 @@
     <!-- ✅ Netflix Top Menu -->
     <include layout="@layout/netflix_top_menu" />
 
-    <!-- ✅ Toggle Switch (Without Extra Titles) -->
+    <!-- ✅ Toggle Switch (Movies / Categories) -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +18,6 @@
         android:gravity="center"
         android:layout_marginTop="30dp">
 
-        <!-- ✅ Toggle Switch -->
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/toggle_group"
             android:layout_width="wrap_content"
@@ -47,7 +46,7 @@
 
     </LinearLayout>
 
-    <!-- ✅ Row for Add Buttons (Both Always Clickable) -->
+    <!-- ✅ Row for Add Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,7 +54,6 @@
         android:gravity="center"
         android:layout_marginTop="30dp">
 
-        <!-- ✅ Add Movie Button -->
         <Button
             android:id="@+id/button_add_movie"
             android:layout_width="150dp"
@@ -64,7 +62,6 @@
             android:textColor="#FFFFFF"
             android:backgroundTint="#E50914"/>
 
-        <!-- ✅ Add Category Button -->
         <Button
             android:id="@+id/button_add_category"
             android:layout_width="150dp"
@@ -74,5 +71,12 @@
             android:backgroundTint="#E50914"
             android:layout_marginStart="20dp"/>
     </LinearLayout>
+
+    <!-- ✅ Movies & Categories List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/admin_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"/>
 
 </LinearLayout>

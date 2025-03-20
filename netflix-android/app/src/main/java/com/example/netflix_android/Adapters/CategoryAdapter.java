@@ -36,10 +36,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         holder.categoryTitle.setText(categoryName);
 
-        // Set up horizontal RecyclerView for movies in this category
-        MoviesAdapter moviesAdapter = new MoviesAdapter(context, movies);
-        holder.moviesRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        holder.moviesRecyclerView.setAdapter(moviesAdapter);
+        // ✅ Ensure `moviesRecyclerView` is initialized before setting LayoutManager
+        if (holder.moviesRecyclerView != null) {
+            holder.moviesRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+            holder.moviesRecyclerView.setAdapter(new MoviesAdapter(context, movies));
+        }
     }
 
     @Override

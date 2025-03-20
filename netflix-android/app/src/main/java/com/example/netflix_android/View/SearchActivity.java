@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,7 +28,6 @@ public class SearchActivity extends AppCompatActivity {
     private RecyclerView searchResultsRecyclerView;
     private SearchAdapter searchResultsAdapter;
     private EditText searchInput;
-    private ImageView backButton;
     private ProgressBar loadingIndicator;
     private Handler searchHandler = new Handler(Looper.getMainLooper());
     private LiveData<List<SearchResult>> searchResultsLiveData;
@@ -43,7 +41,6 @@ public class SearchActivity extends AppCompatActivity {
         // ✅ Initialize UI components
         searchResultsRecyclerView = findViewById(R.id.search_results_list);
         searchInput = findViewById(R.id.search_input);
-        backButton = findViewById(R.id.back_button);
         loadingIndicator = findViewById(R.id.loading_indicator);
 
         // Set GridLayoutManager to display multiple movies per row
@@ -54,9 +51,6 @@ public class SearchActivity extends AppCompatActivity {
         // ✅ Initialize ViewModel using Factory
         SearchViewModelFactory factory = new SearchViewModelFactory(this);
         searchViewModel = new ViewModelProvider(this, factory).get(SearchViewModel.class);
-
-        // ✅ Handle back button click
-        backButton.setOnClickListener(v -> finish());
 
         // ✅ Add TextWatcher with debounce to prevent excessive calls
         searchInput.addTextChangedListener(new TextWatcher() {

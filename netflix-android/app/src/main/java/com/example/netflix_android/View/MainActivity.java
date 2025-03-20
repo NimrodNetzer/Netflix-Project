@@ -2,6 +2,7 @@ package com.example.netflix_android.View;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import com.example.netflix_android.Adapters.CategoryAdapter;
 import com.example.netflix_android.Entities.Movie;
 import com.example.netflix_android.R;
 import com.example.netflix_android.Utils.Constants;
+import com.example.netflix_android.Utils.SessionManager;
 import com.example.netflix_android.ViewModel.MoviesViewModel;
 import com.example.netflix_android.ViewModel.MoviesViewModelFactory;
 import java.util.List;
@@ -100,15 +102,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupTopMenu() {
         try {
-            // ✅ Get references to UI elements (Ensure these IDs exist in activity_main.xml!)
+            // ✅ Get references to UI elements
             searchIcon = findViewById(R.id.icon_search);
-            settingsIcon = findViewById(R.id.icon_settings);
             netflixLogo = findViewById(R.id.netflix_logo);
             exitButton = findViewById(R.id.button_exit);
+            Button adminButton = findViewById(R.id.button_admin); // Admin Button
 
-            if (searchIcon == null || settingsIcon == null || netflixLogo == null || exitButton == null) {
-                Log.e(TAG, "❌ One or more top menu items are missing in activity_main.xml");
-                return; // Prevent NullPointerException
+            // ✅ Check if admin and show button accordingly
+            SessionManager sessionManager = new SessionManager(this);
+            boolean isAdmin = sessionManager.isAdmin();
+
+            if (isAdmin) {
+                adminButton.setVisibility(View.VISIBLE); // Show admin button
+                adminButton.setOnClickListener(v -> {
+                    Log.d(TAG, "👑 Admin Panel clicked");
+                    Intent intent = new Intent(MainActivity.this, AdminActivity.class);
+                    startActivity(intent);
+                });
+            } else {
+                adminButton.setVisibility(View.GONE); // Hide button for non-admins
             }
 
             // ✅ Handle Netflix Logo Click - Refresh page
@@ -117,21 +129,12 @@ public class MainActivity extends AppCompatActivity {
                 recreate();
             });
 
+            // ✅ Handle Search Icon Click
             searchIcon.setOnClickListener(v -> {
                 Log.d(TAG, "🔍 Search icon clicked");
                 Intent intent = new Intent(MainActivity.this, com.example.netflix_android.View.SearchActivity.class);
                 startActivity(intent);
             });
-            settingsIcon.setOnClickListener(v -> {
-                Log.d(TAG, "⚙️ Settings icon clicked - Opening Update Mode with Temporary Data");
-
-                Intent intent = new Intent(MainActivity.this, AddCategoryActivity.class);
-                intent.putExtra("category_id", "67dbc9e301f8a1a99068232d"); // ✅ Temporary ID
-                intent.putExtra("category_name", "Temporary Category"); // ✅ Temporary Name
-                intent.putExtra("category_promoted", true); // ✅ Temporary Promoted Status
-                startActivity(intent);
-            });
-
 
             // ✅ Handle Exit Button - Go Back to WelcomeActivity
             exitButton.setOnClickListener(v -> {
@@ -146,4 +149,6 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "❌ Error setting up top menu", e);
         }
     }
+
+
 }

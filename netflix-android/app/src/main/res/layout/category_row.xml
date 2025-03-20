@@ -3,21 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="10dp"
+    android:background="#1E1E1E">
 
+    <!-- ✅ Category Title -->
     <TextView
         android:id="@+id/category_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Category Name"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:paddingBottom="8dp" />
+        android:textStyle="bold"/>
 
+    <!-- ✅ Horizontal RecyclerView for Movies -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/movies_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="false"
-        android:scrollbars="horizontal" />
+        android:orientation="horizontal"
+        android:scrollbars="horizontal"/>
+
 </LinearLayout>

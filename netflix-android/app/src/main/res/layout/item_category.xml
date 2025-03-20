@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#1E1E1E"
+    android:padding="10dp"
+    android:layout_margin="5dp">  <!-- ✅ Fixed the margin -->
+
+    <!-- ✅ Category Title -->
+    <TextView
+        android:id="@+id/category_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Category Name"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <!-- ✅ Category Type (Regular/Promoted) -->
+    <TextView
+        android:id="@+id/category_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Regular"
+        android:textColor="#CCCCCC"
+        android:textSize="14sp"
+        android:paddingTop="5dp"/>
+
+    <!-- ✅ Buttons Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:paddingTop="10dp">
+
+        <!-- ✅ Edit Button -->
+        <Button
+            android:id="@+id/button_edit"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="Edit"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#FFA500"
+            android:textSize="12sp"/>
+
+        <!-- ✅ Delete Button -->
+        <Button
+            android:id="@+id/button_delete"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#E50914"
+            android:textSize="12sp"
+            android:layout_marginStart="10dp"/>
+    </LinearLayout>
+
+</LinearLayout>
