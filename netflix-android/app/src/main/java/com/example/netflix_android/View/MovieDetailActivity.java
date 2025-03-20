@@ -14,19 +14,21 @@ import com.bumptech.glide.Glide;
 import com.example.netflix_android.Adapters.MoviesAdapter;
 import com.example.netflix_android.Entities.Movie;
 import com.example.netflix_android.R;
+import com.example.netflix_android.Utils.SessionManager;
 import com.example.netflix_android.ViewModel.RecommendationViewModel;
 import com.example.netflix_android.ViewModel.RecommendationViewModelFactory;
-
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MovieDetailActivity extends AppCompatActivity {
-    private ImageView movieThumbnail, backButton;
+    private ImageView movieThumbnail;
     private TextView movieTitle, movieDetails, movieDescription;
     private Button playButton;
     private RecyclerView recommendationsRecyclerView;
     private MoviesAdapter recommendationsAdapter;
     private RecommendationViewModel recommendationViewModel;
+    private FloatingActionButton editButton, deleteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +41,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         movieDetails = findViewById(R.id.movie_details);
         movieDescription = findViewById(R.id.movie_description);
         playButton = findViewById(R.id.play_button);
-        backButton = findViewById(R.id.back_button);
         recommendationsRecyclerView = findViewById(R.id.recommendations_list);
+        editButton = findViewById(R.id.edit_button);
+        deleteButton = findViewById(R.id.delete_button);
 
         // Get data from Intent
         Intent intent = getIntent();
@@ -48,15 +51,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         String title = intent.getStringExtra("movie_title");
         String details = intent.getStringExtra("movie_details");
         String description = intent.getStringExtra("movie_description");
-        String movieId = intent.getStringExtra("movie_id"); // Needed for recommendations
-
-        // Debugging: Check if movieId is null
-        if (movieId == null || movieId.trim().isEmpty()) {
-            movieId = "default_movie_id"; // Assign a default ID or prevent API call
-            android.util.Log.e("MovieDetailActivity", "Received null movieId from Intent!");
-        } else {
-            android.util.Log.d("MovieDetailActivity", "Fetched movieId: " + movieId);
-        }
+        String movieId = intent.getStringExtra("movie_id");
 
         // Set movie details
         movieTitle.setText(title);
@@ -70,33 +65,35 @@ public class MovieDetailActivity extends AppCompatActivity {
                 .error(android.R.drawable.stat_notify_error)
                 .into(movieThumbnail);
 
-        // Play button action (TODO: Add logic)
+        // Play button action
         playButton.setOnClickListener(v -> {
-            // TODO: Play the movie
+            // TODO: Implement movie playback functionality
         });
-
-        // Back button to close the detail screen
-        backButton.setOnClickListener(v -> finish());
 
         // Initialize ViewModel with Factory
         RecommendationViewModelFactory factory = new RecommendationViewModelFactory(this);
         recommendationViewModel = new ViewModelProvider(this, factory).get(RecommendationViewModel.class);
 
-        // Fetch and display recommendations only if movieId is valid
-        if (!movieId.equals("default_movie_id")) {
+        // Fetch and display recommendations
+        if (movieId != null && !movieId.trim().isEmpty()) {
             recommendationViewModel.getRecommendedMovies(movieId).observe(this, this::displayRecommendations);
         }
-    }
 
+        // ✅ Check if user is admin and show buttons
+        SessionManager sessionManager = new SessionManager(this);
+        if (sessionManager.isAdmin()) {
+            editButton.setVisibility(View.VISIBLE);
+            deleteButton.setVisibility(View.VISIBLE);
+        }
+    }
 
     private void displayRecommendations(List<Movie> movies) {
         if (movies == null || movies.isEmpty()) {
             android.util.Log.d("RecommendationDebug", "No recommendations found.");
-            movies = new ArrayList<>(); // Avoid null reference
+            movies = new ArrayList<>();
         }
         recommendationsAdapter = new MoviesAdapter(this, movies);
         recommendationsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recommendationsRecyclerView.setAdapter(recommendationsAdapter);
     }
-
 }
