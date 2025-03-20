@@ -1,24 +1,33 @@
 package com.example.netflix_android.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.netflix_android.Entities.Category;
 import com.example.netflix_android.R;
+import com.example.netflix_android.View.AddCategoryActivity;
+import com.example.netflix_android.View.AdminActivity;
+import com.example.netflix_android.ViewModel.CategoryViewModel;
+import com.example.netflix_android.ViewModel.CategoryViewModelFactory;
 import java.util.List;
 
 public class AdminCategoryAdapter extends RecyclerView.Adapter<AdminCategoryAdapter.CategoryViewHolder> {
     private Context context;
     private List<Category> categories;
+    private CategoryViewModel categoryViewModel;
 
-    public AdminCategoryAdapter(Context context, List<Category> categories) {
+    public AdminCategoryAdapter(Context context, List<Category> categories, CategoryViewModel categoryViewModel) { // 🔺 Pass ViewModel
         this.context = context;
         this.categories = categories;
+        this.categoryViewModel = categoryViewModel; // 🔺 Store ViewModel
     }
 
     @NonNull
@@ -34,15 +43,21 @@ public class AdminCategoryAdapter extends RecyclerView.Adapter<AdminCategoryAdap
         holder.categoryTitle.setText(category.getName());
         holder.categoryType.setText(category.isPromoted() ? "🌟 Promoted" : "📂 Regular");
 
-        // ✅ Handle Edit Button Click
         holder.editButton.setOnClickListener(v -> {
-            // TODO: Implement edit category logic
+            Intent intent = new Intent(context, AddCategoryActivity.class); // 🔺 Use context
+            intent.putExtra("category_id", category.getId());
+            intent.putExtra("category_name", category.getName());
+            intent.putExtra("category_promoted", category.isPromoted());
+            ((AdminActivity) context).startActivityForResult(intent, 1); // 🔺 Ensure result is expected
         });
 
-        // ✅ Handle Delete Button Click
+// ✅ Handle Delete Button Click
         holder.deleteButton.setOnClickListener(v -> {
-            // TODO: Implement delete category logic
+            categoryViewModel.deleteCategory(category.getId()); // 🔺 Use ViewModel to delete
+            Toast.makeText(context, "Category deleted successfully", Toast.LENGTH_SHORT).show();
+            ((AdminActivity) context).loadCategories(); // 🔺 Refresh list after deletion
         });
+
     }
 
     @Override

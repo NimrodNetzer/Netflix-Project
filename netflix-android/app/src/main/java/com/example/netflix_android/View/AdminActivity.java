@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.netflix_android.Adapters.AdminCategoryAdapter;
+import com.example.netflix_android.ViewModel.CategoryViewModel;
+import com.example.netflix_android.ViewModel.CategoryViewModelFactory;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import androidx.appcompat.app.AppCompatActivity;
@@ -112,13 +114,15 @@ public class AdminActivity extends AppCompatActivity {
     }
 
 
-    // ✅ Load Categories (Using CategoryRepository)
-    private void loadCategories() {
+    public void loadCategories() {
         itemsRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
+        CategoryViewModel categoryViewModel = new ViewModelProvider(this, new CategoryViewModelFactory(this)).get(CategoryViewModel.class); // 🔺 Instantiate ViewModel
+
         categoryLiveData = categoryRepository.getCategories();
         categoryLiveData.observe(this, categories -> {
             if (categories != null && !categories.isEmpty()) {
-                AdminCategoryAdapter = new AdminCategoryAdapter(this, categories);
+                AdminCategoryAdapter = new AdminCategoryAdapter(this, categories, categoryViewModel); // 🔺 Pass ViewModel to Adapter
                 itemsRecyclerView.setAdapter(AdminCategoryAdapter);
                 Log.d(TAG, "✅ Categories loaded: " + categories.size());
             } else {
@@ -126,4 +130,5 @@ public class AdminActivity extends AppCompatActivity {
             }
         });
     }
+
 }
