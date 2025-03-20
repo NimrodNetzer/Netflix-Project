@@ -16,4 +16,9 @@ public class MovieViewModel extends ViewModel {
     public LiveData<Movie> getMovieById(String movieId) {
         return movieRepository.getMovieById(movieId);
     }
+
+    public LiveData<Boolean> deleteMovie(String movieId) {
+        return movieRepository.deleteMovie(movieId);
+    }
+
 }

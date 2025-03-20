@@ -47,23 +47,26 @@ public class MainActivity extends AppCompatActivity {
         // Set up top menu
         setupTopMenu();
 
-        // Initialize featured video view
+        // Initialize UI components
         featuredVideo = findViewById(R.id.featured_video);
         featuredVideoDescription = findViewById(R.id.featured_video_description);
-
-        // Set up RecyclerView for categories
         categoriesRecyclerView = findViewById(R.id.categories_recycler_view);
         categoriesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Initialize ViewModel for movies
+        // Initialize ViewModel
         moviesViewModel = new ViewModelProvider(this, new MoviesViewModelFactory(this)).get(MoviesViewModel.class);
 
-        // Fetch movies and display them
+        // Load movies for the first time
+        loadMovies();
+    }
+
+    // ✅ Fetch movies and update UI
+    private void loadMovies() {
         moviesViewModel.getMovies().observe(this, moviesResultsList -> {
             if (moviesResultsList != null && !moviesResultsList.isEmpty()) {
                 Map<String, List<Movie>> categorizedMovies = moviesViewModel.getMoviesGroupedByCategory(moviesResultsList);
 
-                // Set up the featured video using the first movie from the first available category
+                // ✅ Set up the featured video using the first available movie
                 for (List<Movie> movieList : categorizedMovies.values()) {
                     if (!movieList.isEmpty()) {
                         featuredMovie = movieList.get(0);
@@ -72,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if (featuredMovie != null) {
-                    String videoUrl = featuredMovie.getVideo();  // ✅ Fetch video URL
+                    String videoUrl = featuredMovie.getVideo();
 
                     // ✅ Debugging: Ensure `videoUrl` is retrieved
                     if (videoUrl == null || videoUrl.isEmpty()) {
@@ -81,16 +84,16 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "🎬 Video URL retrieved: " + videoUrl);
                     }
 
-                    // ✅ Set a sample video for autoplay
+                    // ✅ Set sample video for autoplay
                     featuredVideo.setVideoURI(Uri.parse("https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"));
 
-                    // Start auto-play once the video is ready
+                    // Start auto-play
                     featuredVideo.setOnPreparedListener(mp -> {
                         mp.setLooping(true);
                         featuredVideo.start();
                     });
 
-                    // ✅ Pass the correct video URL to `MovieDetailActivity`
+                    // ✅ Pass movie data to `MovieDetailActivity`
                     featuredVideo.setOnClickListener(v -> {
                         Intent intent = new Intent(MainActivity.this, MovieDetailActivity.class);
                         intent.putExtra("movie_id", featuredMovie.getId());
@@ -98,8 +101,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("movie_image", Constants.BASE_URL + featuredMovie.getPicture().replace("\\", "/"));
                         intent.putExtra("movie_details", "2025  |  " + featuredMovie.getAge() + "+  |  " + featuredMovie.getTime());
                         intent.putExtra("movie_description", featuredMovie.getDescription());
-                        intent.putExtra("video_url", videoUrl);  // ✅ Ensure `video_url` is sent
-
+                        intent.putExtra("video_url", videoUrl);
                         startActivity(intent);
                     });
 
@@ -108,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(TAG, "⚠️ No featured movie found!");
                 }
 
-                // Set up categories adapter for the RecyclerView
+                // ✅ Set up RecyclerView with categorized movies
                 categoryAdapter = new CategoryAdapter(this, categorizedMovies);
                 categoriesRecyclerView.setAdapter(categoryAdapter);
             } else {
@@ -122,26 +124,25 @@ public class MainActivity extends AppCompatActivity {
             searchIcon = findViewById(R.id.icon_search);
             netflixLogo = findViewById(R.id.netflix_logo);
             exitButton = findViewById(R.id.button_exit);
-            adminButton = findViewById(R.id.button_admin); // Admin Button
+            adminButton = findViewById(R.id.button_admin);
 
             if (searchIcon == null || netflixLogo == null || exitButton == null || adminButton == null) {
                 Log.e(TAG, "❌ One or more top menu items are missing in activity_main.xml");
                 return;
             }
 
-            // ✅ Check if admin and show button accordingly
+            // ✅ Show admin button if user is an admin
             SessionManager sessionManager = new SessionManager(this);
             boolean isAdmin = sessionManager.isAdmin();
 
             if (isAdmin) {
-                adminButton.setVisibility(View.VISIBLE); // Show admin button
+                adminButton.setVisibility(View.VISIBLE);
                 adminButton.setOnClickListener(v -> {
                     Log.d(TAG, "👑 Admin Panel clicked");
-                    Intent intent = new Intent(MainActivity.this, AdminActivity.class);
-                    startActivity(intent);
+                    startActivity(new Intent(MainActivity.this, AdminActivity.class));
                 });
             } else {
-                adminButton.setVisibility(View.GONE); // Hide button for non-admins
+                adminButton.setVisibility(View.GONE);
             }
 
             // ✅ Handle Netflix Logo Click - Refresh page
@@ -153,8 +154,7 @@ public class MainActivity extends AppCompatActivity {
             // ✅ Handle Search Icon Click
             searchIcon.setOnClickListener(v -> {
                 Log.d(TAG, "🔍 Search icon clicked");
-                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(MainActivity.this, SearchActivity.class));
             });
 
             // ✅ Handle Exit Button - Go Back to WelcomeActivity
@@ -169,5 +169,13 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(TAG, "❌ Error setting up top menu", e);
         }
+    }
+
+    // ✅ Refresh movie list when returning to `MainActivity`
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "🔄 onResume called - Refreshing movies list.");
+        loadMovies(); // Reload movies every time the activity is resumed
     }
 }

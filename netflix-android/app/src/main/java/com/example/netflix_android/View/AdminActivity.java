@@ -3,7 +3,6 @@ package com.example.netflix_android.View;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 
 import com.example.netflix_android.Adapters.AdminCategoryAdapter;
@@ -33,16 +32,17 @@ public class AdminActivity extends AppCompatActivity {
 
     private RecyclerView itemsRecyclerView;
     private MoviesAdapter movieAdapter;
-    private AdminCategoryAdapter AdminCategoryAdapter;
-
-    private  CategoryAdapter CategoryAdapter;
+    private AdminCategoryAdapter adminCategoryAdapter;
+    private CategoryAdapter categoryAdapter;
 
     private MoviesViewModel moviesViewModel;
+    private CategoryViewModel categoryViewModel;
     private CategoryRepository categoryRepository;
     private LiveData<List<Category>> categoryLiveData;
     private Button addMovieButton, addCategoryButton;
     private MaterialButton toggleMovies, toggleCategories;
     private MaterialButtonToggleGroup toggleGroup;
+    private boolean isViewingMovies = true; // ✅ Track current tab
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +60,7 @@ public class AdminActivity extends AppCompatActivity {
 
         // ✅ Initialize ViewModel for movies
         moviesViewModel = new ViewModelProvider(this, new MoviesViewModelFactory(this)).get(MoviesViewModel.class);
+        categoryViewModel = new ViewModelProvider(this, new CategoryViewModelFactory(this)).get(CategoryViewModel.class);
 
         // ✅ Initialize Category Repository
         categoryRepository = new CategoryRepository(this);
@@ -69,8 +70,7 @@ public class AdminActivity extends AppCompatActivity {
 
         // ✅ Handle Add Movie Button
         addMovieButton.setOnClickListener(v -> {
-            Log.d(TAG, "🎬 Add Movie Clicked");
-            // TODO: Implement add movie functionality
+
         });
 
         // ✅ Handle Add Category Button
@@ -85,26 +85,27 @@ public class AdminActivity extends AppCompatActivity {
             if (isChecked) {
                 if (checkedId == R.id.toggle_movies) {
                     Log.d(TAG, "🎬 Viewing Movies");
+                    isViewingMovies = true;
                     loadMovies();
                 } else if (checkedId == R.id.toggle_categories) {
                     Log.d(TAG, "📂 Viewing Categories");
+                    isViewingMovies = false;
                     loadCategories();
                 }
             }
         });
     }
 
-    // ✅ Load Movies in Admin Panel (Similar to MainActivity)
+    // ✅ Load Movies in Admin Panel
     private void loadMovies() {
         moviesViewModel.getMovies().observe(this, moviesResultsList -> {
             if (moviesResultsList != null && !moviesResultsList.isEmpty()) {
-                // ✅ Categorize Movies
                 Map<String, List<Movie>> categorizedMovies = moviesViewModel.getMoviesGroupedByCategory(moviesResultsList);
 
                 // ✅ Set up RecyclerView with Categories
                 itemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-                CategoryAdapter = new CategoryAdapter(this, categorizedMovies);
-                itemsRecyclerView.setAdapter(CategoryAdapter);
+                categoryAdapter = new CategoryAdapter(this, categorizedMovies);
+                itemsRecyclerView.setAdapter(categoryAdapter);
 
                 Log.d(TAG, "✅ Movies loaded and categorized: " + moviesResultsList.size());
             } else {
@@ -113,17 +114,15 @@ public class AdminActivity extends AppCompatActivity {
         });
     }
 
-
+    // ✅ Load Categories in Admin Panel
     public void loadCategories() {
         itemsRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
-        CategoryViewModel categoryViewModel = new ViewModelProvider(this, new CategoryViewModelFactory(this)).get(CategoryViewModel.class); // 🔺 Instantiate ViewModel
 
         categoryLiveData = categoryRepository.getCategories();
         categoryLiveData.observe(this, categories -> {
             if (categories != null && !categories.isEmpty()) {
-                AdminCategoryAdapter = new AdminCategoryAdapter(this, categories, categoryViewModel); // 🔺 Pass ViewModel to Adapter
-                itemsRecyclerView.setAdapter(AdminCategoryAdapter);
+                adminCategoryAdapter = new AdminCategoryAdapter(this, categories, categoryViewModel);
+                itemsRecyclerView.setAdapter(adminCategoryAdapter);
                 Log.d(TAG, "✅ Categories loaded: " + categories.size());
             } else {
                 Log.e(TAG, "⚠️ No categories found.");
@@ -131,4 +130,16 @@ public class AdminActivity extends AppCompatActivity {
         });
     }
 
+    // ✅ Refresh content when returning to Admin Panel
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "🔄 AdminActivity Resumed - Refreshing content...");
+
+        if (isViewingMovies) {
+            loadMovies();
+        } else {
+            loadCategories();
+        }
+    }
 }
