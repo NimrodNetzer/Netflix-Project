@@ -70,7 +70,8 @@ public class AdminActivity extends AppCompatActivity {
 
         // ✅ Handle Add Movie Button
         addMovieButton.setOnClickListener(v -> {
-
+            Intent intent = new Intent(AdminActivity.this, MovieFormActivity.class);
+            startActivity(intent);
         });
 
         // ✅ Handle Add Category Button

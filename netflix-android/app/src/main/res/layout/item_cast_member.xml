@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <!-- Cast Member Name Input -->
+    <EditText
+        android:id="@+id/edit_cast_name"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="wrap_content"
+        android:hint="Actor Name"
+        android:textColor="@android:color/white"
+        android:background="@android:drawable/edit_text"
+        android:textColorHint="@android:color/darker_gray"/>
+
+    <!-- Cast Member Role Input -->
+    <EditText
+        android:id="@+id/edit_cast_role"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="wrap_content"
+        android:hint="Role"
+        android:textColor="@android:color/white"
+        android:background="@android:drawable/edit_text"
+        android:textColorHint="@android:color/darker_gray"/>
+
+    <!-- Remove Cast Member Button -->
+    <Button
+        android:id="@+id/button_remove_cast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="❌"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:textColor="@android:color/white"/>
+</LinearLayout>
