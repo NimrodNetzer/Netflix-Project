@@ -8,21 +8,25 @@ import com.example.netflix_android.Database.AppDatabase;
 import com.example.netflix_android.Database.MovieDao;
 import com.example.netflix_android.Entities.Movie;
 import com.example.netflix_android.Network.RetrofitClient;
+
+import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 public class MovieRepository {
     private final MovieDao movieDao;
     private final MovieApi movieApi;
+    private final MovieUploadService movieUploadService;
+
     private final ExecutorService executorService = Executors.newFixedThreadPool(2);
 
     public MovieRepository(Context context) {
         AppDatabase db = AppDatabase.getInstance(context);
         movieDao = db.movieDao();
         movieApi = RetrofitClient.getRetrofitInstance(context).create(MovieApi.class);
+        movieUploadService = new MovieUploadService(context);
     }
 
     // Fetch a movie by ID (from API and cache locally)
@@ -54,51 +58,13 @@ public class MovieRepository {
     }
 
     // Create a new movie
-    public LiveData<Boolean> createMovie(Movie movie) {
-        MutableLiveData<Boolean> successLiveData = new MutableLiveData<>();
-
-        movieApi.createMovie(movie).enqueue(new Callback<Movie>() {
-            @Override
-            public void onResponse(Call<Movie> call, Response<Movie> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    executorService.execute(() -> movieDao.insertMovie(response.body()));
-                    successLiveData.postValue(true);
-                } else {
-                    successLiveData.postValue(false);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Movie> call, Throwable t) {
-                successLiveData.postValue(false);
-            }
-        });
-
-        return successLiveData;
+    public LiveData<Boolean> createMovie(Movie movie, File imageFile, File videoFile, String token) {
+        return movieUploadService.uploadMovie(movie, imageFile, videoFile, token);
     }
 
     // Update an existing movie
-    public LiveData<Boolean> updateMovie(String movieId, Movie movie) {
-        MutableLiveData<Boolean> successLiveData = new MutableLiveData<>();
-
-        movieApi.updateMovie(movieId, movie).enqueue(new Callback<Movie>() {
-            @Override
-            public void onResponse(Call<Movie> call, Response<Movie> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    executorService.execute(() -> movieDao.insertMovie(response.body()));
-                    successLiveData.postValue(true);
-                } else {
-                    successLiveData.postValue(false);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Movie> call, Throwable t) {
-                successLiveData.postValue(false);
-            }
-        });
-
-        return successLiveData;
+    public LiveData<Boolean> updateMovie(String movieId, Movie movie, File imageFile, File videoFile, String token) {
+        return movieUploadService.updateMovie(movieId, movie, imageFile, videoFile, token);
     }
 
     // Delete a movie

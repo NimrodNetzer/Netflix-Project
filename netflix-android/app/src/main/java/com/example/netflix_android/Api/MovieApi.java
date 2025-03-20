@@ -9,6 +9,11 @@ import retrofit2.http.POST;
 import retrofit2.http.Body;
 import retrofit2.http.PUT;
 import retrofit2.http.DELETE;
+import retrofit2.http.Multipart;
+import retrofit2.http.Part;
+import retrofit2.http.Header;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public interface MovieApi {
 
@@ -17,15 +22,30 @@ public interface MovieApi {
     @GET("/api/movies/{id}")
     Call<Movie> getMovieById(@Path("id") String movieId);
 
-    // Create a new movie
-    @POST("/api/movies")
-    Call<Movie> createMovie(@Body Movie movie);
-
     // Update an existing movie
-    @PUT("/api/movies/{id}")
-    Call<Movie> updateMovie(@Path("id") String movieId, @Body Movie movie);
+
 
     // Delete a movie
     @DELETE("/api/movies/{id}")
     Call<Void> deleteMovie(@Path("id") String movieId);
+
+    @Multipart
+    @POST("/api/movies")
+    Call<Movie> createMovie(
+            @Part("data") RequestBody movieData, // JSON Movie Data
+            @Part MultipartBody.Part image,     // Image File
+            @Part MultipartBody.Part video,     // Video File
+            @Header("Authorization") String token // Bearer Token for Auth
+    );
+
+    @Multipart
+    @PUT("/api/movies/{id}")
+    Call<Movie> updateMovie(
+            @Path("id") String movieId, // Movie ID in the URL
+            @Part("data") RequestBody movieData, // JSON Movie Data
+            @Part MultipartBody.Part image,     // Image File
+            @Part MultipartBody.Part video,     // Video File
+            @Header("Authorization") String token // Bearer Token for Auth
+    );
+
 }
