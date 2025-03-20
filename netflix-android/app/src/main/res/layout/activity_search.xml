@@ -15,33 +15,30 @@
         android:gravity="center_vertical"
         android:paddingBottom="10dp">
 
-        <!-- Back Button -->
         <ImageView
             android:id="@+id/back_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="10dp"
-            android:src="@android:drawable/ic_media_previous"
-            app:tint="#FFFFFF"
-            android:contentDescription="@string/back_button"
-            android:clickable="true"
-            android:focusable="true"
-            android:minWidth="48dp"
-            android:minHeight="48dp" />
+            android:layout_width="11dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="Back"
+            android:src="@drawable/ic_back"
+            app:tint="#FFFFFF" />
 
-        <!-- Search Input -->
+        <!-- Search Input with Modern Look -->
         <EditText
             android:id="@+id/search_input"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
-            android:background="@android:drawable/editbox_background"
+            android:background="@drawable/search_background"
             android:hint="@string/search_hint"
-            android:padding="10dp"
-            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            android:textColor="#000000"
             android:textColorHint="#CCCCCC"
             android:inputType="text"
-            android:importantForAutofill="yes" />
+            android:importantForAutofill="yes"
+            android:textSize="16sp"
+            android:elevation="4dp" />
 
         <!-- Search Button -->
         <ImageView
@@ -72,4 +69,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical" />
+
 </LinearLayout>
