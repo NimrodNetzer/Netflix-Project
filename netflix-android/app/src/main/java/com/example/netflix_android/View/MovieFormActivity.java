@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.netflix_android.Entities.CastMember;
@@ -41,12 +42,15 @@ public class MovieFormActivity extends AppCompatActivity {
     private String movieId;
     private List<String> selectedCategories = new ArrayList<>();
     private List<CastMember> castList = new ArrayList<>();
+    private View progressLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_form);
-
+        previewImage = findViewById(R.id.preview_image);
+        previewVideo = findViewById(R.id.preview_video);
+        progressLoading = findViewById(R.id.progress_loading);
         // Initialize UI elements
         editMovieName = findViewById(R.id.edit_movie_name);
         editMovieDescription = findViewById(R.id.edit_movie_description);
@@ -72,7 +76,13 @@ public class MovieFormActivity extends AppCompatActivity {
         if (intent.hasExtra("movie_id")) {
             isUpdate = true;
             movieId = intent.getStringExtra("movie_id");
-            loadMovieDetails(movieId); // ✅ Load movie details
+            TextView textTitle = findViewById(R.id.text_title);
+            textTitle.setText("Update Movie"); // Set title to Update Movie
+            loadMovieDetails(movieId); // Load movie details
+        } else {
+            // Optional: set title explicitly in create mode if needed
+            TextView textTitle = findViewById(R.id.text_title);
+            textTitle.setText("Create Movie");
         }
 
         setupDropdowns();
@@ -168,9 +178,11 @@ public class MovieFormActivity extends AppCompatActivity {
                 if (requestCode == 1) {
                     selectedPictureUri = fileUri;
                     previewImage.setImageURI(fileUri);
+                    previewImage.setVisibility(View.VISIBLE); // Show image preview
                 } else if (requestCode == 2) {
                     selectedVideoUri = fileUri;
                     previewVideo.setVideoURI(fileUri);
+                    previewVideo.setVisibility(View.VISIBLE); // Show video preview
                     previewVideo.start();
                 }
             } catch (Exception e) {
@@ -178,6 +190,7 @@ public class MovieFormActivity extends AppCompatActivity {
             }
         }
     }
+
 
     private void loadMovieDetails(String movieId) {
         movieViewModel.getMovieById(movieId).observe(this, movie -> {
@@ -193,7 +206,7 @@ public class MovieFormActivity extends AppCompatActivity {
                     editMovieMinutes.setText(timeParts[1]);
                 }
 
-                editMovieReleaseDate.setText(movie.getReleaseDate().toString());
+                //editMovieReleaseDate.setText(movie.getReleaseDate().toString());
                 spinnerQuality.setSelection(((ArrayAdapter<String>) spinnerQuality.getAdapter()).getPosition(movie.getQuality()));
                 spinnerLanguage.setSelection(((ArrayAdapter<String>) spinnerLanguage.getAdapter()).getPosition(movie.getProperties().get("language")));
             }
@@ -219,12 +232,27 @@ public class MovieFormActivity extends AppCompatActivity {
     private void submitMovie() {
         String name = editMovieName.getText().toString().trim();
         String description = editMovieDescription.getText().toString().trim();
-        int age = Integer.parseInt(editMovieAge.getText().toString().trim());
-        String time = editMovieHours.getText().toString() + "h " + editMovieMinutes.getText().toString() + "m";
-        String releaseDate = editMovieReleaseDate.getText().toString();
+        String ageString = editMovieAge.getText().toString().trim();
+        String hoursString = editMovieHours.getText().toString().trim();
+        String minutesString = editMovieMinutes.getText().toString().trim();
+        String time = hoursString + "h " + minutesString + "m";
+        String releaseDate = editMovieReleaseDate.getText().toString().trim();
         String quality = spinnerQuality.getSelectedItem().toString();
         String language = spinnerLanguage.getSelectedItem().toString();
         String author = "a"; // Update as needed
+
+        // Validate required text fields
+        if (name.isEmpty() || description.isEmpty() || ageString.isEmpty() ||
+                hoursString.isEmpty() || minutesString.isEmpty() || releaseDate.isEmpty() || quality.isEmpty()) {
+            Toast.makeText(this, "Please fill in all required fields.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Validate that a picture and video have been selected
+        if (selectedPictureUri == null || selectedVideoUri == null) {
+            Toast.makeText(this, "Please select both a picture and a video.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // **✅ Convert selected categories into Category objects**
         List<Category> categories = new ArrayList<>();
@@ -269,31 +297,42 @@ public class MovieFormActivity extends AppCompatActivity {
             return;
         }
 
+        int age;
+        try {
+            age = Integer.parseInt(ageString);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Invalid age rating.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // **✅ Create movie object with selected categories**
         Movie movie = new Movie("", name, "", "", description, age, time, new Date(), quality, categories, castList, null, author);
+        progressLoading.setVisibility(View.VISIBLE);
+        buttonSubmitMovie.setEnabled(false);
 
         SessionManager sessionManager = new SessionManager(this);
         String token = sessionManager.getToken();
 
+        LiveData<Boolean> resultLiveData;
         if (isUpdate) {
-            movieViewModel.updateMovie(movieId, movie, imageFile, videoFile, token).observe(this, success -> {
-                if (success) {
-                    Toast.makeText(this, "Movie updated successfully!", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    Toast.makeText(this, "Failed to update movie.", Toast.LENGTH_SHORT).show();
-                }
-            });
+            resultLiveData = movieViewModel.updateMovie(movieId, movie, imageFile, videoFile, token);
         } else {
-            movieViewModel.createMovie(movie, imageFile, videoFile, token).observe(this, success -> {
-                if (success) {
-                    Toast.makeText(this, "Movie created successfully!", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    Toast.makeText(this, "Failed to create movie.", Toast.LENGTH_SHORT).show();
-                }
-            });
+            resultLiveData = movieViewModel.createMovie(movie, imageFile, videoFile, token);
         }
+        resultLiveData.observe(this, success -> {
+            // Always hide the loading indicator and re-enable the button
+            progressLoading.setVisibility(View.GONE);
+            buttonSubmitMovie.setEnabled(true);
+
+            if (success) {
+                String message = isUpdate ? "Movie updated successfully!" : "Movie created successfully!";
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                finish(); // Return to previous window
+            } else {
+                String message = isUpdate ? "Failed to update movie." : "Failed to create movie.";
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

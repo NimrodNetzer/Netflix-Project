@@ -154,9 +154,16 @@ public class MovieDetailActivity extends AppCompatActivity {
         });
 
 
-        // TODO: Add Edit Movie Functionality Here
         editButton.setOnClickListener(v -> {
-            Toast.makeText(this, "✏️ Edit functionality coming soon!", Toast.LENGTH_SHORT).show();
+            // Create an Intent to start MovieFormActivity
+            Intent intent = new Intent(MovieDetailActivity.this, MovieFormActivity.class);
+
+            // Pass the movie ID if editing an existing movie (replace "movieId" with your actual movie id variable)
+            intent.putExtra("movie_id", movieId);
+
+            // Start the MovieFormActivity
+            startActivity(intent);
         });
+
     }
 }

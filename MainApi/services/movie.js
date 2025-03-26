@@ -102,14 +102,17 @@ const deleteMovieById = async (id) => {
 
 const replaceMovieById = async (id, movieUpdates) => {
   try {
+    // Remove _id from the updates if it exists
+    const { _id, ...updates } = movieUpdates;
+
     // Use findByIdAndUpdate with overwrite to replace the document entirely
     const updatedMovie = await Movie.findByIdAndUpdate(
       id,
-      { ...movieUpdates },
+      updates,
       {
-        new: true,        // return the updated document
-        runValidators: true, // run schema validations on update
-        overwrite: true   // replace the document completely
+        new: true,           // Return the updated document
+        runValidators: true, // Run schema validations on update
+        overwrite: true      // Replace the document completely
       }
     );
 
@@ -120,7 +123,7 @@ const replaceMovieById = async (id, movieUpdates) => {
     return updatedMovie;
   } catch (error) {
     console.error('Error replacing movie:', error);
-    throw new Error(error.message || 'Failed to replace movie');
+    throw error;
   }
 };
 

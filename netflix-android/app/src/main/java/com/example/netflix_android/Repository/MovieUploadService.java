@@ -41,22 +41,23 @@ public class MovieUploadService {
     }
 
     private MultipartBody.Part prepareImagePart(File imageFile) {
-        RequestBody imageRequestBody = RequestBody.create(MediaType.parse("image/*"), imageFile);
+        RequestBody imageRequestBody = RequestBody.create(MediaType.parse("image/png"), imageFile);
         return MultipartBody.Part.createFormData("image", imageFile.getName(), imageRequestBody);
     }
 
     private MultipartBody.Part prepareVideoPart(File videoFile) {
-        RequestBody videoRequestBody = RequestBody.create(MediaType.parse("video/*"), videoFile);
+        RequestBody videoRequestBody = RequestBody.create(MediaType.parse("video/mp4"), videoFile);
         return MultipartBody.Part.createFormData("video", videoFile.getName(), videoRequestBody);
     }
+
 
     private void sendMultipartRequest(Call<Movie> call, MutableLiveData<Boolean> uploadStatus) {
         call.enqueue(new Callback<Movie>() {
             @Override
             public void onResponse(Call<Movie> call, Response<Movie> response) {
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful()) {
                     uploadStatus.postValue(true);
-                    Log.d(TAG, "✅ Movie uploaded successfully: " + response.body().getName());
+                    Log.d(TAG, "✅ Movie uploaded successfully: ");
                 } else {
                     logErrorResponse("upload/update movie", response);
                     uploadStatus.postValue(false);
