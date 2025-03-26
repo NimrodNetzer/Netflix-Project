@@ -9,7 +9,7 @@ const SocketClient = require('../utils/socketClient');
 
 const fetchRecommendations = async (userId, movieId) => {
     const socketClient = new SocketClient(serverIp, serverPort);
-    socketClient.connect();
+    await socketClient.connect();
     const request = `GET ${userId} ${movieId}\n`;
     const response = await socketClient.send(request);
     socketClient.disconnect();
@@ -29,7 +29,7 @@ const addRecommendation = async (userId, movieId) => {
     try {
       await updateMongoDBMoviesList(userId, movieId);
    
-      socketClient.connect();
+      await socketClient.connect();
       const postResponse = await socketClient.send(`POST ${userId} ${movieId}\n`);
       if (postResponse.startsWith('201')) {
         return 'Recommendation added successfully';
@@ -92,7 +92,7 @@ const deleteWatchedMovie = async (movieId) => {
     try {
       const users = await User.find({});
       await User.updateMany({}, { $pull: { moviesList: { movieId } } });
-      socketClient.connect();
+      await socketClient.connect();
       for (const user of users) {
           try {
               await socketClient.send(`DELETE ${user._id} ${movieId}\n`);
