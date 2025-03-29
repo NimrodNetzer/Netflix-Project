@@ -130,7 +130,7 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie, autoPlay }) {
             <span><strong>Year:</strong> {new Date(movie.releaseDate).getFullYear()}</span>
             <span><strong>Duration:</strong> {movie.time} minutes</span>
             <span><strong>Age Rating:</strong> {movie.age}+</span>
-            <span><strong>Language:</strong> {movie.properties.language}</span>
+            <span><strong>Language:</strong> {movie.properties?.language || 'Unknown'}</span>
           </div>
 
           <div className="related-movies">

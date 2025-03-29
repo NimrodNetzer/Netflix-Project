@@ -51,13 +51,13 @@ public class MovieUploadService {
     }
 
 
-    private void sendMultipartRequest(Call<Movie> call, MutableLiveData<Boolean> uploadStatus) {
-        call.enqueue(new Callback<Movie>() {
+    private void sendMultipartRequest(Call<Void> call, MutableLiveData<Boolean> uploadStatus) {
+        call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Movie> call, Response<Movie> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     uploadStatus.postValue(true);
-                    Log.d(TAG, "✅ Movie uploaded successfully: ");
+                    Log.d(TAG, "✅ Movie uploaded successfully");
                 } else {
                     logErrorResponse("upload/update movie", response);
                     uploadStatus.postValue(false);
@@ -65,7 +65,7 @@ public class MovieUploadService {
             }
 
             @Override
-            public void onFailure(Call<Movie> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Log.e(TAG, "❌ Network error while uploading/updating movie", t);
                 uploadStatus.postValue(false);
             }

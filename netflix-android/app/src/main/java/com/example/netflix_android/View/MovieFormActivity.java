@@ -213,8 +213,9 @@ public class MovieFormActivity extends AppCompatActivity {
         });
     }
 
-    private File getFileFromUri(Uri uri) throws IOException {
-        File file = new File(getCacheDir(), "temp_file");
+    private File getFileFromUri(Uri uri, String type) throws IOException {
+        String extension = type.equals("image") ? ".png" : ".mp4";
+        File file = new File(getCacheDir(), "temp_file_" + UUID.randomUUID() + extension);
         InputStream inputStream = getContentResolver().openInputStream(uri);
         OutputStream outputStream = new FileOutputStream(file);
 
@@ -286,10 +287,10 @@ public class MovieFormActivity extends AppCompatActivity {
         File videoFile = null;
         try {
             if (selectedPictureUri != null) {
-                imageFile = getFileFromUri(selectedPictureUri);
+                imageFile = getFileFromUri(selectedPictureUri, "image");
             }
             if (selectedVideoUri != null) {
-                videoFile = getFileFromUri(selectedVideoUri);
+                videoFile = getFileFromUri(selectedVideoUri, "video");
             }
         } catch (IOException e) {
             Log.e(TAG, "❌ Error processing file: " + e.getMessage());

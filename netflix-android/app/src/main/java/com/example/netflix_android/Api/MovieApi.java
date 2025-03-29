@@ -31,7 +31,7 @@ public interface MovieApi {
 
     @Multipart
     @POST("/api/movies")
-    Call<Movie> createMovie(
+    Call<Void> createMovie(
             @Part("data") RequestBody movieData, // JSON Movie Data
             @Part MultipartBody.Part image,     // Image File
             @Part MultipartBody.Part video,     // Video File
@@ -40,7 +40,7 @@ public interface MovieApi {
 
     @Multipart
     @PUT("/api/movies/{id}")
-    Call<Movie> updateMovie(
+    Call<Void> updateMovie(
             @Path("id") String movieId, // Movie ID in the URL
             @Part("data") RequestBody movieData, // JSON Movie Data
             @Part MultipartBody.Part image,     // Image File
