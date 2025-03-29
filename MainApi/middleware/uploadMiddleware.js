@@ -7,9 +7,23 @@ const storage = multer.diskStorage({
         cb(null, './public/uploads/');
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname));
+        let ext = path.extname(file.originalname);
+
+        // If no extension, determine it from mimetype
+        if (!ext) {
+            if (file.mimetype.startsWith('image/')) {
+                ext = '.png';
+            } else if (file.mimetype.startsWith('video/')) {
+                ext = '.mp4';
+            } else {
+                ext = ''; // or a default like '.bin' if needed
+            }
+        }
+
+        cb(null, Date.now() + ext);
     },
 });
+
 
 // File filter to allow only specific types
 const fileFilter = (req, file, cb) => {
