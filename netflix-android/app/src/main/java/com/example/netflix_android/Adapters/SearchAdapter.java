@@ -32,6 +32,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         return new SearchViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull SearchViewHolder holder, int position) {
         SearchResult movie = searchResults.get(position);
@@ -44,13 +45,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 .placeholder(android.R.drawable.ic_menu_gallery)
                 .error(android.R.drawable.stat_notify_error)
                 .into(holder.moviePoster);
-
+        String video = Constants.BASE_URL + movie.getVideo().replace("\\", "/");
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, MovieDetailActivity.class);
             intent.putExtra("movie_id", movie.getId());
             intent.putExtra("movie_title", movie.getName());
             intent.putExtra("movie_image", imageUrl);
             intent.putExtra("movie_description", movie.getDescription());
+            intent.putExtra("video_url", video);
             context.startActivity(intent);
         });
     }

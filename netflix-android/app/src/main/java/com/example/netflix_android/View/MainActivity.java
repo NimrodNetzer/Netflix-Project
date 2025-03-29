@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     // ✅ Set sample video for autoplay
-                    featuredVideo.setVideoURI(Uri.parse("https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"));
+                    featuredVideo.setVideoURI(Uri.parse(Constants.BASE_URL + videoUrl.replace("\\", "/")));
 
                     // Start auto-play
                     featuredVideo.setOnPreparedListener(mp -> {
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("movie_image", Constants.BASE_URL + featuredMovie.getPicture().replace("\\", "/"));
                         intent.putExtra("movie_details", "2025  |  " + featuredMovie.getAge() + "+  |  " + featuredMovie.getTime());
                         intent.putExtra("movie_description", featuredMovie.getDescription());
-                        intent.putExtra("video_url", videoUrl);
+                        intent.putExtra("video_url", Constants.BASE_URL + videoUrl.replace("\\", "/"));
                         startActivity(intent);
                     });
 
