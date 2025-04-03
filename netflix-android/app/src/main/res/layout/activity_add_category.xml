@@ -5,9 +5,7 @@
     android:orientation="vertical"
     android:background="@color/background"
     android:padding="20dp">
-
-    <!-- ✅ Netflix Top Menu -->
-    <include layout="@layout/netflix_top_menu" />
+    
 
     <!-- ✅ Page Title -->
     <TextView
