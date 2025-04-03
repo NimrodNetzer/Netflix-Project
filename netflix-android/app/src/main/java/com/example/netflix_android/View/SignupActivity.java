@@ -43,7 +43,8 @@ public class SignupActivity extends AppCompatActivity {
             authViewModel.signup(email, password, nickname, "").observe(this, success -> {
                 if (success) {
                     Toast.makeText(SignupActivity.this, "Signup successful!", Toast.LENGTH_SHORT).show();
-                    finish();
+                    Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(SignupActivity.this, "Signup failed! Please try again.", Toast.LENGTH_SHORT).show();
                 }

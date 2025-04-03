@@ -18,10 +18,10 @@ public interface CategoryApi {
     Call<Category> getCategory(@Path("id") String id);
 
     @POST("/api/categories") // Matches Node.js route: POST /
-    Call<Category> createCategory(@Body Category category);
+    Call<Void> createCategory(@Body Category category);
 
     @PATCH("/api/categories/{id}") // Matches Node.js route: PATCH /:id
-    Call<Category> updateCategory(@Path("id") String id, @Body Category category);
+    Call<Void> updateCategory(@Path("id") String id, @Body Category category);
 
     @DELETE("/api/categories/{id}") // Matches Node.js route: DELETE /:id
     Call<Void> deleteCategory(@Path("id") String id);
