@@ -44,23 +44,42 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         final String details;
         final String description;
         final String video;
+        final String quality;
+        final String category;
+        final String duration;
+        final String age;
+        final String year;
 
         if (item instanceof Movie) {
             Movie movie = (Movie) item;
             title = movie.getName();
             imageUrl = Constants.BASE_URL + movie.getPicture().replace("\\", "/");
             movieId = movie.getId();
-            details = "2025  |  " + movie.getAge() + "+  |  " + movie.getTime();
             description = movie.getDescription();
-            video = Constants.BASE_URL + movie.getVideo().replace("\\", "/");;
+            video = Constants.BASE_URL + movie.getVideo().replace("\\", "/");
+            quality = movie.getQuality();
+            duration = movie.getTime();
+            age = movie.getAge() + "+";
+            year = movie.getReleaseDate() != null
+                    ? String.valueOf(movie.getReleaseDate().getYear() + 1900)
+                    : "N/A";
+            category = (movie.getCategories() != null && !movie.getCategories().isEmpty())
+                    ? movie.getCategories().get(0).getName()
+                    : "N/A";
+            details = year + " | " + age + " | " + duration;
         } else if (item instanceof SearchResult) {
             SearchResult searchResult = (SearchResult) item;
             title = searchResult.getName();
             imageUrl = Constants.BASE_URL + searchResult.getPicture().replace("\\", "/");
             movieId = searchResult.getId();
-            details = "2025  |  " + searchResult.getAge() + "+  |  " + searchResult.getTime();
             description = searchResult.getDescription();
             video = Constants.BASE_URL + searchResult.getVideo().replace("\\", "/");
+            quality = "N/A";
+            category = "N/A";
+            duration = searchResult.getTime();
+            age = searchResult.getAge() + "+";
+            year = "2025"; // fallback
+            details = year + " | " + age + " | " + duration;
         } else {
             return; // Prevent unexpected errors
         }
@@ -71,8 +90,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         // Load movie poster using Glide
         Glide.with(context)
                 .load(imageUrl)
-                .placeholder(android.R.drawable.ic_menu_gallery) // Default placeholder
-                .error(android.R.drawable.stat_notify_error) // Error icon
+                .placeholder(android.R.drawable.ic_menu_gallery)
+                .error(android.R.drawable.stat_notify_error)
                 .into(holder.moviePoster);
 
         // Handle Click Event - Open Movie Details
@@ -81,12 +100,20 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             intent.putExtra("movie_id", movieId);
             intent.putExtra("movie_title", title);
             intent.putExtra("movie_image", imageUrl);
-            intent.putExtra("movie_details", details);
             intent.putExtra("movie_description", description);
             intent.putExtra("video_url", video);
+
+            // ✅ NEW: Pass additional movie details
+            intent.putExtra("movie_year", year);
+            intent.putExtra("movie_duration", duration);
+            intent.putExtra("movie_age", age);
+            intent.putExtra("movie_quality", quality);
+            intent.putExtra("chosen_category", category);
+
             context.startActivity(intent);
         });
     }
+
 
     @Override
     public int getItemCount() {
