@@ -32,17 +32,19 @@
         android:background="?attr/selectableItemBackgroundBorderless" />
 
     <!-- ✅ Admin Button -->
-    <Button
+    <ImageView
         android:id="@+id/button_admin"
-        android:layout_width="85dp"
+        android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_toStartOf="@id/icon_search"
         android:layout_marginEnd="6dp"
         android:visibility="gone"
-        android:backgroundTint="@color/button_yellow"
-        android:text="@string/admin"
-        android:textColor="@color/text_on_light"
-        android:textSize="12sp" />
+        android:src="@drawable/admin"
+        android:contentDescription="@string/admin"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="4dp"
+        android:scaleType="fitCenter" />
+
 
     <!-- ✅ Exit Button -->
     <Button

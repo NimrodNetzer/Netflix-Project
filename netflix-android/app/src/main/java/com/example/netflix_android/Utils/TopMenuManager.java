@@ -19,11 +19,11 @@ import com.example.netflix_android.View.WelcomeActivity;
 
 public class TopMenuManager {
 
-    public static void setup(Activity activity) {
+    public static void setup(Activity activity) {   
         ImageView searchIcon = activity.findViewById(R.id.icon_search);
         ImageView netflixLogo = activity.findViewById(R.id.netflix_logo);
         Button exitButton = activity.findViewById(R.id.button_exit);
-        Button adminButton = activity.findViewById(R.id.button_admin);
+        ImageView adminButton = activity.findViewById(R.id.button_admin);
         SwitchCompat themeSwitch = activity.findViewById(R.id.theme_switch);
 
         if (searchIcon == null || netflixLogo == null || exitButton == null || adminButton == null || themeSwitch == null) {
