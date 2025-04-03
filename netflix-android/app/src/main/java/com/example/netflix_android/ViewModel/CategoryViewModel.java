@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.netflix_android.Entities.Category;
 import com.example.netflix_android.Repository.CategoryRepository;
 import java.util.List;
+
 public class CategoryViewModel extends ViewModel {
     private final CategoryRepository categoryRepository;
     private final LiveData<List<Category>> categories;

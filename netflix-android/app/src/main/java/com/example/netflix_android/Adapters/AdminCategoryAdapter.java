@@ -8,32 +8,34 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.netflix_android.Entities.Category;
 import com.example.netflix_android.R;
 import com.example.netflix_android.View.AddCategoryActivity;
 import com.example.netflix_android.View.AdminActivity;
 import com.example.netflix_android.ViewModel.CategoryViewModel;
-import com.example.netflix_android.ViewModel.CategoryViewModelFactory;
+
 import java.util.List;
 
 public class AdminCategoryAdapter extends RecyclerView.Adapter<AdminCategoryAdapter.CategoryViewHolder> {
-    private Context context;
-    private List<Category> categories;
-    private CategoryViewModel categoryViewModel;
 
-    public AdminCategoryAdapter(Context context, List<Category> categories, CategoryViewModel categoryViewModel) { // 🔺 Pass ViewModel
-        this.context = context;
+    private final AdminActivity activity;
+    private final List<Category> categories;
+    private final CategoryViewModel categoryViewModel;
+
+    public AdminCategoryAdapter(AdminActivity activity, List<Category> categories, CategoryViewModel categoryViewModel) {
+        this.activity = activity;
         this.categories = categories;
-        this.categoryViewModel = categoryViewModel; // 🔺 Store ViewModel
+        this.categoryViewModel = categoryViewModel;
     }
 
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_category, parent, false);
+        View view = LayoutInflater.from(activity).inflate(R.layout.item_category, parent, false);
         return new CategoryViewHolder(view);
     }
 
@@ -44,19 +46,22 @@ public class AdminCategoryAdapter extends RecyclerView.Adapter<AdminCategoryAdap
         holder.categoryType.setText(category.isPromoted() ? "🌟 Promoted" : "📂 Regular");
 
         holder.editButton.setOnClickListener(v -> {
-            Intent intent = new Intent(context, AddCategoryActivity.class); // 🔺 Use context
+            Intent intent = new Intent(activity, AddCategoryActivity.class);
             intent.putExtra("category_id", category.getId());
             intent.putExtra("category_name", category.getName());
             intent.putExtra("category_promoted", category.isPromoted());
-            ((AdminActivity) context).startActivityForResult(intent, 1); // 🔺 Ensure result is expected
+            activity.startActivityForResult(intent, 1);
         });
 
-// ✅ Handle Delete Button Click
         holder.deleteButton.setOnClickListener(v -> {
-            categoryViewModel.deleteCategory(category.getId()); // 🔺 Use ViewModel to delete
-            Toast.makeText(context, "Category deleted successfully", Toast.LENGTH_SHORT).show();
-        });
+            categoryViewModel.deleteCategory(category.getId());
 
+            // Delay reload slightly to allow LiveData update or server sync
+            holder.itemView.postDelayed(() -> {
+                Toast.makeText(activity, "🗑️ Category deleted. Reloading...", Toast.LENGTH_SHORT).show();
+                activity.loadCategories();
+            }, 500); // short delay
+        });
     }
 
     @Override
