@@ -233,18 +233,25 @@ const VideoPlayer = ({
 
   // Effect to handle the 'play' prop for autoplay
   useEffect(() => {
-    if (play) {
-      if (videoRef.current) {
-        videoRef.current.play();
-        setIsPlaying(true);
+    if (play && videoRef.current) {
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true);
+            console.log("✅ Video playback started");
+          })
+          .catch((error) => {
+            setIsPlaying(false);
+            console.warn("❌ Playback failed:", error);
+          });
       }
-    } else {
-      if (videoRef.current) {
-        videoRef.current.pause();
-        setIsPlaying(false);
-      }
+    } else if (!play && videoRef.current) {
+      videoRef.current.pause();
+      setIsPlaying(false);
     }
   }, [play]);
+  
 
   // Function to exit fullscreen and close the VideoPlayer
   const handleExitFullscreen = () => {
