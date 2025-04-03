@@ -241,7 +241,10 @@ public class MovieFormActivity extends AppCompatActivity {
         String quality = spinnerQuality.getSelectedItem().toString();
         String language = spinnerLanguage.getSelectedItem().toString();
         String author = "a"; // Update as needed
-
+        if (releaseDate.isEmpty()) {
+            Toast.makeText(this, "Please fill Release Date.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         // Validate required text fields
         if (name.isEmpty() || description.isEmpty() || ageString.isEmpty() ||
                 hoursString.isEmpty() || minutesString.isEmpty() || releaseDate.isEmpty() || quality.isEmpty()) {
@@ -328,6 +331,9 @@ public class MovieFormActivity extends AppCompatActivity {
             if (success) {
                 String message = isUpdate ? "Movie updated successfully!" : "Movie created successfully!";
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("movie_id", movieId);
+                setResult(RESULT_OK, resultIntent);
                 finish(); // Return to previous window
             } else {
                 String message = isUpdate ? "Failed to update movie." : "Failed to create movie.";

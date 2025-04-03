@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.example.netflix_android.Adapters.MoviesAdapter;
 import com.example.netflix_android.Entities.Movie;
 import com.example.netflix_android.R;
+import com.example.netflix_android.Utils.Constants;
 import com.example.netflix_android.Utils.SessionManager;
 import com.example.netflix_android.ViewModel.MovieViewModel;
 import com.example.netflix_android.ViewModel.MovieViewModelFactory;
@@ -179,7 +180,35 @@ public class MovieDetailActivity extends AppCompatActivity {
         editButton.setOnClickListener(v -> {
             Intent intent = new Intent(MovieDetailActivity.this, MovieFormActivity.class);
             intent.putExtra("movie_id", movieId);
-            startActivity(intent);
+            startActivityForResult(intent, 100);
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            String updatedMovieId = data.getStringExtra("movie_id");
+
+            if (updatedMovieId != null && !updatedMovieId.isEmpty()) {
+                Log.d(TAG, "🔄 Reloading updated movie details...");
+
+                movieViewModel.getMovieById(updatedMovieId).observe(this, movie -> {
+                    if (movie != null) {
+                        String pictureUrl = Constants.BASE_URL + movie.getPicture().replace("\\", "/");
+                        videoUrl = Constants.BASE_URL + movie.getVideo().replace("\\", "/");
+                        movieTitle.setText(movie.getName());
+                        movieDetails.setText(movie.getTime() + " | Age " + movie.getAge() + " | " + movie.getQuality());
+                        movieDescription.setText(movie.getDescription());
+
+                        Glide.with(this)
+                                .load(pictureUrl) // Replace with correct getter
+                                .placeholder(android.R.drawable.ic_menu_gallery)
+                                .error(android.R.drawable.stat_notify_error)
+                                .into(movieThumbnail);
+                    }
+                });
+            }
+        }
     }
 }
