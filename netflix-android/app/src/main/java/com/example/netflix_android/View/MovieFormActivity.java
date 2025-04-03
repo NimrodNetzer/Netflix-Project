@@ -211,12 +211,27 @@ public class MovieFormActivity extends AppCompatActivity {
                     editMovieMinutes.setText(timeParts[1]);
                 }
 
-                //editMovieReleaseDate.setText(movie.getReleaseDate().toString());
-                spinnerQuality.setSelection(((ArrayAdapter<String>) spinnerQuality.getAdapter()).getPosition(movie.getQuality()));
-                spinnerLanguage.setSelection(((ArrayAdapter<String>) spinnerLanguage.getAdapter()).getPosition(movie.getProperties().get("language")));
+                spinnerQuality.setSelection(
+                        ((ArrayAdapter<String>) spinnerQuality.getAdapter())
+                                .getPosition(movie.getQuality())
+                );
+
+                // ✅ Safe access to language
+                Map<String, String> props = movie.getProperties();
+                if (props != null && props.get("language") != null) {
+                    spinnerLanguage.setSelection(
+                            ((ArrayAdapter<String>) spinnerLanguage.getAdapter())
+                                    .getPosition(props.get("language"))
+                    );
+                } else {
+                    Log.w("MovieFormActivity", "⚠️ Language property is missing or null");
+                    // Optionally set a default value:
+                    spinnerLanguage.setSelection(0); // or leave it unselected
+                }
             }
         });
     }
+
 
     private File getFileFromUri(Uri uri, String type) throws IOException {
         String extension = type.equals("image") ? ".png" : ".mp4";
