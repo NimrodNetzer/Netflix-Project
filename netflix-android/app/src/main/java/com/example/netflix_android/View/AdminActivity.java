@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -88,9 +89,13 @@ public class AdminActivity extends AppCompatActivity {
             if (isChecked) {
                 if (checkedId == R.id.toggle_movies) {
                     isViewingMovies = true;
+                    toggleMovies.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.button_red));
+                    toggleCategories.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.button_gray));
                     loadMovies();
                 } else if (checkedId == R.id.toggle_categories) {
                     isViewingMovies = false;
+                    toggleCategories.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.button_red));
+                    toggleMovies.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.button_gray));
                     loadCategories();
                 }
             }
@@ -104,6 +109,10 @@ public class AdminActivity extends AppCompatActivity {
                 itemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
                 categoryAdapter = new CategoryAdapter(this, categorizedMovies);
                 itemsRecyclerView.setAdapter(categoryAdapter);
+            }
+            else {
+                // Clear adapter if movie list is empty
+                itemsRecyclerView.setAdapter(null);
             }
         });
     }
