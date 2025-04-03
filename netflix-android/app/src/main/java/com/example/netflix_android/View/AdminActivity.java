@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.netflix_android.Adapters.AdminCategoryAdapter;
 import com.example.netflix_android.Adapters.CategoryAdapter;
-import com.example.netflix_android.Adapters.MoviesAdapter;
 import com.example.netflix_android.Entities.Category;
 import com.example.netflix_android.Entities.Movie;
 import com.example.netflix_android.R;
@@ -37,17 +36,13 @@ public class AdminActivity extends AppCompatActivity {
     private static final String TAG = "AdminActivity";
 
     private RecyclerView itemsRecyclerView;
-    private MoviesAdapter movieAdapter;
-    private AdminCategoryAdapter adminCategoryAdapter;
     private CategoryAdapter categoryAdapter;
+    private AdminCategoryAdapter adminCategoryAdapter;
 
     private MoviesViewModel moviesViewModel;
     private CategoryViewModel categoryViewModel;
     private CategoryRepository categoryRepository;
     private LiveData<List<Category>> categoryLiveData;
-    private Button addMovieButton, addCategoryButton;
-    private MaterialButton toggleMovies, toggleCategories;
-    private MaterialButtonToggleGroup toggleGroup;
     private boolean isViewingMovies = true;
 
     @Override
@@ -62,14 +57,15 @@ public class AdminActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_settings);
         Log.d(TAG, "⚙️ Admin Panel Opened");
 
-        TopMenuManager.setup(this); // ✅ Shared top menu
+        TopMenuManager.setup(this);
 
         itemsRecyclerView = findViewById(R.id.admin_recycler_view);
-        addMovieButton = findViewById(R.id.button_add_movie);
-        addCategoryButton = findViewById(R.id.button_add_category);
-        toggleGroup = findViewById(R.id.toggle_group);
-        toggleMovies = findViewById(R.id.toggle_movies);
-        toggleCategories = findViewById(R.id.toggle_categories);
+
+        Button addMovieButton = findViewById(R.id.button_add_movie);
+        Button addCategoryButton = findViewById(R.id.button_add_category);
+        MaterialButtonToggleGroup toggleGroup = findViewById(R.id.toggle_group);
+        MaterialButton toggleMovies = findViewById(R.id.toggle_movies);
+        MaterialButton toggleCategories = findViewById(R.id.toggle_categories);
 
         moviesViewModel = new ViewModelProvider(this, new MoviesViewModelFactory(this)).get(MoviesViewModel.class);
         categoryViewModel = new ViewModelProvider(this, new CategoryViewModelFactory(this)).get(CategoryViewModel.class);
@@ -136,5 +132,15 @@ public class AdminActivity extends AppCompatActivity {
         } else {
             loadCategories();
         }
+    }
+
+    @SuppressWarnings("MissingSuperCall")
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG, "🔙 Back pressed - Navigating to MainActivity");
+        Intent intent = new Intent(AdminActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        finish();
     }
 }
