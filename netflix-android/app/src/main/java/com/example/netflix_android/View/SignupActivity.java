@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.netflix_android.R;
 import com.example.netflix_android.ViewModel.AuthViewModel;
@@ -20,6 +21,9 @@ public class SignupActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // ✅ Force dark mode
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
@@ -39,7 +43,7 @@ public class SignupActivity extends AppCompatActivity {
             authViewModel.signup(email, password, nickname, "").observe(this, success -> {
                 if (success) {
                     Toast.makeText(SignupActivity.this, "Signup successful!", Toast.LENGTH_SHORT).show();
-                    finish(); // Close the activity after successful signup
+                    finish();
                 } else {
                     Toast.makeText(SignupActivity.this, "Signup failed! Please try again.", Toast.LENGTH_SHORT).show();
                 }
