@@ -55,7 +55,6 @@ public class AdminCategoryAdapter extends RecyclerView.Adapter<AdminCategoryAdap
         holder.deleteButton.setOnClickListener(v -> {
             categoryViewModel.deleteCategory(category.getId()); // 🔺 Use ViewModel to delete
             Toast.makeText(context, "Category deleted successfully", Toast.LENGTH_SHORT).show();
-            ((AdminActivity) context).loadCategories(); // 🔺 Refresh list after deletion
         });
 
     }

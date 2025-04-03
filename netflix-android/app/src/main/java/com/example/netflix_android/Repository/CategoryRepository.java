@@ -56,13 +56,17 @@ public class CategoryRepository {
     }
 
     public void addCategory(Category category) {
+        // ✅ Step 1: Insert locally first so UI updates immediately
+        executorService.execute(() -> categoryDao.insertAll(Collections.singletonList(category)));
+
+        // ✅ Step 2: Sync with server in background
         categoryApi.createCategory(category).enqueue(new Callback<Category>() {
             @Override
             public void onResponse(Call<Category> call, Response<Category> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Category> categoryList = Collections.singletonList(response.body());
-                    executorService.execute(() -> categoryDao.insertAll(categoryList));
-                    Log.d(TAG, "✅ Category added successfully: " + response.body().getName());
+                    // ✅ Step 3: Replace local entry with server's version (in case ID or fields change)
+                    executorService.execute(() -> categoryDao.insertAll(Collections.singletonList(response.body())));
+                    Log.d(TAG, "✅ Category synced with server: " + response.body().getName());
                 } else {
                     logErrorResponse("add category", response);
                 }
@@ -70,10 +74,11 @@ public class CategoryRepository {
 
             @Override
             public void onFailure(Call<Category> call, Throwable t) {
-                Log.e(TAG, "❌ Network error while adding category", t);
+                Log.e(TAG, "Network error while adding category", t);
             }
         });
     }
+
 
     public void updateCategory(Category category) {
         categoryApi.updateCategory(category.getId(), category).enqueue(new Callback<Category>() {

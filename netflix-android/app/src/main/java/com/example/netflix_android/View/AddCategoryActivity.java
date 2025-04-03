@@ -85,8 +85,9 @@ public class AddCategoryActivity extends AppCompatActivity {
                 Category newCategory = new Category(tempId, categoryName, isPromoted);
                 categoryViewModel.addCategory(newCategory);
                 Toast.makeText(this, "Category added successfully", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK);
+                finish();
             }
-            finish();
         });
 
         // ✅ Handle Floating Delete (Only in Update Mode)
