@@ -25,5 +25,6 @@
     <color name="image_placeholder">#333333</color>
     <color name="background_overlay">#AA000000</color>
     <color name="blue_edit">#2196F3</color> <!-- Slightly brighter for dark mode visibility -->
+    <color name="search_bg"> #444444 </color>
 
 </resources>

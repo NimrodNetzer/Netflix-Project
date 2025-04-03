@@ -34,5 +34,5 @@
     <color name="image_placeholder">#EEEEEE</color>
     <color name="background_overlay">#AA000000</color>
     <color name="blue_edit">#1976D2</color> <!-- A clean, vibrant blue for edit button -->
-
+    <color name="search_bg"> #EEEEEE </color>
 </resources>
