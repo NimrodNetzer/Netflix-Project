@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.netflix_android.R;
 import com.example.netflix_android.ViewModel.AuthViewModel;
@@ -20,6 +21,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // ✅ Force dark mode
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -31,21 +35,11 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
         signupLink = findViewById(R.id.signup_link);
 
-        // Check if user is already logged in
-        //checkExistingLogin();
-
         loginButton.setOnClickListener(view -> login());
         signupLink.setOnClickListener(view -> {
             Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
             startActivity(intent);
         });
-    }
-
-    private void checkExistingLogin() {
-        String token = authViewModel.getToken();
-        if (token != null) {
-            navigateToMainActivity();
-        }
     }
 
     private void login() {
