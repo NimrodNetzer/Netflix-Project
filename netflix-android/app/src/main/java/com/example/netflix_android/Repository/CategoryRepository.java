@@ -1,7 +1,10 @@
 package com.example.netflix_android.Repository;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 import androidx.lifecycle.LiveData;
 import com.example.netflix_android.Api.CategoryApi;
 import com.example.netflix_android.Database.AppDatabase;
@@ -21,9 +24,12 @@ public class CategoryRepository {
     private final CategoryDao categoryDao;
     private final CategoryApi categoryApi;
     private final ExecutorService executorService = Executors.newFixedThreadPool(2);
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private final Context context;
 
     public CategoryRepository(Context context) {
         AppDatabase db = AppDatabase.getInstance(context);
+        this.context = context;
         categoryDao = db.categoryDao();
         categoryApi = RetrofitClient.getRetrofitInstance(context).create(CategoryApi.class);
     }
@@ -56,17 +62,14 @@ public class CategoryRepository {
     }
 
     public void addCategory(Category category) {
-        // ✅ Step 1: Insert locally first so UI updates immediately
         executorService.execute(() -> categoryDao.insertAll(Collections.singletonList(category)));
 
-        // ✅ Step 2: Sync with server in background
         categoryApi.createCategory(category).enqueue(new Callback<Category>() {
             @Override
             public void onResponse(Call<Category> call, Response<Category> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // ✅ Step 3: Replace local entry with server's version (in case ID or fields change)
                     executorService.execute(() -> categoryDao.insertAll(Collections.singletonList(response.body())));
-                    Log.d(TAG, "✅ Category synced with server: " + response.body().getName());
+                    handler.post(() -> Toast.makeText(context, "✅ Category added successfully", Toast.LENGTH_SHORT).show());
                 } else {
                     logErrorResponse("add category", response);
                 }
@@ -79,14 +82,13 @@ public class CategoryRepository {
         });
     }
 
-
     public void updateCategory(Category category) {
         categoryApi.updateCategory(category.getId(), category).enqueue(new Callback<Category>() {
             @Override
             public void onResponse(Call<Category> call, Response<Category> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     executorService.execute(() -> categoryDao.insertAll(Collections.singletonList(response.body())));
-                    Log.d(TAG, "✅ Category updated successfully: " + response.body().getName());
+                    handler.post(() -> Toast.makeText(context, "✅ Category updated successfully", Toast.LENGTH_SHORT).show());
                 } else {
                     logErrorResponse("update category", response);
                 }
@@ -104,16 +106,22 @@ public class CategoryRepository {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    //executorService.execute(() -> categoryDao.deleteCategory(categoryId));
-                    Log.d(TAG, "✅ Category deleted successfully (ID: " + categoryId + ")");
+                    handler.post(() -> Toast.makeText(context, "✅ Category deleted", Toast.LENGTH_SHORT).show());
                 } else {
-                    logErrorResponse("delete category", response);
+                    try {
+                        String errorMsg = response.errorBody().string();
+                        handler.post(() -> Toast.makeText(context, "⚠️ " + errorMsg, Toast.LENGTH_LONG).show());
+                        Log.e(TAG, "Response error: " + errorMsg);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error reading errorBody", e);
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Log.e(TAG, "❌ Network error while deleting category", t);
+                handler.post(() -> Toast.makeText(context, "❌ Failed to delete category", Toast.LENGTH_SHORT).show());
             }
         });
     }
@@ -121,9 +129,11 @@ public class CategoryRepository {
     private void logErrorResponse(String action, Response<?> response) {
         Log.e(TAG, "❌ Failed to " + action + ". HTTP Code: " + response.code());
         try {
-            Log.e(TAG, "Response error: " + response.errorBody().string());
+            String error = response.errorBody().string();
+            Log.e(TAG, "Response error: " + error);
+            handler.post(() -> Toast.makeText(context, "❌ " + error, Toast.LENGTH_LONG).show());
         } catch (Exception e) {
-            Log.e(TAG, "Error reading response body", e);
+            Log.e(TAG, "Error reading error body", e);
         }
     }
 }
