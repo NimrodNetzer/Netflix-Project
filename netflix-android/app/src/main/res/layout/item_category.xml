@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="#1E1E1E"
+    android:background="@color/category_background"
     android:padding="10dp"
-    android:layout_margin="5dp">  <!-- ✅ Fixed the margin -->
+    android:layout_margin="5dp">
 
     <!-- ✅ Category Title -->
     <TextView
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Category Name"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/text_primary"
         android:textSize="18sp"
         android:textStyle="bold"/>
 
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Regular"
-        android:textColor="#CCCCCC"
+        android:textColor="@color/text_secondary"
         android:textSize="14sp"
         android:paddingTop="5dp"/>
 
@@ -41,8 +41,8 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="Edit"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#FFA500"
+            android:textColor="@color/text_on_button"
+            android:backgroundTint="@color/button_orange"
             android:textSize="12sp"/>
 
         <!-- ✅ Delete Button -->
@@ -51,10 +51,9 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="Delete"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#E50914"
+            android:textColor="@color/text_on_button"
+            android:backgroundTint="@color/button_red"
             android:textSize="12sp"
             android:layout_marginStart="10dp"/>
     </LinearLayout>
-
 </LinearLayout>

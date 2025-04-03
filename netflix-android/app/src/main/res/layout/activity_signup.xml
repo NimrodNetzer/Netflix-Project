@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="#E5000000"
+    android:background="@color/background"
     android:padding="20dp">
 
     <ImageView
@@ -18,9 +18,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
-        android:backgroundTint="#FFFFFF"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#B3FFFFFF"
+        android:backgroundTint="@color/edittext_tint"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_hint"
         android:inputType="textEmailAddress"
         android:padding="10dp" />
 
@@ -29,9 +29,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
-        android:backgroundTint="#FFFFFF"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#B3FFFFFF"
+        android:backgroundTint="@color/edittext_tint"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_hint"
         android:inputType="textPassword"
         android:layout_marginTop="15dp"
         android:padding="10dp" />
@@ -41,9 +41,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nickname"
-        android:backgroundTint="#FFFFFF"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#B3FFFFFF"
+        android:backgroundTint="@color/edittext_tint"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_hint"
         android:layout_marginTop="15dp"
         android:padding="10dp" />
 
@@ -52,8 +52,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign Up"
-        android:textColor="#FFFFFF"
-        android:backgroundTint="#E50914"
+        android:textColor="@color/text_on_button"
+        android:backgroundTint="@color/button_red"
         android:layout_marginTop="20dp" />
 
     <TextView
@@ -61,7 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Already have an account? Sign In"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/text_primary"
         android:textSize="14sp"
         android:textStyle="bold"
         android:layout_marginTop="20dp"

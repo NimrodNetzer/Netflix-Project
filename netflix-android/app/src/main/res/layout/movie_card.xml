@@ -6,7 +6,7 @@
     app:cardCornerRadius="14dp"
     app:cardElevation="6dp"
     android:layout_margin="6dp"
-    android:background="@android:color/black">
+    android:background="@color/card_background">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:background="@android:color/darker_gray"
+            android:background="@color/image_placeholder"
             android:contentDescription="Movie Poster"/>
 
         <!-- Gradient Overlay for Title -->
@@ -29,14 +29,14 @@
             android:layout_alignParentBottom="true"
             android:background="@drawable/gradient_overlay" />
 
-        <!-- Movie Title (Inside Image) -->
+        <!-- Movie Title -->
         <TextView
             android:id="@+id/movie_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:padding="8dp"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/text_on_image"
             android:textSize="14sp"
             android:textStyle="bold"
             android:gravity="center"

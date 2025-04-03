@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#000000"
+    android:background="@color/background"
     android:padding="16dp">
 
     <!-- ✅ Netflix Top Menu -->
@@ -30,8 +30,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Movies"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#E50914"
+                android:textColor="@color/text_on_button"
+                android:backgroundTint="@color/button_red"
                 app:cornerRadius="8dp"/>
 
             <com.google.android.material.button.MaterialButton
@@ -39,8 +39,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Categories"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#333333"
+                android:textColor="@color/text_on_button"
+                android:backgroundTint="@color/button_gray"
                 app:cornerRadius="8dp"/>
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -59,16 +59,16 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="Add Movie"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#E50914"/>
+            android:textColor="@color/text_on_button"
+            android:backgroundTint="@color/button_red"/>
 
         <Button
             android:id="@+id/button_add_category"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="Add Category"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#E50914"
+            android:textColor="@color/text_on_button"
+            android:backgroundTint="@color/button_red"
             android:layout_marginStart="20dp"/>
     </LinearLayout>
 
@@ -78,5 +78,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"/>
-
 </LinearLayout>

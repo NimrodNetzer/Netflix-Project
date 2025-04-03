@@ -4,9 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/background">
 
-    <!-- Back Button (Previous Page) -->
+    <!-- 🔙 Back Button -->
     <ImageView
         android:id="@+id/btn_back"
         android:layout_width="48dp"
@@ -14,14 +15,11 @@
         android:src="@drawable/ic_back"
         android:contentDescription="Back"
         android:layout_margin="16dp"
+        android:tint="@color/icon_tint"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Play/Pause Button -->
-    <!-- Default is play icon, will toggle dynamically -->
-
-    <!-- 10-Second Rewind Button -->
-
+    <!-- ▶️ Play/Pause Button -->
     <ImageView
         android:id="@+id/btn_play_pause"
         android:layout_width="64dp"
@@ -29,11 +27,13 @@
         android:layout_marginBottom="144dp"
         android:contentDescription="Play/Pause"
         android:src="@drawable/ic_play"
+        android:tint="@color/icon_tint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.499"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <!-- 🔁 Rewind Button -->
     <ImageView
         android:id="@+id/btn_rewind"
         android:layout_width="48dp"
@@ -42,9 +42,11 @@
         android:layout_marginBottom="144dp"
         android:contentDescription="Rewind 10 seconds"
         android:src="@drawable/ic_rewind"
+        android:tint="@color/icon_tint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_play_pause" />
 
+    <!-- ⏩ Forward Button -->
     <ImageView
         android:id="@+id/btn_forward"
         android:layout_width="48dp"
@@ -53,9 +55,7 @@
         android:layout_marginBottom="144dp"
         android:contentDescription="Forward 10 seconds"
         android:src="@drawable/ic_forward"
+        android:tint="@color/icon_tint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_play_pause" />
-
-    <!-- 10-Second Forward Button -->
-
 </androidx.constraintlayout.widget.ConstraintLayout>
