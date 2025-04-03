@@ -45,17 +45,38 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 .placeholder(android.R.drawable.ic_menu_gallery)
                 .error(android.R.drawable.stat_notify_error)
                 .into(holder.moviePoster);
+
         String video = Constants.BASE_URL + movie.getVideo().replace("\\", "/");
+
+        // Extract extra details for consistency
+        String title = movie.getName();
+        String movieId = movie.getId();
+        String description = movie.getDescription();
+        String duration = movie.getTime();
+        String age = movie.getAge() + "+";
+        String year = "2025"; // fallback; ideally from movie.getReleaseDate()
+        String quality = "N/A";
+        String category = "N/A";
+
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, MovieDetailActivity.class);
-            intent.putExtra("movie_id", movie.getId());
-            intent.putExtra("movie_title", movie.getName());
+            intent.putExtra("movie_id", movieId);
+            intent.putExtra("movie_title", title);
             intent.putExtra("movie_image", imageUrl);
-            intent.putExtra("movie_description", movie.getDescription());
+            intent.putExtra("movie_description", description);
             intent.putExtra("video_url", video);
+
+            // ✅ Add the additional extras for compatibility
+            intent.putExtra("movie_year", year);
+            intent.putExtra("movie_duration", duration);
+            intent.putExtra("movie_age", age);
+            intent.putExtra("movie_quality", quality);
+            intent.putExtra("chosen_category", category);
+
             context.startActivity(intent);
         });
     }
+
 
     public void updateMovies(List<SearchResult> newMovies) {
         searchResults = newMovies;

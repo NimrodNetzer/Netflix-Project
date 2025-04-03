@@ -183,7 +183,12 @@ public class MovieFormActivity extends AppCompatActivity {
                     selectedVideoUri = fileUri;
                     previewVideo.setVideoURI(fileUri);
                     previewVideo.setVisibility(View.VISIBLE); // Show video preview
-                    previewVideo.start();
+
+                    previewVideo.setOnPreparedListener(mp -> {
+                        mp.setVolume(0f, 0f); // Optional: mute it just in case
+                        mp.seekTo(1);         // Seek a bit to ensure preview shows
+                        previewVideo.pause(); // Pause so it doesn't play
+                    });
                 }
             } catch (Exception e) {
                 Log.e(TAG, "❌ Error processing file: " + e.getMessage());

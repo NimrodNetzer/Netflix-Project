@@ -92,9 +92,9 @@ public class MovieDetailActivity extends AppCompatActivity {
 
 // ✅ Build full details string
         String details = String.format("%s | %s | %s | %s | %s",
-                year != null ? year : "N/A",
-                age != null ? age : "N/A",
-                duration != null ? duration : "N/A",
+                year,
+                age,
+                duration,
                 movieQuality != null ? movieQuality : "N/A",
                 chosenCategory != null ? chosenCategory : "N/A"
         );

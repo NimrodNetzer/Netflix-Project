@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.netflix_android.Adapters.CategoryAdapter;
 import com.example.netflix_android.Entities.Movie;
+import com.example.netflix_android.Entities.SearchResult;
 import com.example.netflix_android.R;
 import com.example.netflix_android.Utils.Constants;
 import com.example.netflix_android.Utils.SessionManager;
@@ -92,6 +93,34 @@ public class MainActivity extends AppCompatActivity {
                         mp.setLooping(true);
                         featuredVideo.start();
                     });
+                    final String title;
+                    final String imageUrl;
+                    final String movieId;
+                    final String details;
+                    final String description;
+                    final String video;
+                    final String quality;
+                    final String category;
+                    final String duration;
+                    final String age;
+                    final String year;
+                    Movie item = featuredMovie;
+                    Movie movie = (Movie) item;
+                    title = movie.getName();
+                    imageUrl = Constants.BASE_URL + movie.getPicture().replace("\\", "/");
+                    movieId = movie.getId();
+                    description = movie.getDescription();
+                    video = Constants.BASE_URL + movie.getVideo().replace("\\", "/");
+                    quality = movie.getQuality();
+                    duration = movie.getTime();
+                    age = movie.getAge() + "+";
+                    year = movie.getReleaseDate() != null
+                            ? String.valueOf(movie.getReleaseDate().getYear() + 1900)
+                            : "N/A";
+                    category = (movie.getCategories() != null && !movie.getCategories().isEmpty())
+                            ? movie.getCategories().get(0).getName()
+                            : "N/A";
+                    details = year + " | " + age + " | " + duration;
 
                     // ✅ Pass movie data to `MovieDetailActivity`
                     featuredVideo.setOnClickListener(v -> {
@@ -102,6 +131,11 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("movie_details", "2025  |  " + featuredMovie.getAge() + "+  |  " + featuredMovie.getTime());
                         intent.putExtra("movie_description", featuredMovie.getDescription());
                         intent.putExtra("video_url", Constants.BASE_URL + videoUrl.replace("\\", "/"));
+                        intent.putExtra("movie_year", year);
+                        intent.putExtra("movie_duration", duration);
+                        intent.putExtra("movie_age", age);
+                        intent.putExtra("movie_quality", quality);
+                        intent.putExtra("chosen_category", category);
                         startActivity(intent);
                     });
 
