@@ -1,17 +1,256 @@
-/* 🌞 Light Mode (Inverted Colors, but excludes images, overlays, and video) */
+/* ========== GLOBAL RESET & STYLES ========== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #000; /* Default dark background */
+  color: white;
+  overflow-x: hidden;
+  transition: background-color 0.5s ease, color 0.5s ease; /* Smooth transition for background and text color */
+  padding-top: 60px;
+}
+
+/* ========== DARK MODE / LIGHT MODE ========== */
+
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --top-menu-bg: #141414;
+  --top-menu-text: #ffffff;
+  --button-bg: #e50914;
+  --button-text: #ffffff;
+}
+
+.dark-mode {
+  --bg-color: #141414; /* Dark background color */
+  --text-color: #ffffff;
+  --top-menu-bg: #000000;
+  --top-menu-text: #ffffff;
+  --button-bg: #ff0000;
+  --button-text: #ffffff;
+}
+
 .light-mode {
-  filter: invert(1) hue-rotate(180deg);
+  --bg-color: #ffffff; /* Light background color */
+  --text-color: #000000; /* Dark text in light mode */
+  --top-menu-bg: #ffffff; /* Top menu background in light mode */
+  --top-menu-text: #000000; /* Text color for top menu */
+  --button-bg: #007bff;
+  --button-text: #fff;
 }
 
-/* Prevent inversion for images, dark overlays, and feature video */
-.light-mode img,
-.light-mode .overlay,
-.light-mode .hero::before,
-.light-mode .featured-video {
-  filter: invert(1) hue-rotate(180deg); /* Reverts the inversion for these elements */
+/* ========== Background color change on theme switch ========== */
+.light-mode {
+  background-color: #ffffff; /* Light background color */
+  color: #000000; /* Dark text in light mode */
 }
 
-/* Ensure movie image darkening effect remains WITHOUT reinverting */
-.light-mode .movie-box:hover .default-image {
-  filter: invert(1) hue-rotate(180deg) brightness(0.5); /* Keeps the image inverted while darkening */
+.dark-mode {
+  background-color: #141414; /* Dark background color for dark mode */
+  color: white; /* White text for dark mode */
+}
+
+/* ========== FIXED TOP MENU ========== */
+
+.top-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: var(--top-menu-bg);
+  color: var(--top-menu-text);
+  position: fixed;
+  width: 100%;
+  height: 60px;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.right-section {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-right: 20px;
+}
+
+/* ========== Modal Overlay & Positioning Fix ========== */
+
+.modal-overlay,
+.createmovie-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Optional (adjust overlay color depending on light/dark) */
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.85);
+}
+.createmovie-modal-overlay {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* ========== Light Mode Actual Styles (Optional) ========== */
+
+.light-mode .modal-content,
+.light-mode .createmovie-modal-content {
+  background-color: #ffffff; /* White background for modal */
+  color: #000000; /* Dark text for modal */
+}
+
+.light-mode .createmovie-form-input,
+.light-mode .createmovie-time-input {
+  background-color: #f0f0f0; /* Lighter background for inputs */
+  color: #000000; /* Dark text for inputs */
+}
+
+.light-mode .createmovie-remove-cast-button,
+.light-mode .createmovie-close-button {
+  color: #000; /* Dark text for close and remove buttons */
+}
+
+.light-mode .createmovie-submit-button {
+  background-color: #007bff; /* Blue background for submit button */
+  color: #fff; /* White text for submit button */
+}
+
+.light-mode .createmovie-submit-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.light-mode .modal-content::-webkit-scrollbar-track {
+  background: #fff; /* Light background for scroll track */
+}
+
+.light-mode .modal-content::-webkit-scrollbar-thumb {
+  background-color: #888; /* Light thumb color */
+  border: 2px solid #fff; /* White border around thumb */
+}
+
+.light-mode .category-row .movie-list::-webkit-scrollbar-track {
+  background: #fff; /* Light background for scroll track */
+}
+
+/* ========== Home Page Section Styles ========== */
+.light-mode .home {
+  background-color: #ffffff; /* White background for home */
+  color: #000000; /* Dark text for home */
+}
+
+/* ========== Admin Section Styles ========== */
+.light-mode .admin-container {
+  background-color: #ffffff; /* White background for admin container */
+  color: #000000; /* Dark text for admin container */
+}
+
+/* ========== Categories Section Styles ========== */
+.light-mode .categories-container {
+  background-color: #ffffff; /* White background for categories container */
+  color: #000000; /* Dark text for categories */
+}
+
+/* ========== Movie Box (Home) Section ========== */
+.light-mode .movie-box {
+  background-color: #ffffff; /* White background for movie boxes */
+  color: #000000; /* Dark text for movie boxes */
+}
+
+/* Prevent image inversion in light mode */
+.light-mode .movie-box img,
+.light-mode .movie-box .default-image {
+  filter: none; /* Do not invert images */
+}
+
+/* ========== Category Item Styles ========== */
+.light-mode .category-item {
+  background-color: #ffffff; /* White background for category items */
+  color: #000000; /* Dark text for category items */
+}
+
+/* ========== Header Section Styles ========== */
+.light-mode .header {
+  background-color: #ffffff; /* White background for header */
+  color: #000000; /* Dark text for header */
+}
+
+/* ========== Buttons in Light Mode ========== */
+.light-mode .button {
+  background-color: #007bff; /* Blue background for general buttons */
+  color: #fff; /* White text for buttons */
+}
+
+.light-mode .button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* ========== Links in Light Mode ========== */
+.light-mode .link {
+  color: #007bff; /* Blue color for links */
+}
+
+.light-mode .link:hover {
+  color: #0056b3; /* Darker blue on hover */
+}
+
+/* ========== Footer Section Styles ========== */
+.light-mode .footer {
+  background-color: #ffffff; /* White background for footer */
+  color: #000000; /* Dark text for footer */
+}
+
+
+/* ========== DARK MODE ACTUAL STYLES (Optional) ========== */
+
+.dark-mode .modal-content,
+.dark-mode .createmovie-modal-content {
+  background-color: #2d2d2d; /* Dark background for modals */
+  color: #ffffff;
+}
+
+.dark-mode .createmovie-form-input,
+.dark-mode .createmovie-time-input {
+  background-color: #555555; /* Darker background for inputs */
+  color: #ffffff;
+}
+
+.dark-mode .createmovie-remove-cast-button,
+.dark-mode .createmovie-close-button {
+  color: #fff;
+}
+
+.dark-mode .createmovie-submit-button {
+  background-color: #e50914;
+  color: #fff;
+}
+
+.dark-mode .createmovie-submit-button:hover {
+  background-color: #ff0000;
+}
+
+.dark-mode .modal-content::-webkit-scrollbar-track {
+  background: #333;
+}
+
+.dark-mode .modal-content::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border: 2px solid #333;
 }

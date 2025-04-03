@@ -4,9 +4,8 @@ import './categoryRow.css';
 
 function CategoryRow({ category, movies, isAdmin = false }) {
   const rowRef = useRef(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [moviesPerView, setMoviesPerView] = useState(6);
-  const scrollStep = 3; // Number of movies to scroll per step
+  const scrollStep = 3;
 
   useEffect(() => {
     const updateMoviesPerView = () => {
@@ -23,34 +22,27 @@ function CategoryRow({ category, movies, isAdmin = false }) {
     return () => window.removeEventListener('resize', updateMoviesPerView);
   }, []);
 
-  // 🔹 Ensure movies are available before rendering
   if (!movies || movies.length === 0) {
-    return;
+    return null;
   }
 
-  // 🔹 Fix Infinite Scroll Issues
-  const extendedMovies =
-    movies.length > moviesPerView
-      ? [...movies, ...movies.slice(0, Math.min(moviesPerView, movies.length))]
-      : movies;
-
   const handleScroll = (direction) => {
-    if (movies.length <= moviesPerView) return;
+    if (!rowRef.current || movies.length <= moviesPerView) return;
 
-    const scrollAmount = (rowRef.current.offsetWidth / moviesPerView) * scrollStep;
-    let newIndex = currentIndex + direction;
+    const container = rowRef.current;
+    const scrollAmount = (container.offsetWidth / moviesPerView) * scrollStep;
+    const maxScrollLeft = container.scrollWidth - container.clientWidth;
 
-    if (newIndex < 0) {
-      newIndex = Math.ceil(movies.length / scrollStep) - 1;
-      rowRef.current.scrollTo({ left: scrollAmount * (movies.length - moviesPerView), behavior: 'auto' });
-    } else if (newIndex * scrollStep >= movies.length) {
-      newIndex = 0;
-      rowRef.current.scrollTo({ left: 0, behavior: 'auto' });
-    } else {
-      rowRef.current.scrollTo({ left: scrollAmount * newIndex, behavior: 'smooth' });
+    let targetScroll = container.scrollLeft + direction * scrollAmount;
+
+    // Wrap around for infinite effect without duplication
+    if (targetScroll < 0) {
+      targetScroll = maxScrollLeft;
+    } else if (targetScroll > maxScrollLeft) {
+      targetScroll = 0;
     }
 
-    setCurrentIndex(newIndex);
+    container.scrollTo({ left: targetScroll, behavior: 'smooth' });
   };
 
   return (
@@ -63,7 +55,7 @@ function CategoryRow({ category, movies, isAdmin = false }) {
           </button>
         )}
         <div className="movie-list" ref={rowRef}>
-          {extendedMovies.map((movie, index) => (
+          {movies.map((movie, index) => (
             <MovieBox key={index} movie={movie} isAdmin={isAdmin} />
           ))}
         </div>
@@ -77,4 +69,4 @@ function CategoryRow({ category, movies, isAdmin = false }) {
   );
 }
 
-export default CategoryRow;
+export default CategoryRow;
