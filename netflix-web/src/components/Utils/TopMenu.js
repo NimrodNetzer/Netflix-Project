@@ -15,7 +15,10 @@ function TopMenu({ darkMode, setDarkMode }) {
   const location = useLocation();
   const isLoggedIn = !!localStorage.getItem("jwt");
 
-  // 🔥 Re-run this effect whenever JWT changes (ensures admin status updates instantly)
+  // 👇 Pages where we hide search bar & other navs
+  const isRestrictedPage = ["/", "/login", "/signup"].includes(location.pathname);
+  const avatarImage = user?.picture || defaultAvatar;
+
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) setUser(storedUser);
@@ -32,16 +35,14 @@ function TopMenu({ darkMode, setDarkMode }) {
     } else {
       setIsAdmin(false);
     }
-  }, [localStorage.getItem("jwt")]); // 🔥 Runs when JWT changes
+  }, [localStorage.getItem("jwt")]);
 
-  // Handle search input change
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchQuery(value);
     navigate(value.trim() ? `/search/${value}` : "/home");
   };
 
-  // Show search input field on search icon click
   const handleSearchClick = () => {
     if (!isLoggedIn) return;
     setIsSearchVisible((prev) => !prev);
@@ -50,7 +51,6 @@ function TopMenu({ darkMode, setDarkMode }) {
     }
   };
 
-  // Close search input if clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -61,7 +61,6 @@ function TopMenu({ darkMode, setDarkMode }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Handle user logout
   const handleSignOut = (e) => {
     e.preventDefault();
     localStorage.removeItem("jwt");
@@ -71,10 +70,9 @@ function TopMenu({ darkMode, setDarkMode }) {
     setIsSearchVisible(false);
     setSearchQuery("");
     navigate("/login");
-    window.location.reload(); // 🔥 Ensures menu updates instantly
+    window.location.reload();
   };
 
-  // Toggle dark mode and store preference
   const handleToggleDarkMode = (event) => {
     event.stopPropagation();
     setDarkMode((prevMode) => {
@@ -85,8 +83,6 @@ function TopMenu({ darkMode, setDarkMode }) {
   };
 
   const isActive = (path) => location.pathname === path;
-  const isLoginPage = ["/login", "/register", "/"].includes(location.pathname);
-  const avatarImage = user?.picture || defaultAvatar;
 
   return (
     <div className="top-menu-wrapper">
@@ -98,37 +94,36 @@ function TopMenu({ darkMode, setDarkMode }) {
             </a>
           </li>
 
-          {!isLoginPage && (
+          {!isRestrictedPage && (
             <>
               <li className={isActive("/home") ? "active" : ""}>
                 <a href="#" onClick={(e) => { e.preventDefault(); navigate("/home"); }}>Movies</a>
               </li>
               <li><a href="#" onClick={handleSignOut}>Exit Netflix</a></li>
-              {/* 🔥 Admin menu updates instantly after login/logout */}
               {isAdmin && <li className={isActive("/admin") ? "active" : ""}><a href="/admin">Admin</a></li>}
             </>
           )}
         </ul>
 
         <div className="right-section">
-          {/* Search bar should always exist if logged in */}
-          {isLoggedIn && (
+          {/* 👇 Hide search on login/signup/hero */}
+          {!isRestrictedPage && isLoggedIn && (
             <div className="search-container" ref={searchRef}>
-              <img 
-                src="/assets/searchButton.png" 
-                alt="Search" 
-                className="search-icon" 
-                onClick={handleSearchClick} 
+              <img
+                src="/assets/searchButton.png"
+                alt="Search"
+                className="search-icon"
+                onClick={handleSearchClick}
               />
               {isSearchVisible && (
-                <input 
-                  type="text" 
-                  placeholder="Search" 
-                  className="search-input visible" 
-                  value={searchQuery} 
-                  onChange={handleSearchChange} 
-                  ref={inputRef} 
-                  autoFocus 
+                <input
+                  type="text"
+                  placeholder="Search"
+                  className="search-input visible"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  ref={inputRef}
+                  autoFocus
                 />
               )}
             </div>
@@ -143,7 +138,7 @@ function TopMenu({ darkMode, setDarkMode }) {
             <span className="toggle-label">🌙</span>
           </div>
 
-          {isLoggedIn && (
+          {!isRestrictedPage && isLoggedIn && (
             <div className="user-avatar-container">
               <img src={avatarImage} alt="User Avatar" className="user-avatar" />
             </div>
