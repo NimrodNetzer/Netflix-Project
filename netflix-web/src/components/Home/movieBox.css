@@ -1,16 +1,16 @@
 .movie-box {
   position: relative;
-  height: 250px; /* Adjusted height for better proportions */
-  width: 300px; /* Fixed width for consistency */
-  margin: 10px;
+  height: 280px;
+  width: 340px;
+  margin: 2px;
   overflow: hidden;
-  border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Stronger shadow */
-  background-color: #222; /* Dark background for contrast */
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  border-radius: 15px; 
+  box-shadow: none !important; /* ✅ Removes any shadow */
+  background-color: transparent !important; /* ✅ Ensures it blends with the page */
+  transition: transform 0.3s ease-in-out;
   cursor: pointer;
+  border: none !important; /* ✅ Ensures there's no border */
 }
-
 
 
 .movie-box:hover .default-image {
@@ -122,4 +122,22 @@
   font-size: 0.8rem;
   color: white;
   text-align: center;
+}
+
+.edit-button,
+.delete-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid white;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, transform 0.2s;
+}
+
+.edit-button:hover,
+.delete-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
 }

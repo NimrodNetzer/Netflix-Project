@@ -1,6 +1,17 @@
-/* src/index.css */
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-  }
-  
+/* 🌞 Light Mode (Inverted Colors, but excludes images, overlays, and video) */
+.light-mode {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Prevent inversion for images, dark overlays, and feature video */
+.light-mode img,
+.light-mode .overlay,
+.light-mode .hero::before,
+.light-mode .featured-video {
+  filter: invert(1) hue-rotate(180deg); /* Reverts the inversion for these elements */
+}
+
+/* Ensure movie image darkening effect remains WITHOUT reinverting */
+.light-mode .movie-box:hover .default-image {
+  filter: invert(1) hue-rotate(180deg) brightness(0.5); /* Keeps the image inverted while darkening */
+}

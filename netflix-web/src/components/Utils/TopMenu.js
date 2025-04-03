@@ -1,99 +1,156 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import './TopMenu.css';
-import HelperTopMenu from './HelperTopMenu';
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import "./TopMenu.css";
+import defaultAvatar from "../../assets/profile2.webp";
 
-function TopMenu() {
+function TopMenu({ darkMode, setDarkMode }) {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [user, setUser] = useState(null);
   const searchRef = useRef(null);
   const inputRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const isLoggedIn = !!localStorage.getItem("jwt");
 
-  // Show search input and keep focus
-  const handleSearchClick = () => {
-    setIsSearchVisible(true);
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 100);
-  };
+  // 🔥 Re-run this effect whenever JWT changes (ensures admin status updates instantly)
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) setUser(storedUser);
 
-  // Handle search input change and navigate
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setIsAdmin(decodedToken.admin === true);
+      } catch (error) {
+        console.error("Invalid token:", error);
+        setIsAdmin(false);
+      }
+    } else {
+      setIsAdmin(false);
+    }
+  }, [localStorage.getItem("jwt")]); // 🔥 Runs when JWT changes
+
+  // Handle search input change
   const handleSearchChange = (event) => {
     const value = event.target.value;
+    setSearchQuery(value);
+    navigate(value.trim() ? `/search/${value}` : "/home");
+  };
 
-    if (value !== searchQuery) {
-      setSearchQuery(value);
-    }
-
-    if (value.trim() === '') {
-      navigate('/home'); // Stay in Home when search is empty
-    } else {
-      navigate(`/search/${value}`, { replace: true });
+  // Show search input field on search icon click
+  const handleSearchClick = () => {
+    if (!isLoggedIn) return;
+    setIsSearchVisible((prev) => !prev);
+    if (!isSearchVisible) {
+      setTimeout(() => inputRef.current?.focus(), 100);
     }
   };
 
-  // Close search input only when clicking outside
-  const handleClickOutside = (event) => {
-    if (searchRef.current && !searchRef.current.contains(event.target)) {
-      setIsSearchVisible(false);
-    }
-  };
-
+  // Close search input if clicked outside
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setIsSearchVisible(false);
+      }
     };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // ✅ Keep search open when switching pages (even when coming back from Home)
-  useEffect(() => {
-    if (location.pathname.startsWith('/search')) {
-      setIsSearchVisible(true);
-      setSearchQuery(decodeURIComponent(location.pathname.replace('/search/', '')));
-    } else if (location.pathname === '/home') {
-      setTimeout(() => setIsSearchVisible(true), 100); // Ensures search box stays open after navigating home
-    }
-  }, [location.pathname]);
+  // Handle user logout
+  const handleSignOut = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("user");
+    setUser(null);
+    setIsAdmin(false);
+    setIsSearchVisible(false);
+    setSearchQuery("");
+    navigate("/login");
+    window.location.reload(); // 🔥 Ensures menu updates instantly
+  };
+
+  // Toggle dark mode and store preference
+  const handleToggleDarkMode = (event) => {
+    event.stopPropagation();
+    setDarkMode((prevMode) => {
+      const newMode = !prevMode;
+      localStorage.setItem("theme", newMode ? "dark" : "light");
+      return newMode;
+    });
+  };
+
+  const isActive = (path) => location.pathname === path;
+  const isLoginPage = ["/login", "/register", "/"].includes(location.pathname);
+  const avatarImage = user?.picture || defaultAvatar;
 
   return (
-    <nav className="top-menu">
-      <ul>
-        <li className="netflix-logo">
-          <a href="/">
-            <img src="../assets/LOGO.jpg" alt="Netflix Logo" className="logo-img" />
-          </a>
-        </li>
-        <li><a href="/home">Home</a></li>
-        <li><a href="/">Movies</a></li>
-        <li><a href="/">New & Popular</a></li>
-        <li><a href="/">My List</a></li>
-      </ul>
-      <div className="right-section">
-        <div className="search-container" ref={searchRef}>
-          <img
-            src="/assets/searchButton.png"
-            alt="Search"
-            className="search-icon"
-            onClick={handleSearchClick}
-          />
-          {isSearchVisible && (
-            <input
-              type="text"
-              placeholder="Search"
-              className="search-input visible"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              ref={inputRef}
-              autoFocus
-            />
+    <div className="top-menu-wrapper">
+      <nav className="top-menu">
+        <ul>
+          <li className="netflix-logo">
+            <a href="#" onClick={(e) => { e.preventDefault(); isLoggedIn ? navigate("/home") : navigate("/login"); }}>
+              <img src="../assets/LOGO.jpg" alt="Netflix Logo" className="logo-img" />
+            </a>
+          </li>
+
+          {!isLoginPage && (
+            <>
+              <li className={isActive("/home") ? "active" : ""}>
+                <a href="#" onClick={(e) => { e.preventDefault(); navigate("/home"); }}>Movies</a>
+              </li>
+              <li><a href="#" onClick={handleSignOut}>Exit Netflix</a></li>
+              {/* 🔥 Admin menu updates instantly after login/logout */}
+              {isAdmin && <li className={isActive("/admin") ? "active" : ""}><a href="/admin">Admin</a></li>}
+            </>
+          )}
+        </ul>
+
+        <div className="right-section">
+          {/* Search bar should always exist if logged in */}
+          {isLoggedIn && (
+            <div className="search-container" ref={searchRef}>
+              <img 
+                src="/assets/searchButton.png" 
+                alt="Search" 
+                className="search-icon" 
+                onClick={handleSearchClick} 
+              />
+              {isSearchVisible && (
+                <input 
+                  type="text" 
+                  placeholder="Search" 
+                  className="search-input visible" 
+                  value={searchQuery} 
+                  onChange={handleSearchChange} 
+                  ref={inputRef} 
+                  autoFocus 
+                />
+              )}
+            </div>
+          )}
+
+          <div className="dark-mode-toggle">
+            <span className="toggle-label">☀</span>
+            <label className="switch">
+              <input type="checkbox" checked={darkMode} onChange={handleToggleDarkMode} />
+              <span className="slider"></span>
+            </label>
+            <span className="toggle-label">🌙</span>
+          </div>
+
+          {isLoggedIn && (
+            <div className="user-avatar-container">
+              <img src={avatarImage} alt="User Avatar" className="user-avatar" />
+            </div>
           )}
         </div>
-        <HelperTopMenu />
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 }
 

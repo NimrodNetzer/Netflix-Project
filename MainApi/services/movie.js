@@ -44,7 +44,6 @@ const createMovie = async (movieData) => {
     }
 
     // Optional validations
-    console.log(movieData.cast);
     if (movieData.cast) {
       if (!Array.isArray(movieData.cast)) {
         throw new Error('Invalid cast: must be an array');
@@ -55,7 +54,6 @@ const createMovie = async (movieData) => {
         }
       });
     }
-    console.log(movieData.properties, "this is properties");
 
     // Check for duplicates
     const existingMovie = await Movie.findOne({ name: movieData.name, releaseDate: movieData.releaseDate });
@@ -104,29 +102,39 @@ const deleteMovieById = async (id) => {
 
 const replaceMovieById = async (id, movieUpdates) => {
   try {
-    // Find the existing movie
-    const existingMovie = await Movie.findById(id);
-    if (!existingMovie) {
+    // Remove _id from the updates if it exists
+    const { _id, ...updates } = movieUpdates;
+
+    // Use findByIdAndUpdate with overwrite to replace the document entirely
+    const updatedMovie = await Movie.findByIdAndUpdate(
+      id,
+      updates,
+      {
+        new: true,           // Return the updated document
+        runValidators: true, // Run schema validations on update
+        overwrite: true      // Replace the document completely
+      }
+    );
+
+    if (!updatedMovie) {
       throw new Error('Movie not found');
     }
 
-    // Delete the existing movie
-    await existingMovie.deleteOne();
-
-    // Use the createMovie function to create a new movie with the same ID
-    const newMovie = await createMovie({ ...movieUpdates, _id: id });
-
-    return newMovie;
+    return updatedMovie;
   } catch (error) {
     console.error('Error replacing movie:', error);
-    throw new Error(error.message || 'Failed to replace movie');
+    throw error;
   }
 };
+
 
 const getMoviesByPromotedCategories = async (userId) => {
   // 1. Fetch the user and their watched movies
   const user = await User.findById(userId)
-    .populate('moviesList.movieId')
+    .populate({
+      path: 'moviesList.movieId',
+      populate: { path: 'categories', select: 'name promoted' } // ✅ Populate categories for watched movies
+    })
     .exec();
 
   if (!user) {
@@ -155,7 +163,7 @@ const getMoviesByPromotedCategories = async (userId) => {
     categories: { $in: promotedCategoryIds }, // Check if any promoted category is in the movie's categories
     _id: { $nin: watchedMovieIds }, // Exclude already watched movies
   })
-    .populate('categories', 'name promoted') // Populate category details
+    .populate('categories', 'name promoted') // ✅ Populate category details
     .exec();
 
   // 6. Group promoted movies by category, picking up to 20 random for each
@@ -178,17 +186,21 @@ const getMoviesByPromotedCategories = async (userId) => {
   // 7. Randomize the watched movies array
   const shuffledWatchedMovies = recentlyWatchedMovies.sort(() => 0.5 - Math.random());
 
-  // 8. Create a special category for watched movies
+  // 8. Create a special category for watched movies, ensuring categories are populated
   const watchedCategory = {
     category: 'Watched Movies',
     category_id: null, // or any placeholder
     promoted: false,
-    movies: shuffledWatchedMovies.map((entry) => entry.movieId), // If you want the full array with `watchedAt` and other details, remove `.map(...)`
+    movies: shuffledWatchedMovies.map((entry) => ({
+      ...entry.movieId.toObject(), // ✅ Convert Mongoose document to plain JS object
+      categories: entry.movieId.categories || [] // ✅ Ensure categories is an array of objects
+    })),
   };
 
   // 9. Combine results and return
   return [...promotedMoviesGrouped, watchedCategory];
 };
+
 
 
 module.exports = {

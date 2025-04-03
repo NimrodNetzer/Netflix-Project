@@ -44,11 +44,18 @@ const getCategories = async (filters = {}) => {
 // Update a category by ID
 const updateCategory = async (id, name, promoted) => {
   const category = await getCategoryById(id);
-  if(!category)
+  if (!category) {
     return null;
-  try {
+  }
 
-    // Update fields
+  try {
+    // ✅ Check if the new name already exists (excluding the current category)
+    const existingCategory = await Category.findOne({ name });
+    if (existingCategory && existingCategory._id.toString() !== id) {
+      throw new Error(`A category with the name "${name}" already exists.`);
+    }
+
+    // ✅ Update fields
     if (name) category.name = name;
     if (typeof promoted !== 'undefined') category.promoted = promoted;
 
@@ -58,6 +65,7 @@ const updateCategory = async (id, name, promoted) => {
     throw new Error(`Error updating category: ${error.message}`);
   }
 };
+
 
 // Delete a category by ID
 const deleteCategory = async (id) => {

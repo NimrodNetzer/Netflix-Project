@@ -9,7 +9,7 @@ const searchRoutes = require('./routes/search');
 const users = require('./routes/user');
 const tokens = require('./routes/token');
 const path = require('path');
-
+const fs = require('fs');
 require('custom-env').env(process.env.NODE_ENV, './config');
 
 mongoose.connect(process.env.CONNECTION_STRING)
@@ -33,8 +33,22 @@ app.use('/api/tokens', tokens); // Routes for token operations (e.g., validate, 
 app.use('/api/movies', movieRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/movies/search', searchRoutes)
+
+const uploadsDir = path.join(__dirname, 'public/uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+app.use('/public/uploads', express.static(path.join(__dirname, 'public/uploads')));
+// Serve static files from React build
 const publicPath = path.join(__dirname, 'public');
-app.use('/public', express.static(publicPath));
+app.use(express.static(publicPath));
+
+// Serve React frontend
+app.get('*', (req, res) => {
+    res.sendFile(path.join(publicPath, 'index.html'));
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

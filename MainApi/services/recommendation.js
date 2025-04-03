@@ -9,12 +9,10 @@ const SocketClient = require('../utils/socketClient');
 
 const fetchRecommendations = async (userId, movieId) => {
     const socketClient = new SocketClient(serverIp, serverPort);
-    socketClient.connect();
+    await socketClient.connect();
     const request = `GET ${userId} ${movieId}\n`;
-    console.log(`Sending request to Recommendation System: ${request}`);
     const response = await socketClient.send(request);
     socketClient.disconnect();
-    console.log(`Received response from Recommendation System: ${response}`);
 
     if (response.startsWith('404')) {
         const error = new Error('User or Movie not found');
@@ -31,7 +29,7 @@ const addRecommendation = async (userId, movieId) => {
     try {
       await updateMongoDBMoviesList(userId, movieId);
    
-      socketClient.connect();
+      await socketClient.connect();
       const postResponse = await socketClient.send(`POST ${userId} ${movieId}\n`);
       if (postResponse.startsWith('201')) {
         return 'Recommendation added successfully';
@@ -79,7 +77,6 @@ const updateMongoDBMoviesList = async (userId, movieId) => {
             throw new Error(`User with ID ${userId} not found`);
         }
 
-        console.log(`Movie ${movieId} successfully added to user ${userId}'s moviesList.`);
         return result;
     } catch (error) {
         console.error(`Error adding movie to user ${userId}:`, error.message);
@@ -95,7 +92,7 @@ const deleteWatchedMovie = async (movieId) => {
     try {
       const users = await User.find({});
       await User.updateMany({}, { $pull: { moviesList: { movieId } } });
-      socketClient.connect();
+      await socketClient.connect();
       for (const user of users) {
           try {
               await socketClient.send(`DELETE ${user._id} ${movieId}\n`);

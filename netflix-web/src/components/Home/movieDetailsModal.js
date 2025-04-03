@@ -6,12 +6,14 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie, autoPlay }) {
   const [relatedMovies, setRelatedMovies] = useState([]);
   const [isVideoOpen, setIsVideoOpen] = useState(autoPlay || false); // ✅ Start video if autoPlay is true
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     const fetchRelatedMovies = async () => {
       if (!isOpen || !movie?._id) return;
 
       try {
-        const response = await fetch(`http://localhost:4000/api/movies/${movie._id}/recommend`, {
+        const response = await fetch(`${API_URL}/api/movies/${movie._id}/recommend`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -27,7 +29,7 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie, autoPlay }) {
 
         const moviesDetails = await Promise.all(
           data.recommendedMovies.map(async (id) => {
-            const movieResponse = await fetch(`http://localhost:4000/api/movies/${id}`, {
+            const movieResponse = await fetch(`${API_URL}/api/movies/${id}`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
@@ -52,15 +54,41 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie, autoPlay }) {
     fetchRelatedMovies();
   }, [isOpen, movie]);
 
+  const addToRecommendations = async () => {
+    const token = localStorage.getItem('jwt');
+    if (!token) {
+      console.error("No authentication token found.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}:/api/movies/${movie._id}/recommend`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to add movie to recommendations (status: ${response.status})`);
+      }
+
+      console.log("Movie successfully added to recommendations.");
+    } catch (error) {
+      console.error("Error adding movie to recommendations:", error);
+    }
+  };
+
   const handleMovieClick = (newMovie) => {
     updateMovie(newMovie);
     setIsVideoOpen(false); // ✅ Stop video when switching movies
   };
 
-  const handlePlayVideo = () => {
+  const handlePlayVideo = async () => {
     setIsVideoOpen(true);
+    await addToRecommendations(); // ✅ Add movie to recommendations when played
   };
-
   const handleCloseVideo = (e) => {
     if (e && e.stopPropagation) {
       e.stopPropagation();
@@ -80,7 +108,7 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie, autoPlay }) {
         <button className="close-button" onClick={onClose}>✕</button>
         <div className="movie-banner" style={{ height: '420px' }}>
           <img 
-            src={`http://localhost:4000/${movie.picture}`} 
+            src={`${API_URL}/${movie.picture}`} 
             alt={movie.name} 
             className="movie-banner-image"
             style={{ height: '100%', objectFit: 'cover' }}
@@ -99,10 +127,10 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie, autoPlay }) {
 
           <p className="movie-description">{movie.description}</p>
           <div className="movie-meta">
-            <span><strong>Year:</strong> {movie.year}</span>
+            <span><strong>Year:</strong> {new Date(movie.releaseDate).getFullYear()}</span>
             <span><strong>Duration:</strong> {movie.time} minutes</span>
             <span><strong>Age Rating:</strong> {movie.age}+</span>
-            <span><strong>Language:</strong> {movie.language}</span>
+            <span><strong>Language:</strong> {movie.properties?.language || 'Unknown'}</span>
           </div>
 
           <div className="related-movies">
@@ -117,7 +145,7 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie, autoPlay }) {
                     style={{ cursor: 'pointer' }} 
                   >
                     <img
-                      src={`http://localhost:4000/${relatedMovie.picture}`}
+                      src={`${API_URL}/${relatedMovie.picture}`}
                       alt={relatedMovie.name}
                       className="related-movie-poster"
                     />
@@ -135,7 +163,7 @@ function MovieDetailsModal({ movie, isOpen, onClose, updateMovie, autoPlay }) {
       {isVideoOpen && (
         <div className="video-overlay" onClick={(e) => e.stopPropagation()}>
           <VideoPlayer
-            videoUrl={`http://localhost:4000/${movie.video}`}
+            videoUrl={`${API_URL}/${movie.video}`}
             videoName={movie.name}
             play={true}
             startFullscreen={true}

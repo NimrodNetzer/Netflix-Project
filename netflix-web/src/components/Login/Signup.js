@@ -1,18 +1,25 @@
-import './Signup.css'; // Import the CSS file for styling
-import React, { useState, useEffect } from 'react';
+import './Signup.css'; 
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import ClickableLogo from '../Utils/ClickableLogo';
 
-import profile1 from '../../assets/profile1.webp'; // Import predefined images
+import profile1 from '../../assets/profile1.webp'; 
 import profile2 from '../../assets/profile2.webp';
 import profile3 from '../../assets/profile3.webp';
+
+// Avatar mapping for easy reference
+const avatarMap = {
+    profile1: profile1,
+    profile2: profile2,
+    profile3: profile3
+};
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 const Signup = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const [picture, setSelectedPicture] = useState('profile2'); // State for selected profile picture
-
-    const [email, setEmail] = useState(location.state?.email || ''); // Initialize email with passed state or empty string
+    const [picture, setSelectedPicture] = useState('profile2'); // Default profile picture
+    const [email, setEmail] = useState(location.state?.email || '');
     const [password, setPassword] = useState('');
     const [nickname, setNickname] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -21,24 +28,27 @@ const Signup = () => {
 
     const handleSignup = async (event) => {
         event.preventDefault();
-
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://localhost:4000/api/users', {
+            const userAvatar = avatarMap[picture]; // Get full image URL
+
+            console.log("Saving avatar:", userAvatar); // Debugging
+
+            const response = await fetch(`${API_URL}/api/users`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password, nickname, picture }),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password, nickname, picture: userAvatar }),
             });
 
             if (response.ok) {
                 setErrorMessage('');
-                setSuccessMessage('Signup successful! Redirecting to login page...');
-                setTimeout(() => {
-                    navigate('/Login');
-                }, 1500); // 1.5-second delay before redirecting
+                setSuccessMessage('Signup successful! Redirecting to login...');
+
+                // Save user info in localStorage
+                localStorage.setItem('user', JSON.stringify({ email, nickname, picture: userAvatar }));
+
+                setTimeout(() => { navigate('/Login'); }, 1500);
             } else {
                 const data = await response.json();
                 setErrorMessage(data.errors || 'Signup failed.');
@@ -52,107 +62,49 @@ const Signup = () => {
 
     return (
         <div className="signup">
-        <ClickableLogo></ClickableLogo>
-        <div className="signup-container">
-            <h2>Sign Up</h2>
-            <form onSubmit={handleSignup}>
-                {/* Email Field */}
-                <div className="form-group">
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Enter your email"
-                        required
-                        pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
-                        title="Please enter a valid email address in the format: example@domain.com"
-                    />
-                </div>
-
-                {/* Password Field */}
-                <div className="form-group">
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Enter your password"
-                        required
-                        pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
-                        title="Password must be at least 8 characters long, contain at least one letter and one number, and use only English letters and numbers."
-                    />
-                </div>
-
-                {/* Nickname Field */}
-                <div className="form-group">
-                    <label htmlFor="nickname">Nickname:</label>
-                    <input
-                        type="text"
-                        id="nickname"
-                        value={nickname}
-                        onChange={(e) => setNickname(e.target.value)}
-                        placeholder="Enter your nickname"
-                        required
-                        pattern="^[A-Za-z\d_]{3,}$"
-                        title="Nickname must be at least 3 characters long and can include letters, numbers, and underscores only."
-                    />
-                </div>
-
-                {/* Profile Picture Selection */}
-                <div className="form-group">
-                    <label htmlFor="profile-picture">Choose a Profile Picture:</label>
-                    <div className="profile-picture-options">
-                        {/* Option 1 */}
-                        <img
-                            src={profile1}
-                            alt="Profile 1"
-                            className={`profile-thumbnail ${picture === 'profile1' ? 'selected' : ''}`}
-                            onClick={() => setSelectedPicture('profile1')}
-                        />
-
-                        {/* Option 2 */}
-                        <img
-                            src={profile2}
-                            alt="Profile 2"
-                            className={`profile-thumbnail ${picture === 'profile2' ? 'selected' : ''}`}
-                            onClick={() => setSelectedPicture('profile2')}
-                        />
-
-                        {/* Option 3 */}
-                        <img
-                            src={profile3}
-                            alt="Profile 3"
-                            className={`profile-thumbnail ${picture === 'profile3' ? 'selected' : ''}`}
-                            onClick={() => setSelectedPicture('profile3')}
-                        />
+            <div className="signup-container">
+                <h2>Sign Up</h2>
+                <form onSubmit={handleSignup}>
+                    <div className="form-group">
+                        <label>Email:</label>
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                     </div>
-                   
-                </div>
 
-  
+                    <div className="form-group">
+                        <label>Password:</label>
+                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                    </div>
 
-                {/* Success Message */}
-                {successMessage && (
-                    <div className="success-message centered">{successMessage}</div>
-                )}
-                
-                {/* Error Message */}
-                {errorMessage && <p className="error-message centered">{errorMessage}</p>}
+                    <div className="form-group">
+                        <label>Nickname:</label>
+                        <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} required />
+                    </div>
 
-                {/* Signup Button */}
-                <button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Signing up...' : 'Signup'}
-                </button>
+                    <div className="form-group">
+                        <label>Choose a Profile Picture:</label>
+                        <div className="profile-picture-options">
+                            {Object.keys(avatarMap).map((key) => (
+                                <img
+                                    key={key}
+                                    src={avatarMap[key]}
+                                    alt={`Profile ${key}`}
+                                    className={`profile-thumbnail ${picture === key ? 'selected' : ''}`}
+                                    onClick={() => setSelectedPicture(key)}
+                                />
+                            ))}
+                        </div>
+                    </div>
 
-                {/* Additional Options */}
-                <div className="additional-options">
-                    <a onClick={() => navigate('/login')}>Already have an account? Sign in</a>
-                </div>
-            </form>
-        </div>
+                    {successMessage && <div className="success-message">{successMessage}</div>}
+                    {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+                    <button type="submit" disabled={isLoading}>{isLoading ? 'Signing up...' : 'Signup'}</button>
+
+                    <div className="additional-options">
+                        <a onClick={() => navigate('/login')}>Already have an account? Sign in</a>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

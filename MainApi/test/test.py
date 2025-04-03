@@ -7,19 +7,18 @@ import os
 from urllib.parse import urljoin
 import glob
 import json
+
 # MongoDB Connection
 BASE_URL = os.getenv("BASE_URL", "http://localhost:4000/api/")
 LOGIN_URL = urljoin(BASE_URL, "tokens/")
-
-# Generate other URLs based on the base URL
 USER_URL = urljoin(BASE_URL, "users/")
 CATEGORY_URL = urljoin(BASE_URL, "categories/")
 MOVIE_URL = urljoin(BASE_URL, "movies/")
 RECOMMEND_URL = urljoin(MOVIE_URL, "{movie_id}/recommend")
 
 # MongoDB Configuration
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")  # Default MongoDB URI
-DB_NAME = os.getenv("DBNAME", "NetFlix")   # Replace with your database name
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
+DB_NAME = os.getenv("DBNAME", "NetFlix")
 
 def login(email, password):
     """Logs in a user and returns the token."""
@@ -50,10 +49,32 @@ def random_date(start_date, end_date):
     random_days = random.randint(0, delta.days)
     return start_date + timedelta(days=random_days)
 
-# Create Users
+# ✅ Create Users (Including One Admin)
 def create_users():
+    client = MongoClient(MONGO_URI)  # Initialize MongoDB client
+    db = client[DB_NAME]  # Select the database
+
     users = []
-    for i in range(100):
+
+    # **Create Admin User**
+    admin_user = {
+        "email": "admin@example.com",
+        "password": "admin123",
+        "nickname": "AdminUser",
+        "picture": "default",
+    }
+
+    response = requests.post(USER_URL, json=admin_user)
+    if response.status_code == 201:
+        # **Force Update the Admin User in MongoDB**
+        db.users.update_one({"email": "admin@example.com"}, {"$set": {"admin": True}})
+        users.append(admin_user)
+        print("✅ Admin user created and set to admin: true in MongoDB.")
+    else:
+        print(f"❌ Failed to create admin user: {response.text}")
+
+    # Create **Regular Users**
+    for i in range(99):
         user = {
             "email": f"user{i}@example.com",
             "password": "password123",
@@ -64,8 +85,11 @@ def create_users():
         if response.status_code == 201:
             users.append(user)
         else:
-            print(f"Failed to create user {i}: {response.text}")
+            print(f"❌ Failed to create user {i}: {response.text}")
+
+    client.close()  # Close MongoDB connection
     return users
+
 
 # Create Categories
 def create_categories(user_tokens):
@@ -79,7 +103,6 @@ def create_categories(user_tokens):
         headers = {"Authorization": f"Bearer {token}"}
         response = requests.post(CATEGORY_URL, json=category, headers=headers)
         if response.status_code == 201:
-            # Parse the response to get the ID of the created category
             category_id = response.headers.get("Location").split("/")[-1]
             if category_id:
                 category_ids.append(category_id)
@@ -92,20 +115,18 @@ def create_movies(category_ids, user_tokens):
     movies = []
     image_files = glob.glob("./images/*.png")
     video_files = glob.glob("./videos/*.mp4")
-    print(image_files)
+
     for i in range(100):
-        # Assign multiple random categories
-        selected_categories = random.sample(category_ids, random.randint(1, 3))  # Select 1 to 3 categories
-        age = random.randint(1, 18)
+        selected_categories = random.sample(category_ids, random.randint(1, 3))
         movie = {
             "name": f"Movie {i}",
             "picture": f"https://example.com/movies/movie{i}.jpg",
             "description": f"This is the description of Movie {i}",
-            "age": age,
+            "age": random.randint(1, 18),
             "time": f"{random.randint(1, 3)}h {random.randint(0, 59)}m",
             "releaseDate": random_date(datetime(2000, 1, 1), datetime(2025, 1, 1)).isoformat(),
             "quality": random.choice(["HD", "SD", "4K"]),
-            "categories": selected_categories,  # Assign multiple categories
+            "categories": selected_categories,
             "cast": [
                 {"name": random_string(8), "role": random.choice(["Lead", "Supporting"])}
                 for _ in range(random.randint(2, 5))
@@ -132,7 +153,6 @@ def create_movies(category_ids, user_tokens):
             else:
                 print(f"Failed to create movie {i}: {response.text}")
         finally:
-        # Close file streams
             for file in files.values():
                 file.close()
     return movies
@@ -157,7 +177,7 @@ def main():
 
     print("Creating users...")
     users = create_users()
-    print(f"Created {len(users)} users.")
+    print(f"Created {len(users)} users (including 1 admin).")
 
     print("Logging in users...")
     user_tokens = [login(user["email"], user["password"]) for user in users if login(user["email"], user["password"])]
@@ -170,8 +190,9 @@ def main():
     print("Creating movies...")
     movies = create_movies(category_ids, user_tokens)
     print(f"Created {len(movies)} movies.")
- # Example: Add first movie to the watched list of first user
+
     for i in range(1, 1000):
         add_movie_to_watched(user_tokens)
+
 if __name__ == "__main__":
     main()

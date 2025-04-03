@@ -27,11 +27,17 @@ router
   )
   .get(getMovies);
 
-router
-    .route('/:id')
-    .get(getMovie)
-    .delete(deleteMovie)
-    .put(updateMovie);
+  router
+  .route('/:id')
+  .get(getMovie)
+  .delete(deleteMovie)
+  .put(
+    upload.fields([
+      { name: 'image', maxCount: 1 },
+      { name: 'video', maxCount: 1 }
+    ]),
+    updateMovie
+  );
 
 // Recommendation Routes
 router
