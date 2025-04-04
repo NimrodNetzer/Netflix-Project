@@ -55,6 +55,7 @@ A test script is provided to:
 - Create 100 movies
 - Create 100 users
 - Recommend 1000 random movies to random users
+- Create Admin User with username : admin@example.com , password : admin123
 
 To run the test script:
 
