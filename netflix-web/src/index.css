@@ -108,113 +108,256 @@ body {
 .createmovie-modal-overlay {
   background-color: rgba(0, 0, 0, 0.4);
 }
+/* ========== LIGHT MODE FINAL STYLES ========== */
 
-/* ========== Light Mode Actual Styles (Optional) ========== */
+.light-mode {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --top-menu-bg: #ffffff;
+  --top-menu-text: #000000;
+  --button-bg: #007bff;
+  --button-text: #ffffff;
+
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.light-mode body {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.light-mode .admin-container,
+.light-mode .admin-content,
+.light-mode .categories-container,
+.light-mode .category-box,
+.light-mode .movie-box,
+.light-mode .home,
+.light-mode .search-page {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.light-mode .category-box .category-promoted,
+.light-mode .movie-box span,
+.light-mode .category-box .form-input {
+  color: #333;
+}
+
+.light-mode .movie-box,
+.light-mode .category-box,
+.light-mode .movie-detail-box,
+.light-mode .movie-category {
+  background-color: #f0f0f0;
+  color: #000000;
+}
 
 .light-mode .modal-content,
-.light-mode .createmovie-modal-content {
-  background-color: #ffffff; /* White background for modal */
-  color: #000000; /* Dark text for modal */
+.light-mode .createmovie-modal-content,
+.light-mode .category-modal .modal-content {
+  background-color: #ffffff;
+  color: #000000;
 }
 
+.light-mode .modal-content h2,
+.light-mode .createmovie-modal-content h2 {
+  color: #e50914;
+}
+
+.light-mode .form-input,
 .light-mode .createmovie-form-input,
-.light-mode .createmovie-time-input {
-  background-color: #f0f0f0; /* Lighter background for inputs */
-  color: #000000; /* Dark text for inputs */
-}
-
-.light-mode .createmovie-remove-cast-button,
-.light-mode .createmovie-close-button {
-  color: #000; /* Dark text for close and remove buttons */
-}
-
-.light-mode .createmovie-submit-button {
-  background-color: #007bff; /* Blue background for submit button */
-  color: #fff; /* White text for submit button */
-}
-
-.light-mode .createmovie-submit-button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+.light-mode .createmovie-time-input,
+.light-mode .category-box .form-input {
+  background-color: #f0f0f0;
+  color: #000000;
 }
 
 .light-mode .modal-content::-webkit-scrollbar-track {
-  background: #fff; /* Light background for scroll track */
+  background: #ffffff;
 }
 
 .light-mode .modal-content::-webkit-scrollbar-thumb {
-  background-color: #888; /* Light thumb color */
-  border: 2px solid #fff; /* White border around thumb */
+  background-color: #888;
+  border: 2px solid #ffffff;
+}
+
+.light-mode .add-button,
+.light-mode .submit-button,
+.light-mode .createmovie-submit-button,
+.light-mode .button {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+}
+
+.light-mode .add-button:hover,
+.light-mode .submit-button:hover,
+.light-mode .createmovie-submit-button:hover,
+.light-mode .button:hover {
+  background-color: #0056b3;
+}
+
+.light-mode .close-button,
+.light-mode .createmovie-close-button,
+.light-mode .createmovie-remove-cast-button {
+  color: #000000;
+}
+
+.light-mode .header,
+.light-mode .top-menu,
+.light-mode .footer {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.light-mode .category-row,
+.light-mode .category-title,
+.light-mode .movie-title2 {
+  color: #000000;
 }
 
 .light-mode .category-row .movie-list::-webkit-scrollbar-track {
-  background: #fff; /* Light background for scroll track */
+  background: #f0f0f0;
 }
 
-/* ========== Home Page Section Styles ========== */
-.light-mode .home {
-  background-color: #ffffff; /* White background for home */
-  color: #000000; /* Dark text for home */
+.light-mode .category-row .movie-list::-webkit-scrollbar-thumb {
+  background-color: #999;
+  border-radius: 4px;
 }
 
-/* ========== Admin Section Styles ========== */
-.light-mode .admin-container {
-  background-color: #ffffff; /* White background for admin container */
-  color: #000000; /* Dark text for admin container */
+.light-mode .category-row .movie-list::-webkit-scrollbar-thumb:hover {
+  background-color: #666;
 }
 
-/* ========== Categories Section Styles ========== */
-.light-mode .categories-container {
-  background-color: #ffffff; /* White background for categories container */
-  color: #000000; /* Dark text for categories */
+.light-mode .edit-button,
+.light-mode .delete-button,
+.light-mode .play-button,
+.light-mode .info-button {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #000000;
+  border: 1px solid #000000;
 }
 
-/* ========== Movie Box (Home) Section ========== */
-.light-mode .movie-box {
-  background-color: #ffffff; /* White background for movie boxes */
-  color: #000000; /* Dark text for movie boxes */
+.light-mode .edit-button:hover,
+.light-mode .delete-button:hover,
+.light-mode .play-button:hover,
+.light-mode .info-button:hover {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
-/* Prevent image inversion in light mode */
-.light-mode .movie-box img,
-.light-mode .movie-box .default-image {
-  filter: none; /* Do not invert images */
+.light-mode .search-page .search-title,
+.light-mode .search-page .loading-message,
+.light-mode .search-page .error-message,
+.light-mode .search-page .no-results-message {
+  color: #000000;
 }
 
-/* ========== Category Item Styles ========== */
-.light-mode .category-item {
-  background-color: #ffffff; /* White background for category items */
-  color: #000000; /* Dark text for category items */
+.light-mode .toggle-label {
+  color: #000000;
 }
 
-/* ========== Header Section Styles ========== */
-.light-mode .header {
-  background-color: #ffffff; /* White background for header */
-  color: #000000; /* Dark text for header */
+/* 🎬 Movie Box Hover Behavior (Light Mode) */
+
+.light-mode .movie-hover-overlay {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
 }
 
-/* ========== Buttons in Light Mode ========== */
-.light-mode .button {
-  background-color: #007bff; /* Blue background for general buttons */
-  color: #fff; /* White text for buttons */
+.light-mode .movie-box:hover .movie-hover-overlay {
+  opacity: 1;
 }
 
-.light-mode .button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+/* Ensure white text/buttons like dark mode */
+.light-mode .movie-hover-content,
+.light-mode .movie-title2,
+.light-mode .movie-hover-content span,
+.light-mode .movie-hover-content h3,
+.light-mode .movie-buttons button,
+.light-mode .play-button,
+.light-mode .info-button {
+  color: #ffffff !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
-/* ========== Links in Light Mode ========== */
-.light-mode .link {
-  color: #007bff; /* Blue color for links */
+/* Optional: keep background image darkened on hover */
+.light-mode .movie-box:hover .default-image {
+  filter: brightness(0.6);
 }
 
-.light-mode .link:hover {
-  color: #0056b3; /* Darker blue on hover */
+
+/* 🎬 Featured Video Text - Always White */
+.light-mode .video-overlay,
+.light-mode .featured-title,
+.light-mode .featured-description {
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
-/* ========== Footer Section Styles ========== */
-.light-mode .footer {
-  background-color: #ffffff; /* White background for footer */
-  color: #000000; /* Dark text for footer */
+.light-mode .video-overlay {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+
+
+
+
+.light-mode .login .login-container,
+.light-mode .signup .signup-container {
+  background-color: #f5f5f5;
+  color: #000000;
+}
+
+.light-mode .login form h2,
+.light-mode .signup form h2 {
+  color: #000000;
+}
+
+.light-mode .login .form-group input,
+.light-mode .signup .form-group input {
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #ccc;
+}
+
+.light-mode .login button,
+.light-mode .signup button {
+  background-color: #007bff;
+  color: white;
+}
+
+.light-mode .login button:hover,
+.light-mode .signup button:hover {
+  background-color: #0056b3;
+}
+
+.light-mode .login .additional-options a,
+.light-mode .signup .additional-options a {
+  color: #007bff;
+}
+
+.light-mode .login .additional-options a:hover,
+.light-mode .signup .additional-options a:hover {
+  color: #0056b3;
+}
+
+.light-mode .success-message {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.light-mode .error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.light-mode .delete-error-message {
+  background-color: rgba(255, 0, 0, 0.1);
+  color: #721c24;
+}
+
+.light-mode .related-movie-title,
+.light-mode .movie-details-info,
+.light-mode .movie-meta strong {
+  color: #000000;
 }
 
 
