@@ -34,7 +34,7 @@ Main landing screen with categorized movies.
 
 Users with `admin: true` in the database will see the settings icon and access the Admin Panel.
 
-<div align="center">
+<div>
   <img src="https://github.com/user-attachments/assets/574bee88-2b7a-4531-afa9-24f5e84dab41" height="400"/>
 </div>
 
