@@ -1,8 +1,9 @@
 # 📽️ Netflix Clone — Web Flow (README Demo)
+
 ## 1. Login Page
 
 ### Dark Mode  
-<img src="C:\Users\orlib\Documents\Barilan\simester 3\advance programming\Netflix-BIU\wiki\assets\adminCategoriesMenagement.png" height="400"/>
+<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/LogIn.png" height="400"/>
 
 ### Light Mode  
 <img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/LogInLight.png" height="400"/>
