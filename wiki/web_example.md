@@ -1,5 +1,5 @@
 # 📽️ Netflix Clone — Web Flow (README Demo)
-
+C:\Users\orlib\Documents\Barilan\simester 3\advance programming\Netflix-BIU\wiki\assets\adminCategoriesMenagement.png
 ## 1. Login Page
 
 ### Dark Mode  
