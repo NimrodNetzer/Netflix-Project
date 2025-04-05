@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,7 +72,7 @@ public class AdminCategoryAdapter extends RecyclerView.Adapter<AdminCategoryAdap
 
     public static class CategoryViewHolder extends RecyclerView.ViewHolder {
         TextView categoryTitle, categoryType;
-        Button editButton, deleteButton;
+        ImageButton editButton, deleteButton;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
