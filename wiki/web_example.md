@@ -1,132 +1,162 @@
-# 📽️ Netflix Clone — Web Flow (README Demo)
+# 📽️ Netflix Clone — Web Flow
 
-## 1. Login Page
-
-### Dark Mode  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/LogIn.png" height="400"/>
-
-### Light Mode  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/LogInLight.png" height="400"/>
+An end-to-end Netflix-style platform for browsing, managing, and watching movies. Includes user and admin experiences, dark/light modes, and a fully responsive interface.
 
 ---
 
-## 2. Signup Page
+## 🧭 Top Menu Navigation
 
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/signup.png" height="400"/>
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/signupLight.png" height="400"/>
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/signupV1.png" height="400"/>
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/signupV2.png" height="400"/>
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/signupV3.png" height="400"/>
+The top menu provides access to key features: search, logout, theme toggle, and (for admins) a settings button that opens the admin dashboard.
 
----
-
-## 3. Welcome Page
-
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/welcomePage.png" height="400"/>
+<div align="center">
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/topMenu.png?raw=true" width="600"/>
+</div>
 
 ---
 
-## 4. Home Page (Dark & Light Modes)
+## 🔐 1. Login Page
 
-### Dark Mode  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/moviesScreen.png" height="400"/>
+The entry point to the platform. Supports dark and light modes for accessibility and user preference.
 
-### Light Mode  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/moviesScreenLight.png" height="400"/>
-
-### Watched List  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/moviesScreenWatchedList.png" height="400"/>
+<p float="left">
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/LogIn.png?raw=true" width="350"/>
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/LogInLight.png?raw=true" width="350"/>
+</p>
 
 ---
 
-## 5. Movie Info Page
+## ✍️ 2. Signup Flow
 
-### Dark Mode  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/movieInfo.png" height="400"/>
+A guided signup experience with multiple layout versions to test UI flexibility, responsiveness, and UX styling across light and dark themes.
 
-### Light Mode  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/movieInfoLight.png" height="400"/>
+<p float="left">
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/signup.png?raw=true" width="350"/>
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/signupLight.png?raw=true" width="350"/>
+</p>
 
-### Related Movies  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/movieInfoPageRelatedMovies.png" height="400"/>
-
----
-
-## 6. Watching a Movie
-
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/moviePlay.png" height="400"/>
+<p float="left">
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/signupV1.png?raw=true" width="350"/>
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/signupV2.png?raw=true" width="350"/>
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/signupV3.png?raw=true" width="350"/>
+</p>
 
 ---
 
-## 7. Search Page
+## 🎬 3. Welcome Page
 
-### Full Results  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/searchPage.png" height="400"/>
+The page users land on after signing up or logging in.
 
-### Light Mode  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/searchPageLight.png" height="400"/>
-
-### Single Result  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/searchPageOneResult.png" height="400"/>
+<div align="center">
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/welcomePage.png?raw=true" width="350"/>
+</div>
 
 ---
 
-## 8. Admin Home Page
+## 🏠 4. Home Page
 
-Admins can access the Admin page via the **settings icon** in the top navigation bar.  
-Only users with `admin: true` in MongoDB will see this icon.
+Displays movies by category, with support for dark/light modes and a personal watched list.
 
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/topMenu.png" height="400"/>
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/adminMoviesPage.png" height="400"/>
-
----
-
-## 9. Manage Categories (Admin)
-
-### View Categories  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/adminCategoriesMenagement.png" height="400"/>
-
-### Add Category  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/adminCategoriesMenagementAdd.png" height="400"/>
-
-### Delete Category  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/adminCategoriesMenagementDelete.png" height="400"/>
-
-### Edit Category  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/adminCategoriesMenagementEdit.png" height="400"/>
-
-### Light Mode  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/adminCategoriesMenagementLightMode.png" height="400"/>
+<p float="left">
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/moviesScreen.png?raw=true" width="350"/>
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/moviesScreenLight.png?raw=true" width="350"/>
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/moviesScreenWatchedList.png?raw=true" width="350"/>
+</p>
 
 ---
 
-## 10. Add New Movie (Admin)
+## 🎞️ 5. Movie Info
 
-### Dark Mode  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/adminCreateMovieForm.png" height="400"/>
+Each movie page shows details, a trailer, and related suggestions — styled for both themes.
 
-### Light Mode  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/adminCreateMovieFormLightMode.png" height="400"/>
-
----
-
-## 11. Manage Movies (Admin)
-
-### All Movies  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/adminMoviesMenagement.png" height="400"/>
-
-### Delete Movie  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/adminMoviesMenagementDeleteMovie.png" height="400"/>
-
-### Edit Movie  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/adminMoviesMenagementEditMovie.png" height="400"/>
-
-### Light Mode  
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/adminMoviesMenagementLightMode.png" height="400"/>
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/adminMoviesMenagementSecondLightMode.png" height="400"/>
+<p float="left">
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/movieInfo.png?raw=true" width="350"/>
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/movieInfoLight.png?raw=true" width="350"/>
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/movieInfoPageRelatedMovies.png?raw=true" width="350"/>
+</p>
 
 ---
 
-## 12. Admin Search
+## ▶️ 6. Watch Movie
 
-<img src="https://raw.githubusercontent.com/orliber/Netflix-BIU/ex4/wiki/assets/adminSearchMovie.png" height="400"/>
+A custom video player with Netflix-like styling and playback controls.
+
+<div align="center">
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/moviePlay.png?raw=true" width="350"/>
+</div>
+
+---
+
+## 🔎 7. Search Movies
+
+Live search feature with full and single result states. Light and dark mode supported.
+
+<p float="left">
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/searchPage.png?raw=true" width="350"/>
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/searchPageLight.png?raw=true" width="350"/>
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/searchPageOneResult.png?raw=true" width="350"/>
+</p>
+
+---
+
+## 🛠️ 8. Admin Dashboard
+
+Accessible only to users with `admin: true`. From here, admins can manage content and categories.
+
+<div align="center">
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/adminMoviesPage.png?raw=true" width="350"/>
+</div>
+
+---
+
+## 📂 9. Manage Categories (Admin)
+
+Admins can view, add, edit, or delete categories. Light mode included.
+
+<p float="left">
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/adminCategoriesMenagement.png?raw=true" width="350"/>
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/adminCategoriesMenagementAdd.png?raw=true" width="350"/>
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/adminCategoriesMenagementEdit.png?raw=true" width="350"/>
+</p>
+
+<p float="left">
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/adminCategoriesMenagementDelete.png?raw=true" width="350"/>
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/adminCategoriesMenagementLightMode.png?raw=true" width="350"/>
+</p>
+
+---
+
+## 🎥 10. Add New Movie (Admin)
+
+Admins can fill in movie details and upload thumbnails via the movie creation form.
+
+<p float="left">
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/adminCreateMovieForm.png?raw=true" width="350"/>
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/adminCreateMovieFormLightMode.png?raw=true" width="350"/>
+</p>
+
+---
+
+## 🎛️ 11. Manage Movies (Admin)
+
+Admins can browse, edit, or delete existing movies. Includes full light/dark layout.
+
+<p float="left">
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/adminMoviesMenagament.png?raw=true" width="350"/>
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/adminMoviesMenagamentEditMovie.png?raw=true" width="350"/>
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/adminMoviesMenagamentDeleteMovie.png?raw=true" width="350"/>
+</p>
+
+<p float="left">
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/adminMoviesMenagamentLightMode.png?raw=true" width="350"/>
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/adminMoviesMenagamentSecondLightMode.png?raw=true" width="350"/>
+</p>
+
+---
+
+## 🔍 12. Admin Search
+
+Admins can search for any movie by name and instantly manage it.
+
+<div align="center">
+  <img src="https://github.com/idorozin/Netflix-BIU/blob/7261936a6722875ed83234b2b085529e83a9b5fb/wiki/assets/adminSearchMovie.png?raw=true" width="350"/>
+</div>
