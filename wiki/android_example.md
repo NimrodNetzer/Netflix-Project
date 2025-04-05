@@ -12,9 +12,15 @@
 <img src="https://github.com/user-attachments/assets/a2255d33-ad66-4866-8440-72c0a0123d40" height="400"/>
 <img src="https://github.com/user-attachments/assets/91c4a60c-4e21-4307-91cf-3f5362b16c21" height="400"/>
 
-## 4. Admin's Home page:
+## 4. Admin's Home Page
 
-<img src="https://github.com/user-attachments/assets/574bee88-2b7a-4531-afa9-24f5e84dab41" height="400"/>
+A user is considered an **admin** if their `admin` field in MongoDB is set to `true`.  
+Admins can access the Admin Page via the **settings icon** in the top navigation menu — this icon is only visible to admins.
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/574bee88-2b7a-4531-afa9-24f5e84dab41" height="400"/>
+</div>
+
 
 ## 5. Add Category:
 
