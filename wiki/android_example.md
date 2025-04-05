@@ -34,12 +34,9 @@
 
 <img src="https://github.com/user-attachments/assets/0157a8e9-16d0-4c97-9dd1-342e701b9cb8" height="400"/>
 
-## 8. Deleting movie:
+## 8. Deleting movie (Before and After):
 
 <img src="https://github.com/user-attachments/assets/d58db13c-15d5-48ae-875a-0308fb012826" height="400"/>
-
-## Movie deleted:
-
 <img src="https://github.com/user-attachments/assets/27b8d283-302d-4fc9-be1b-b9a5984a9f86" height="400"/>
 
 ## 8. Watching movie:
