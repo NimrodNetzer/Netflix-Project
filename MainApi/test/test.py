@@ -113,8 +113,8 @@ def create_categories(user_tokens):
 # Create Movies
 def create_movies(category_ids, user_tokens):
     movies = []
-    image_files = glob.glob("./images/*.png")
-    video_files = glob.glob("./videos/*.mp4")
+    image_files = glob.glob("./images/*.*")
+    video_files = glob.glob("./videos/*.*")
 
     for i in range(100):
         selected_categories = random.sample(category_ids, random.randint(1, 3))
