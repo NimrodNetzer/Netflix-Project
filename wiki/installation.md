@@ -126,3 +126,13 @@ SECRET=sod
 > - App: 3000
 > - MongoDB: 27017
 
+
+
+
+### Admin creation on MongoDb:
+
+<img src="https://github.com/user-attachments/assets/bcd2d0fd-e47f-4ad5-a25d-2993c6e66cd9" height="400"/>
+<img src="https://github.com/user-attachments/assets/542cc508-3324-4eef-bda6-3782dacfeca9" height="400"/>
+
+
+
