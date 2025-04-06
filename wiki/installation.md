@@ -21,7 +21,7 @@ mkdir -p ./MainApi/config
 touch ./MainApi/config/.env.prod
 ```
 
-**Windows (Command Prompt or PowerShell):**
+**Windows (Command Prompt - CMD):**
 
 ```cmd
 mkdir MainApi\config && type nul > MainApi\config\.env.prod
@@ -53,10 +53,9 @@ This will:
 A test script is provided to:
 
 - Create 100 movies
-- Create 100 users
+- Create 100 users with usernames: user0@example.com, password: password123
 - Recommend 1000 random movies to random users
 - Create Admin User with username : admin@example.com , password : admin123
-
 To run the test script:
 
 ```bash
@@ -97,8 +96,6 @@ java/com/example/netflix/Utils/Constants.java
 ```
 
 Replace the IP address with your local IPv4 address.
-
-- For emulator: use `10.0.0.2`
 
 ### d. Build & Install the APK
 
