@@ -40,11 +40,17 @@ Users with `admin: true` in the database will see the settings icon and access t
 
 ---
 
-## ➕ 5. Add Category
+## ➕ 5. Add and update Category
 
 Admins can create new content categories.
 
 <img src="https://github.com/user-attachments/assets/6d30d7d3-cfd8-4511-a641-646af375df89" height="400"/>
+<img src="https://github.com/user-attachments/assets/7e186f30-0f23-436a-8a32-77656baa2e7d" height="400"/>
+<img src="https://github.com/user-attachments/assets/b16fb800-c283-4aa5-9fe4-c87f63f58d79" height="400"/>
+<img src="https://github.com/user-attachments/assets/c742f841-e2bd-417d-b8df-5f21a49fb010" height="400"/>
+
+
+
 
 ---
 
